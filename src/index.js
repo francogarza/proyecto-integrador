@@ -4,12 +4,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import RegistroPadres from './RegistroPadres.js';
+import RegistroTaller from './RegistroTaller.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <App />
     <RegistroPadres />
+    <RegistroTaller />
   </React.StrictMode>
 );
 
