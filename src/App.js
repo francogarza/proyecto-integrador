@@ -3,6 +3,8 @@ import {db} from './firebase';
 import {uid} from 'uid';
 import {set,ref,onValue,remove,update} from 'firebase/database';
 import {useState,useEffect} from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import TallerCard from './components/TallerCard'
 
 function App() {
   const [todo,setTodo] = useState("");//write stuffs
@@ -60,7 +62,14 @@ function App() {
   }
 
   return (
-    <div className='App'>
+    <Router>
+      <Routes>
+        <Route path="/card-test" element={
+          <TallerCard />
+        } />
+      </Routes>
+    </Router>
+    /* /* {/* <div className='App'>
       <input type="text" value={todo} onChange={handleTodoChange}></input>
       {isEdit ? ( //esto es para update
         <>
@@ -77,7 +86,7 @@ function App() {
           <button onClick={() => handleDelete(todo)}>delete</button>
         </>
       ))}
-    </div>
+    </div> }*/
   )
 }
 
