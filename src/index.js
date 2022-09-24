@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import RegistroPadres from './RegistroPadres.js';
 import RegistroTaller from './RegistroTaller.js';
+import RegistroTalleres from './RegistroTalleres.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -12,6 +13,7 @@ root.render(
     <App />
     <RegistroPadres />
     <RegistroTaller />
+    <RegistroTalleres />
   </React.StrictMode>
 );
 
