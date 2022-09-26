@@ -62,14 +62,7 @@ function App() {
   }
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/card-test" element={
-          <TallerCard />
-        } />
-      </Routes>
-    </Router>
-    /* /* {/* <div className='App'>
+    <div className='App'>
       <input type="text" value={todo} onChange={handleTodoChange}></input>
       {isEdit ? ( //esto es para update
         <>
@@ -86,7 +79,7 @@ function App() {
           <button onClick={() => handleDelete(todo)}>delete</button>
         </>
       ))}
-    </div> }*/
+    </div>
   )
 }
 
