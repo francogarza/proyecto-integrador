@@ -3,6 +3,8 @@ import {db} from './firebase';
 import {uid} from 'uid';
 import {set,ref,onValue,remove,update} from 'firebase/database';
 import {useState,useEffect} from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import TallerCard from './components/TallerCard'
 
 function App() {
   const [todo,setTodo] = useState("");//write stuffs
