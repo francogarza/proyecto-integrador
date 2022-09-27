@@ -1,10 +1,16 @@
 import React from 'react';
 import {db} from './firebase';
 import {uid} from 'uid';
-import {set, ref} from 'firebase/database';
-import {useState} from "react";
+import {set, ref,onValue,update} from 'firebase/database';
+import {useState,useEffect} from "react";
 
-const RegistroTalleres = () => {
+
+///
+///Se llama <RegistroTalleres/> cuando es el nuevo taller
+///Se llama <RegistroTalleres  isUpdate={true} id={id}/> cuando se usa como update
+///
+
+const RegistroTalleres = (props) => {
 
     const [Descripcion, setDescripcion] = useState("");
     const [Fechas, setFechas] = useState("");
@@ -13,6 +19,7 @@ const RegistroTalleres = () => {
     const [Nombre, setNombre] = useState("");
     const [Prerequisitos, setPrerequisitos] = useState("");
     const [VirtualPresencial, setVirtualPresencial] = useState("");
+
 
     const handleChangeDescripcion=(e)=>{
         setDescripcion(e.target.value)
@@ -43,6 +50,7 @@ const RegistroTalleres = () => {
 
     const writeToDatabase = () => {
         const uuid = uid()
+
         set(ref(db, 'Taller/patotest/'+ uuid), {
             Descripcion,
             Fechas,
@@ -60,6 +68,50 @@ const RegistroTalleres = () => {
         setPrerequisitos("");
         setVirtualPresencial("");
     };
+
+    const updateToDatabase = () => {
+        const id = props.id
+
+        update(ref(db, 'Taller/patotest/'+ id), {
+            Descripcion,
+            Fechas,
+            Horarios,
+            ImpartidoPor,
+            Nombre,
+            Prerequisitos,
+            VirtualPresencial,
+        });
+        setDescripcion("");
+        setFechas("");
+        setHorarios("");
+        setImpartidoPor("");
+        setNombre("");
+        setPrerequisitos("");
+        setVirtualPresencial("");
+    };
+
+
+    useEffect(() => {
+        if(props.isUpdate){//si viene como update
+
+            //sacar el id
+            const id = props.id
+
+            onValue(ref(db,'Taller/patotest/'+id),(snapshot) => {
+                const data = snapshot.val();
+                if(data !== null){
+                    setDescripcion(data.Descripcion)
+                    setFechas(data.Fechas)
+                    setHorarios(data.Horarios)
+                    setImpartidoPor(data.ImpartidoPor)
+                    setNombre(data.Nombre)
+                    setPrerequisitos(data.Prerequisitos)
+                    setVirtualPresencial(data.VirtualPresencial)
+                }
+              });
+
+        }
+      }, [props.id,props.isUpdate])
 
     return(
         <form classname="registroTaller">
@@ -109,8 +161,8 @@ const RegistroTalleres = () => {
             <label htmlFor="Presencial">Presencial</label>
             <br/>
             <br/>
-            <button onClick={writeToDatabase} class="registro" type="submit">
-                Registrar Taller
+            <button onClick={props.isUpdate ? updateToDatabase : writeToDatabase} class="registro" type="submit">
+                {props.isUpdate ? 'Actualizar Taller' : 'Registrar Taller'}
             </button>
         </form>
     )

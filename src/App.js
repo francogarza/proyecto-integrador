@@ -45,7 +45,6 @@ function App() {
   }
 
   const handleSubmitChange = () => {
-    console.log('test/' + tempUuid);
     update(ref(db,'test/' + tempUuid),{
       todo:todo,
       uuid:tempUuid

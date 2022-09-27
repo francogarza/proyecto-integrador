@@ -24,7 +24,7 @@ const RegistroPadres = () => {
 
   const writeToDatabase = () => {
     const uuid = uid()
-    set(ref(db, `/${uuid}`), {
+    set(ref(db,'Padre/' + uuid), {
       todoNombre,
       todoMail,
       todoCelular,
