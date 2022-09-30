@@ -97,7 +97,7 @@ const RegistroTalleres = (props) => {
         if(verificarDatos()){
             const uuid = uid()
 
-            set(ref(db, 'Taller/patotest/'+ uuid), {
+            set(ref(db, 'Taller/'+ uuid), {
                 Descripcion,
                 Fechas,
                 Horarios,
@@ -105,6 +105,7 @@ const RegistroTalleres = (props) => {
                 Nombre,
                 Prerequisitos,
                 VirtualPresencial,
+                uuid
             });
             setDescripcion("");
             setFechas("");
@@ -123,7 +124,7 @@ const RegistroTalleres = (props) => {
         if(verificarDatos()){
             const id = props.id
 
-            update(ref(db, 'Taller/patotest/'+ id), {
+            update(ref(db, 'Taller/'+ id), {
                 Descripcion,
                 Fechas,
                 Horarios,
@@ -152,7 +153,7 @@ const RegistroTalleres = (props) => {
             //sacar el id
             const id = props.id
 
-            onValue(ref(db,'Taller/patotest/'+id),(snapshot) => {
+            onValue(ref(db,'Taller/'+id),(snapshot) => {
                 const data = snapshot.val();
                 if(data !== null){
                     setDescripcion(data.Descripcion)

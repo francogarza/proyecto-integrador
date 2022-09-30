@@ -25,11 +25,15 @@ function App() {
         }
         />
         <Route path="/registro-taller-admin" element={
-          <RegistroTalleres  isUpdate={true} id="e9ab6a288b2"/>
+          <RegistroTalleres />
         }
         />
         <Route path="/catalogo-talleres" element={
-          <CatalogoTalleres />
+          <CatalogoTalleres EsAdmin={false} />
+        }
+        />
+        <Route path="/catalogo-talleres-admin" element={
+          <CatalogoTalleres EsAdmin={true} />
         }
         />
       </Routes>
