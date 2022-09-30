@@ -3,6 +3,9 @@ import {db} from './firebase';
 import {uid} from 'uid';
 import {set, ref} from 'firebase/database';
 import {useState} from "react";
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './basic.css'
+import {Button,Container,Form,Alert} from 'react-bootstrap'
 
 const RegistroTaller = () => {
 
@@ -23,6 +26,7 @@ const RegistroTaller = () => {
     const [TipoEscuela, setTipoEscuela] = useState("");
     const [UltimoGrado, setUltimoGrado] = useState("");
     const [VivieEnMexico, setVivieEnMexico] = useState("");
+    const [alertActive, setAlertActive] = useState(false);
 
     const handleChangeCelularTutorPadre=(e)=>{
         setCelularTutorPadre(e.target.value)
@@ -90,201 +94,242 @@ const RegistroTaller = () => {
         setVivieEnMexico(e.target.value)
     }
 
+    function verificarDatos(){
+        if(verificarCelularPadre() && verificarEdad() && verificarCorreo() && verificarNombre() && verificarEscuela() && verificarNombrePadre() && verificarTrabajoFuturo()){
+            return true
+        }else{
+            return false
+        }
+    }
+
+    function verificarCelularPadre(){
+        return !isNaN(parseInt(CelularTutorPadre))
+    }
+
+    function verificarEdad(){
+        return  !isNaN(parseInt(Edad))
+    }
+
+    function verificarCorreo(){
+        return /\S+@\S+\.\S+/.test(Correo);
+    }
+
+    function verificarNombre(){
+        if(Nombre.length>0){
+            return true
+        }else{
+            return false
+        }
+    }
+
+    function verificarEscuela(){
+        if(NombreEscuela.length>0){
+            return true
+        }else{
+            return false
+        }
+    }
+
+    function verificarNombrePadre(){
+        if(NombreTutorPadre.length>0){
+            return true
+        }else{
+            return false
+        }
+    }
+
+    function verificarTrabajoFuturo(){
+        if(FuturoTrabajo.length>0){
+            return true
+        }else{
+            return false
+        }
+    }
+
     const writeToDatabase = () => {
-        const uuid = uid()
-        set(ref(db, 'Participante/patotest/'+ uuid), {
-            CelularTutorPadre,
-            ClaseProgra,
-            ComoEntero,
-            Correo,
-            Edad,
-            Estado,
-            FuturoTrabajo,
-            Genero,
-            Municipio,
-            Nacimiento,
-            Nombre,
-            NombreEscuela,
-            NombreTutorPadre,
-            ParticipadoAxta,
-            TipoEscuela,
-            UltimoGrado,
-            VivieEnMexico,
-        });
-        setCelularTutorPadre("");
-        setClaseProgra("");
-        setComoEntero("");
-        setCorreo("");
-        setEdad("");
-        setEstado("");
-        setFuturoTrabajo("");
-        setGenero("");
-        setMunicipio("");
-        setNacimiento("");
-        setNombre("");
-        setNombreEscuela("");
-        setNombreTutorPadre("");
-        setParticipadoAxta("");
-        setUltimoGrado("");
-        setVivieEnMexico("");
+        if(verificarDatos()){
+            const uuid = uid()
+            set(ref(db, 'Participante/patotest/'+ uuid), {
+                CelularTutorPadre,
+                ClaseProgra,
+                ComoEntero,
+                Correo,
+                Edad,
+                Estado,
+                FuturoTrabajo,
+                Genero,
+                Municipio,
+                Nacimiento,
+                Nombre,
+                NombreEscuela,
+                NombreTutorPadre,
+                ParticipadoAxta,
+                TipoEscuela,
+                UltimoGrado,
+                VivieEnMexico,
+            });
+            setCelularTutorPadre("");
+            setClaseProgra("");
+            setComoEntero("");
+            setCorreo("");
+            setEdad("");
+            setEstado("");
+            setFuturoTrabajo("");
+            setGenero("");
+            setMunicipio("");
+            setNacimiento("");
+            setNombre("");
+            setNombreEscuela("");
+            setNombreTutorPadre("");
+            setParticipadoAxta("");
+            setUltimoGrado("");
+            setVivieEnMexico("");
+        }else{
+            setAlertActive(true);
+        }
+        
     };
 
     return(
-        <form classname="registroTaller">
-            <label>
+        <Container>
+        {alertActive && <Alert variant='warning'>porfavor verifique sus datos</Alert>}
+        <Form classname="registroTaller">
+            <Form.Label>
                 Escriba el nombre completo del participante.
-            </label>
+            </Form.Label>
             <br/>
-            <input type="text" placeholder="Nombre" id="Nombre" value={Nombre} onChange={handleChangeNombre} required="true"/>
+            <Form.Control type="text" placeholder="Nombre" id="Nombre" value={Nombre} onChange={handleChangeNombre} required="true"/>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 Escriba su edad.
-            </label>
+            </Form.Label>
             <br/>
-            <input type="number" placeholder="Correo" id="Mail" value={Edad} onChange={handleChangeEdad} required="true"/>
+            <Form.Control type="number" placeholder="telefono" id="Mail" value={Edad} onChange={handleChangeEdad} required="true"/>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 Seleccione su fecha de nacimiento.
-            </label>
+            </Form.Label>
             <br/>
-            <input type="date" placeholder="31/12/2001" id="Nacimiento" value={Nacimiento} onChange={handleChangeNacimiento} required="true"/>
+            <Form.Control type="date" placeholder="31/12/2001" id="Nacimiento" value={Nacimiento} onChange={handleChangeNacimiento} required="true"/>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 Seleccione su genero.
-            </label>
+            </Form.Label>
             <br/>
             <input type="radio" id="Masculino" name="Genero" value={Genero} onChange={handleChangeGenero} checked="true"/>
-            <label for="Masculino">Masculino</label>
+            <Form.Label for="Masculino">Masculino</Form.Label>
             <input type="radio" id="Femenino" name="Genero" value={Genero} onChange={handleChangeGenero}/>
-            <label htmlFor="Femenino">Femenino</label>
+            <Form.Label htmlFor="Femenino">Femenino</Form.Label>
             <input type="radio" id="Otro" name="Genero" value={Genero} onChange={handleChangeGenero}/>
-            <label htmlFor="Otro">Otro</label>
+            <Form.Label htmlFor="Otro">Otro</Form.Label>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 Escriba su direccion de correo electronico.
-            </label>
+            </Form.Label>
             <br/>
-            <input type="email" placeholder="algo@correo.com" id="Correo" value={Correo} onChange={handleChangeCorreo} required="true"/>
+            <Form.Control type="email" placeholder="algo@correo.com" id="Correo" value={Correo} onChange={handleChangeCorreo} required="true"/>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 Escriba el nombre del padre o tutor del participante.
-            </label>
+            </Form.Label>
             <br/>
-            <input type="text" placeholder="NombreTutorPadre" id="NombreTutorPadre" value={NombreTutorPadre} onChange={handleChangeNombreTutorPadre} required="true"/>
+            <Form.Control type="text" placeholder="NombreTutorPadre" id="NombreTutorPadre" value={NombreTutorPadre} onChange={handleChangeNombreTutorPadre} required="true"/>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 Escriba el numero celular del padre o tutor del participante.
-            </label>
+            </Form.Label>
             <br/>
-            <input type="number" placeholder="CelularTutorPadre" id="CelularTutorPadre" value={CelularTutorPadre} onChange={handleChangeCelularTutorPadre} minLength="10" maxLength="10" required="true"/>
+            <Form.Control type="number" placeholder="CelularTutorPadre" id="CelularTutorPadre" value={CelularTutorPadre} onChange={handleChangeCelularTutorPadre} minLength="10" maxLength="10" required="true"/>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 ¿Vive en Mexico?
-            </label>
-            <br/>
+            </Form.Label>
             <br/>
             <input type="radio" id="Verdadero" name="VivieEnMexico" value={VivieEnMexico} onChange={handleChangeVivieEnMexico}
                    checked="true"/>
-            <label htmlFor="Verdadero">Verdadero</label>
+            <Form.Label htmlFor="Verdadero">Verdadero</Form.Label>
             <input type="radio" id="Falso" name="VivieEnMexico" value={VivieEnMexico} onChange={handleChangeVivieEnMexico}/>
-            <label htmlFor="Falso">Falso</label>
+            <Form.Label htmlFor="Falso">Falso</Form.Label>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 Seleccione el estado de residencia.
-            </label>
+            </Form.Label>
             <br/>
-            <input type="text" placeholder="NuevoLeon" id="Estado" value={Estado} onChange={handleChangeEstado} required="true"/>
+            <Form.Control type="text" placeholder="NuevoLeon" id="Estado" value={Estado} onChange={handleChangeEstado} required="true"/>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 Seleccione el municipio de residencia.
-            </label>
+            </Form.Label>
             <br/>
-            <input type="text" placeholder="Monterrey" id="Municipio" value={Municipio} onChange={handleChangeMunicipio} required="true"/>
+            <Form.Control type="text" placeholder="Monterrey" id="Municipio" value={Municipio} onChange={handleChangeMunicipio} required="true"/>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 Escriba el nombre de la escuela del participante.
-            </label>
+            </Form.Label>
             <br/>
-            <input type="text" placeholder="NombreEscuela" id="NombreEscuela" value={NombreEscuela} onChange={handleChangeNombreEscuela} required="true"/>
+            <Form.Control type="text" placeholder="NombreEscuela" id="NombreEscuela" value={NombreEscuela} onChange={handleChangeNombreEscuela} required="true"/>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 Selecciona el tipo de escuela del participante.
-            </label>
+            </Form.Label>
             <br/>
             <input type="radio" id="Privada" name="TipoEscuela" value={TipoEscuela} onChange={handleChangeTipoEscuela}
                    checked="true"/>
-            <label htmlFor="Privada">Privada</label>
+            <Form.Label htmlFor="Privada">Privada</Form.Label>
             <input type="radio" id="Publica" name="TipoEscuela" value={TipoEscuela} onChange={handleChangeTipoEscuela}/>
-            <label htmlFor="Publica">Publica</label>
+            <Form.Label htmlFor="Publica">Publica</Form.Label>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 Escriba el ultimo grado de escolaridad del participante:
-            </label>
+            </Form.Label>
             <br/>
-            <input type="text" placeholder="8vo grado" id="UltimoGrado" value={UltimoGrado} onChange={handleChangeUlitmoGrado} required="true"/>
+            <Form.Control type="text" placeholder="8vo grado" id="UltimoGrado" value={UltimoGrado} onChange={handleChangeUlitmoGrado} required="true"/>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 ¿Ha llevado clases de programacion antes el participante?
-            </label>
+            </Form.Label>
             <br/>
             <input type="radio" id="Verdadero" name="ClaseProgra" value={ClaseProgra} onChange={handleChangeClaseProgra}
                    checked="true"/>
-            <label htmlFor="Verdadero">Verdadero</label>
+            <Form.Label htmlFor="Verdadero">Verdadero</Form.Label>
             <input type="radio" id="Falso" name="ClaseProgra" value={ClaseProgra} onChange={handleChangeClaseProgra}/>
-            <label htmlFor="Falso">Falso</label>
+            <Form.Label htmlFor="Falso">Falso</Form.Label>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 ¿Ha participado antes en un taller de Axta?
-            </label>
+            </Form.Label>
             <br/>
             <input type="radio" id="Verdadero" name="ParticipadoAxta" value={ParticipadoAxta} onChange={handleChangeParticipadoAxta}
                    checked="true"/>
-            <label htmlFor="Verdadero">Verdadero</label>
+            <Form.Label htmlFor="Verdadero">Verdadero</Form.Label>
             <input type="radio" id="Falso" name="ParticipadoAxta" value={ParticipadoAxta} onChange={handleChangeParticipadoAxta}/>
-            <label htmlFor="Falso">Falso</label>
+            <Form.Label htmlFor="Falso">Falso</Form.Label>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 Cual es el trabajo futuro que desea el participante.
-            </label>
+            </Form.Label>
             <br/>
-            <input type="text" placeholder="Desarrollador de Software" id="FuturoTrabajo" value={FuturoTrabajo} onChange={handleChangeFuturoTrabajo} required="true"/>
+            <Form.Control type="text" placeholder="Desarrollador de Software" id="FuturoTrabajo" value={FuturoTrabajo} onChange={handleChangeFuturoTrabajo} required="true"/>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 ¿Como se entero de estos talleres?
-            </label>
+            </Form.Label>
             <br/>
             <input type="radio" id="Maestro" name="ComoEntero" value={ComoEntero} onChange={handleChangeComoEntero}
                    checked="true"/>
-            <label htmlFor="Maestro">Maestro</label>
+            <Form.Label htmlFor="Maestro">Maestro</Form.Label>
             <input type="radio" id="Amigo" name="ComoEntero" value={ComoEntero} onChange={handleChangeComoEntero}/>
-            <label htmlFor="Amigo">Amigo</label>
+            <Form.Label htmlFor="Amigo">Amigo</Form.Label>
             <input type="radio" id="Publicidad" name="ComoEntero" value={ComoEntero} onChange={handleChangeComoEntero}/>
-            <label htmlFor="Publicidad">Publicidad</label>
+            <Form.Label htmlFor="Publicidad">Publicidad</Form.Label>
             <input type="radio" id="Otro" name="ComoEntero" value={ComoEntero} onChange={handleChangeComoEntero}/>
-            <label htmlFor="Otro">Otro</label>
+            <Form.Label htmlFor="Otro">Otro</Form.Label>
             <br/>
-            <br/>
-
-            <button onClick={writeToDatabase} class="registro" type="submit">
+            <Button onClick={writeToDatabase} class="registro" type="submit" style={{backgroundColor:"#864FBA"}}>
                 Registrarse
-            </button>
-        </form>
+            </Button>
+        </Form>
+        </Container>
     )
 }
 

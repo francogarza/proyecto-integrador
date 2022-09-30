@@ -3,6 +3,9 @@ import {db} from './firebase';
 import {uid} from 'uid';
 import {set, ref,onValue,update} from 'firebase/database';
 import {useState,useEffect} from "react";
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './basic.css'
+import {Button,Container,Form,Alert} from 'react-bootstrap'
 
 
 ///
@@ -19,6 +22,7 @@ const RegistroTalleres = (props) => {
     const [Nombre, setNombre] = useState("");
     const [Prerequisitos, setPrerequisitos] = useState("");
     const [VirtualPresencial, setVirtualPresencial] = useState("");
+    const [alertActive, setAlertActive] = useState(false);
 
 
     const handleChangeDescripcion=(e)=>{
@@ -48,46 +52,97 @@ const RegistroTalleres = (props) => {
         setVirtualPresencial(e.target.value)
     }
 
-    const writeToDatabase = () => {
-        const uuid = uid()
+    function verificarDatos(){
+        
+        if(verificarDescripcion() && verificarImpartido() && verificarNombre() && verificarPrerequisitos()){
+            return true
+        }else{
+            return false
+        }
+    }
 
-        set(ref(db, 'Taller/patotest/'+ uuid), {
-            Descripcion,
-            Fechas,
-            Horarios,
-            ImpartidoPor,
-            Nombre,
-            Prerequisitos,
-            VirtualPresencial,
-        });
-        setDescripcion("");
-        setFechas("");
-        setHorarios("");
-        setImpartidoPor("");
-        setNombre("");
-        setPrerequisitos("");
-        setVirtualPresencial("");
+    function verificarDescripcion(){
+        if(Descripcion.length>0){
+            return true
+        }else{
+            return false
+        }
+    }
+
+    function verificarImpartido(){
+        if(ImpartidoPor.length>0){
+            return true
+        }else{
+            return false
+        }
+    }
+
+    function verificarNombre(){
+        if(Nombre.length>0){
+            return true
+        }else{
+            return false
+        }
+    }
+
+    function verificarPrerequisitos(){
+        if(Prerequisitos.length>0){
+            return true
+        }else{
+            return false
+        }
+    }
+
+    const writeToDatabase = () => {
+        if(verificarDatos()){
+            const uuid = uid()
+
+            set(ref(db, 'Taller/patotest/'+ uuid), {
+                Descripcion,
+                Fechas,
+                Horarios,
+                ImpartidoPor,
+                Nombre,
+                Prerequisitos,
+                VirtualPresencial,
+            });
+            setDescripcion("");
+            setFechas("");
+            setHorarios("");
+            setImpartidoPor("");
+            setNombre("");
+            setPrerequisitos("");
+            setVirtualPresencial("");
+        }else{
+            setAlertActive(true);
+        }
+        
     };
 
     const updateToDatabase = () => {
-        const id = props.id
+        if(verificarDatos()){
+            const id = props.id
 
-        update(ref(db, 'Taller/patotest/'+ id), {
-            Descripcion,
-            Fechas,
-            Horarios,
-            ImpartidoPor,
-            Nombre,
-            Prerequisitos,
-            VirtualPresencial,
-        });
-        setDescripcion("");
-        setFechas("");
-        setHorarios("");
-        setImpartidoPor("");
-        setNombre("");
-        setPrerequisitos("");
-        setVirtualPresencial("");
+            update(ref(db, 'Taller/patotest/'+ id), {
+                Descripcion,
+                Fechas,
+                Horarios,
+                ImpartidoPor,
+                Nombre,
+                Prerequisitos,
+                VirtualPresencial,
+            });
+            setDescripcion("");
+            setFechas("");
+            setHorarios("");
+            setImpartidoPor("");
+            setNombre("");
+            setPrerequisitos("");
+            setVirtualPresencial("");
+        }else{
+            setAlertActive(true);
+        }
+        
     };
 
 
@@ -114,45 +169,42 @@ const RegistroTalleres = (props) => {
       }, [props.id,props.isUpdate])
 
     return(
-        <form classname="registroTaller">
-            <label>
+        <Container>
+        {alertActive && <Alert variant='warning'>porfavor verifique sus datos</Alert>}
+        <Form className="registroTaller">
+            <Form.Label>
                 Escriba la descripcion del taller.
-            </label>
+            </Form.Label>
             <br/>
-            <input type="text" placeholder="Descripcion" id="Descripcion" value={Descripcion} onChange={handleChangeDescripcion} required="true"/>
+            <Form.Control type="text" placeholder="Descripcion" id="Descripcion" value={Descripcion} onChange={handleChangeDescripcion} required="true"/>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 Seleccione la fecha de inicio del Taller.
-            </label>
+            </Form.Label>
             <br/>
-            <input type="date" id="Fechas" value={Fechas} onChange={handleChangeFechas} required="true"/>
+            <Form.Control type="date" id="Fechas" value={Fechas} onChange={handleChangeFechas} required="true"/>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 Escribe el nombre de quien imparte el taller.
-            </label>
+            </Form.Label>
             <br/>
-            <input type="text" placeholder="Nombre" id="ImpartidoPor" value={ImpartidoPor} onChange={handleChangeImpartidoPor} required="true"/>
+            <Form.Control type="text" placeholder="Nombre" id="ImpartidoPor" value={ImpartidoPor} onChange={handleChangeImpartidoPor} required="true"/>
             <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 Escriba el nombre del Taller.
-            </label>
+            </Form.Label>
             <br/>
-            <input type="text" placeholder="Nombre" id="Nombre" value={Nombre} onChange={handleChangeNombre} required="true"/>
+            <Form.Control type="text" placeholder="Nombre" id="Nombre" value={Nombre} onChange={handleChangeNombre} required="true"/>
             <br/>
+            <Form.Label>
+                Escriba los prerequisitos del taller.
+            </Form.Label>
             <br/>
-            <label>
-                Esriba los prerequisitos del taller.
-            </label>
+            <Form.Control type="text" placeholder="" id="Prerequisitos" value={Prerequisitos} onChange={handleChangePrerequisitos} required="true"/>
             <br/>
-            <input type="text" placeholder="" id="Prerequisitos" value={Prerequisitos} onChange={handleChangePrerequisitos} required="true"/>
-            <br/>
-            <br/>
-            <label>
+            <Form.Label>
                 Seleccione si el taller es virtual o presencial.
-            </label>
+            </Form.Label>
             <br/>
             <input type="radio" id="Virtual" name="VirtualPresencial" value={VirtualPresencial} onChange={handleChangeVirtualPresencial}
                    checked="true"/>
@@ -160,11 +212,11 @@ const RegistroTalleres = (props) => {
             <input type="radio" id="Presencial" name="Presencial" value={VirtualPresencial} onChange={handleChangeVirtualPresencial}/>
             <label htmlFor="Presencial">Presencial</label>
             <br/>
-            <br/>
-            <button onClick={props.isUpdate ? updateToDatabase : writeToDatabase} class="registro" type="submit">
+            <Button onClick={props.isUpdate ? updateToDatabase : writeToDatabase} class="registro" type="submit" style={{backgroundColor:"#864FBA"}}>
                 {props.isUpdate ? 'Actualizar Taller' : 'Registrar Taller'}
-            </button>
-        </form>
+            </Button>
+        </Form>
+        </Container>
     )
 }
 
