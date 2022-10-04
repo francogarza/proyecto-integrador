@@ -62,17 +62,17 @@ export default function Home() {
             <input type="text" value={todo} onChange={handleTodoChange}></input>
             {isEdit ? ( //esto es para update
                 <>
-                    <button onClick={handleSubmitChange}>submit change</button>
+                    <button onClick={handleSubmitChange}>Submit change</button>
                     <button onClick={() => setIsEdit(false)}>X</button>
                 </>
             ): ( //esto para create
-                    <button onClick={writeToDatabase}>submit</button>
+                    <button onClick={writeToDatabase}>Submit</button>
             )}
             {todos.map(todo => ( 
                 <>
                     <h1>{todo.todo}</h1>
-                    <button onClick={() => handleUpdate(todo)}>update</button>
-                    <button onClick={() => handleDelete(todo)}>delete</button>
+                    <button onClick={() => handleUpdate(todo)}>Update</button>
+                    <button onClick={() => handleDelete(todo)}>Delete</button>
                 </>
             ))}
         </div>
