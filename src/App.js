@@ -6,6 +6,7 @@ import RegistroPadres from './RegistroPadres.js';
 import RegistroTaller from './RegistroTaller.js';
 import RegistroTalleres from './RegistroTalleres.js';
 import CatalogoTalleres from './CatalogoTalleres.js';
+import DetalleTaller from './DetalleTaller.js';
 
 function App() {
   
@@ -34,6 +35,10 @@ function App() {
         />
         <Route path="/catalogo-talleres-admin" element={
           <CatalogoTalleres EsAdmin={true} />
+        }
+        />
+        <Route path="/detalle-taller" element={
+          <DetalleTaller id={"36805bea4fa"} />
         }
         />
       </Routes>
