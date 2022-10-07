@@ -177,43 +177,43 @@ const RegistroTalleres = (props) => {
                 Escriba la descripción del taller.
             </Form.Label>
             <br/>
-            <Form.Control type="text" placeholder="Descripción" id="Descripcion" value={Descripcion} onChange={handleChangeDescripcion} required="true"/>
+            <Form.Control type="text" placeholder="Descripción" id="Descripcion" value={Descripcion} onChange={handleChangeDescripcion} required={true}/>
             <br/>
             <Form.Label>
                 Seleccione la fecha de inicio del taller.
             </Form.Label>
             <br/>
-            <Form.Control type="date" id="Fechas" value={Fechas} onChange={handleChangeFechas} required="true"/>
+            <Form.Control type="date" id="Fechas" value={Fechas} onChange={handleChangeFechas} required={true}/>
             <br/>
             <Form.Label>
                 Escriba el nombre de quien imparte el taller.
             </Form.Label>
             <br/>
-            <Form.Control type="text" placeholder="NombreInstructor" id="ImpartidoPor" value={ImpartidoPor} onChange={handleChangeImpartidoPor} required="true"/>
+            <Form.Control type="text" placeholder="NombreInstructor" id="ImpartidoPor" value={ImpartidoPor} onChange={handleChangeImpartidoPor} required={true}/>
             <br/>
             <Form.Label>
                 Escriba el nombre del taller.
             </Form.Label>
             <br/>
-            <Form.Control type="text" placeholder="NombreTaller" id="Nombre" value={Nombre} onChange={handleChangeNombre} required="true"/>
+            <Form.Control type="text" placeholder="NombreTaller" id="Nombre" value={Nombre} onChange={handleChangeNombre} required={true}/>
             <br/>
             <Form.Label>
                 Escriba los prerrequisitos del taller.
             </Form.Label>
             <br/>
-            <Form.Control type="text" placeholder="Prerrequisitos" id="Prerrequisitos" value={Prerequisitos} onChange={handleChangePrerequisitos} required="true"/>
+            <Form.Control type="text" placeholder="Prerrequisitos" id="Prerrequisitos" value={Prerequisitos} onChange={handleChangePrerequisitos} required={true}/>
             <br/>
             <Form.Label>
                 Seleccione si el taller es virtual o presencial.
             </Form.Label>
             <br/>
             <input type="radio" id="Virtual" name="VirtualPresencial" value={VirtualPresencial} onChange={handleChangeVirtualPresencial}
-                   checked="true"/>
+                   checked={true}/>
             <label htmlFor="Virtual">Virtual</label>
             <input type="radio" id="Presencial" name="Presencial" value={VirtualPresencial} onChange={handleChangeVirtualPresencial}/>
             <label htmlFor="Presencial">Presencial</label>
             <br/>
-            <Button onClick={props.isUpdate ? updateToDatabase : writeToDatabase} class="registro" type="submit" style={{backgroundColor:"#864FBA"}}>
+            <Button onClick={props.isUpdate ? updateToDatabase : writeToDatabase} className="registro" type="submit" style={{backgroundColor:"#864FBA"}}>
                 {props.isUpdate ? 'Actualizar Taller' : 'Registrar taller'}
             </Button>
         </Form>

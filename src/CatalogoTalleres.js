@@ -32,7 +32,7 @@ const CatalogoTalleres = (props) => {
         </div>
         <div style={{padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
             {talleres.map(taller => (
-                <div style={{display: "inline-block"}}>
+                <div style={{display: "inline-block"}} key={taller.uuid}>
                     {props.EsAdmin ? (<TallerCard EsAdmin={true} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion}></TallerCard>) : <TallerCard EsAdmin={false} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion}></TallerCard>}
                 </div>
             ))}
