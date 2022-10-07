@@ -1,13 +1,13 @@
 import React from 'react';
 import {db} from './firebase';
 import {uid} from 'uid';
-import {set, ref} from 'firebase/database';
-import {useState} from "react";
+import {set, ref, onValue,update} from 'firebase/database';
+import {useState,useEffect} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
 import {Button,Container,Form,Alert} from 'react-bootstrap'
 
-const RegistroTaller = () => {
+const RegistroTaller = (props) => {
 
     const [CelularTutorPadre, setCelularTutorPadre] = useState("");
     const [ClaseProgra, setClaseProgra] = useState("");
@@ -27,6 +27,7 @@ const RegistroTaller = () => {
     const [UltimoGrado, setUltimoGrado] = useState("");
     const [VivieEnMexico, setVivieEnMexico] = useState("");
     const [alertActive, setAlertActive] = useState(false);
+    const [hijos, setHijos] = useState([]);
 
     const handleChangeCelularTutorPadre=(e)=>{
         setCelularTutorPadre(e.target.value)
@@ -148,8 +149,9 @@ const RegistroTaller = () => {
 
     const writeToDatabase = () => {
         if(verificarDatos()){
+            const PadreId = props.PadreId;
             const uuid = uid()
-            set(ref(db, 'Participante/patotest/'+ uuid), {
+            set(ref(db, 'Participante/'+ uuid), {
                 CelularTutorPadre,
                 ClaseProgra,
                 ComoEntero,
@@ -167,6 +169,11 @@ const RegistroTaller = () => {
                 TipoEscuela,
                 UltimoGrado,
                 VivieEnMexico,
+            });
+
+            update(ref(db, 'Padre/'+ PadreId+ "/hijos/" + uuid), {
+                Nombre,
+                uuid
             });
             setCelularTutorPadre("");
             setClaseProgra("");

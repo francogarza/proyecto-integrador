@@ -22,7 +22,7 @@ function App() {
         }
         />
         <Route path="/registro-taller-usuario" element={
-          <RegistroTaller />
+          <RegistroTaller PadreId={"10366ae44ab"}/>
         }
         />
         <Route path="/registro-taller-admin" element={

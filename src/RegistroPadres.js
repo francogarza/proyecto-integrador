@@ -48,10 +48,12 @@ const RegistroPadres = () => {
   const writeToDatabase = () => {
     if(verificarDatos()){
       const uuid = uid()
+      const hijos = [""]
       set(ref(db,'Padre/' + uuid), {
         todoNombre,
         todoMail,
         todoCelular,
+        hijos,
         uuid,
       });
       setTodoNombre("");
