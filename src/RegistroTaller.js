@@ -200,31 +200,31 @@ const RegistroTaller = (props) => {
     return(
         <Container>
         {alertActive && <Alert variant='warning'>porfavor verifique sus datos</Alert>}
-        <Form classname="registroTaller">
+        <Form className="registroTaller">
             <Form.Label>
                 Escriba el nombre completo del participante.
             </Form.Label>
             <br/>
-            <Form.Control type="text" placeholder="Nombre" id="Nombre" value={Nombre} onChange={handleChangeNombre} required="true"/>
+            <Form.Control type="text" placeholder="Nombre" id="Nombre" value={Nombre} onChange={handleChangeNombre} required={true}/>
             <br/>
             <Form.Label>
                 Escriba su edad.
             </Form.Label>
             <br/>
-            <Form.Control type="number" placeholder="Edad" id="Edad" value={Edad} onChange={handleChangeEdad} required="true"/>
+            <Form.Control type="number" placeholder="Edad" id="Edad" value={Edad} onChange={handleChangeEdad} required={true}/>
             <br/>
             <Form.Label>
                 Seleccione su fecha de nacimiento.
             </Form.Label>
             <br/>
-            <Form.Control type="date" placeholder="31/12/2001" id="Nacimiento" value={Nacimiento} onChange={handleChangeNacimiento} required="true"/>
+            <Form.Control type="date" placeholder="31/12/2001" id="Nacimiento" value={Nacimiento} onChange={handleChangeNacimiento} required={true}/>
             <br/>
             <Form.Label>
                 Seleccione su género.
             </Form.Label>
             <br/>
-            <input type="radio" id="Masculino" name="Genero" value={Genero} onChange={handleChangeGenero} checked="true"/>
-            <Form.Label for="Masculino">Masculino</Form.Label>
+            <input type="radio" id="Masculino" name="Genero" value={Genero} onChange={handleChangeGenero} checked={true}/>
+            <Form.Label htmlFor="Masculino">Masculino</Form.Label>
             <input type="radio" id="Femenino" name="Genero" value={Genero} onChange={handleChangeGenero}/>
             <Form.Label htmlFor="Femenino">Femenino</Form.Label>
             <input type="radio" id="Otro" name="Genero" value={Genero} onChange={handleChangeGenero}/>
@@ -234,26 +234,26 @@ const RegistroTaller = (props) => {
                 Escriba su direccion de correo electrónico.
             </Form.Label>
             <br/>
-            <Form.Control type="email" placeholder="algo@correo.com" id="Correo" value={Correo} onChange={handleChangeCorreo} required="true"/>
+            <Form.Control type="email" placeholder="algo@correo.com" id="Correo" value={Correo} onChange={handleChangeCorreo} required={true}/>
             <br/>
             <Form.Label>
                 Escriba el nombre del padre o tutor del participante.
             </Form.Label>
             <br/>
-            <Form.Control type="text" placeholder="NombreTutorPadre" id="NombreTutorPadre" value={NombreTutorPadre} onChange={handleChangeNombreTutorPadre} required="true"/>
+            <Form.Control type="text" placeholder="NombreTutorPadre" id="NombreTutorPadre" value={NombreTutorPadre} onChange={handleChangeNombreTutorPadre} required={true}/>
             <br/>
             <Form.Label>
                 Escriba el número celular del padre o tutor del participante.
             </Form.Label>
             <br/>
-            <Form.Control type="number" placeholder="CelularTutorPadre" id="CelularTutorPadre" value={CelularTutorPadre} onChange={handleChangeCelularTutorPadre} minLength="10" maxLength="10" required="true"/>
+            <Form.Control type="number" placeholder="CelularTutorPadre" id="CelularTutorPadre" value={CelularTutorPadre} onChange={handleChangeCelularTutorPadre} minLength="10" maxLength="10" required={true}/>
             <br/>
             <Form.Label>
                 ¿Vive en México?
             </Form.Label>
             <br/>
             <input type="radio" id="Verdadero" name="VivieEnMexico" value={VivieEnMexico} onChange={handleChangeVivieEnMexico}
-                   checked="true"/>
+                   checked={true}/>
             <Form.Label htmlFor="Verdadero">Verdadero</Form.Label>
             <input type="radio" id="Falso" name="VivieEnMexico" value={VivieEnMexico} onChange={handleChangeVivieEnMexico}/>
             <Form.Label htmlFor="Falso">Falso</Form.Label>
@@ -262,26 +262,26 @@ const RegistroTaller = (props) => {
                 Seleccione el estado de residencia.
             </Form.Label>
             <br/>
-            <Form.Control type="text" placeholder="Nuevo León" id="Estado" value={Estado} onChange={handleChangeEstado} required="true"/>
+            <Form.Control type="text" placeholder="Nuevo León" id="Estado" value={Estado} onChange={handleChangeEstado} required={true}/>
             <br/>
             <Form.Label>
                 Seleccione el municipio de residencia.
             </Form.Label>
             <br/>
-            <Form.Control type="text" placeholder="Monterrey" id="Municipio" value={Municipio} onChange={handleChangeMunicipio} required="true"/>
+            <Form.Control type="text" placeholder="Monterrey" id="Municipio" value={Municipio} onChange={handleChangeMunicipio} required={true}/>
             <br/>
             <Form.Label>
                 Escriba el nombre de la escuela del participante.
             </Form.Label>
             <br/>
-            <Form.Control type="text" placeholder="NombreEscuela" id="NombreEscuela" value={NombreEscuela} onChange={handleChangeNombreEscuela} required="true"/>
+            <Form.Control type="text" placeholder="NombreEscuela" id="NombreEscuela" value={NombreEscuela} onChange={handleChangeNombreEscuela} required={true}/>
             <br/>
             <Form.Label>
                 Seleccione el tipo de escuela del participante.
             </Form.Label>
             <br/>
             <input type="radio" id="Privada" name="TipoEscuela" value={TipoEscuela} onChange={handleChangeTipoEscuela}
-                   checked="true"/>
+                   checked={true}/>
             <Form.Label htmlFor="Privada">Privada</Form.Label>
             <input type="radio" id="Publica" name="TipoEscuela" value={TipoEscuela} onChange={handleChangeTipoEscuela}/>
             <Form.Label htmlFor="Publica">Pública</Form.Label>
@@ -290,14 +290,14 @@ const RegistroTaller = (props) => {
                 Escriba el último grado de escolaridad del participante.
             </Form.Label>
             <br/>
-            <Form.Control type="text" placeholder="8vo grado" id="UltimoGrado" value={UltimoGrado} onChange={handleChangeUlitmoGrado} required="true"/>
+            <Form.Control type="text" placeholder="8vo grado" id="UltimoGrado" value={UltimoGrado} onChange={handleChangeUlitmoGrado} required={true}/>
             <br/>
             <Form.Label>
                 ¿Ha llevado clases de programación anteriormente el participante?
             </Form.Label>
             <br/>
             <input type="radio" id="Verdadero" name="ClaseProgra" value={ClaseProgra} onChange={handleChangeClaseProgra}
-                   checked="true"/>
+                   checked={true}/>
             <Form.Label htmlFor="Verdadero">Verdadero</Form.Label>
             <input type="radio" id="Falso" name="ClaseProgra" value={ClaseProgra} onChange={handleChangeClaseProgra}/>
             <Form.Label htmlFor="Falso">Falso</Form.Label>
@@ -307,7 +307,7 @@ const RegistroTaller = (props) => {
             </Form.Label>
             <br/>
             <input type="radio" id="Verdadero" name="ParticipadoAxta" value={ParticipadoAxta} onChange={handleChangeParticipadoAxta}
-                   checked="true"/>
+                   checked={true}/>
             <Form.Label htmlFor="Verdadero">Verdadero</Form.Label>
             <input type="radio" id="Falso" name="ParticipadoAxta" value={ParticipadoAxta} onChange={handleChangeParticipadoAxta}/>
             <Form.Label htmlFor="Falso">Falso</Form.Label>
@@ -316,14 +316,14 @@ const RegistroTaller = (props) => {
                 ¿Cuál es el trabajo futuro que desea el participante?
             </Form.Label>
             <br/>
-            <Form.Control type="text" placeholder="Desarrollador de Software" id="FuturoTrabajo" value={FuturoTrabajo} onChange={handleChangeFuturoTrabajo} required="true"/>
+            <Form.Control type="text" placeholder="Desarrollador de Software" id="FuturoTrabajo" value={FuturoTrabajo} onChange={handleChangeFuturoTrabajo} required={true}/>
             <br/>
             <Form.Label>
                 ¿Cómo se enteró de estos talleres?
             </Form.Label>
             <br/>
             <input type="radio" id="Maestro" name="ComoEntero" value={ComoEntero} onChange={handleChangeComoEntero}
-                   checked="true"/>
+                   checked={true}/>
             <Form.Label htmlFor="Maestro">Maestro</Form.Label>
             <input type="radio" id="Amigo" name="ComoEntero" value={ComoEntero} onChange={handleChangeComoEntero}/>
             <Form.Label htmlFor="Amigo">Amigo</Form.Label>
@@ -332,7 +332,7 @@ const RegistroTaller = (props) => {
             <input type="radio" id="Otro" name="ComoEntero" value={ComoEntero} onChange={handleChangeComoEntero}/>
             <Form.Label htmlFor="Otro">Otro</Form.Label>
             <br/>
-            <Button onClick={writeToDatabase} class="registro" type="submit" style={{backgroundColor:"#864FBA"}}>
+            <Button onClick={writeToDatabase} className="registro" type="submit" style={{backgroundColor:"#864FBA"}}>
                 Registrarse
             </Button>
         </Form>
