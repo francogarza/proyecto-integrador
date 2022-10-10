@@ -22,6 +22,7 @@ const RegistroTalleres = (props) => {
     const [Nombre, setNombre] = useState("");
     const [Prerequisitos, setPrerequisitos] = useState("");
     const [VirtualPresencial, setVirtualPresencial] = useState("");
+    const [InformacionConfidencial, setInformacionConfidencial] = useState("");
     const [alertActive, setAlertActive] = useState(false);
 
 
@@ -48,13 +49,18 @@ const RegistroTalleres = (props) => {
     const handleChangePrerequisitos=(e)=>{
         setPrerequisitos(e.target.value)
     }
+
     const handleChangeVirtualPresencial=(e)=>{
         setVirtualPresencial(e.target.value)
     }
 
+    const handleChangeInformacionConfidencial=(e)=>{
+        setInformacionConfidencial(e.target.value)
+    }
+
     function verificarDatos(){
         
-        if(verificarDescripcion() && verificarImpartido() && verificarNombre() && verificarPrerequisitos()){
+        if(verificarDescripcion() && verificarImpartido() && verificarNombre() && verificarPrerequisitos() && verificarInformacionConfidencial()){
             return true
         }else{
             return false
@@ -93,6 +99,14 @@ const RegistroTalleres = (props) => {
         }
     }
 
+    function verificarInformacionConfidencial(){
+        if(InformacionConfidencial.length>0){
+            return true
+        }else{
+            return false
+        }
+    }
+
     const writeToDatabase = () => {
         if(verificarDatos()){
             const uuid = uid()
@@ -105,6 +119,7 @@ const RegistroTalleres = (props) => {
                 Nombre,
                 Prerequisitos,
                 VirtualPresencial,
+                InformacionConfidencial,
                 uuid
             });
             setDescripcion("");
@@ -114,6 +129,7 @@ const RegistroTalleres = (props) => {
             setNombre("");
             setPrerequisitos("");
             setVirtualPresencial("");
+            setInformacionConfidencial("");
         }else{
             setAlertActive(true);
         }
@@ -132,6 +148,7 @@ const RegistroTalleres = (props) => {
                 Nombre,
                 Prerequisitos,
                 VirtualPresencial,
+                InformacionConfidencial,
             });
             setDescripcion("");
             setFechas("");
@@ -140,6 +157,7 @@ const RegistroTalleres = (props) => {
             setNombre("");
             setPrerequisitos("");
             setVirtualPresencial("");
+            setInformacionConfidencial("");
         }else{
             setAlertActive(true);
         }
@@ -163,6 +181,7 @@ const RegistroTalleres = (props) => {
                     setNombre(data.Nombre)
                     setPrerequisitos(data.Prerequisitos)
                     setVirtualPresencial(data.VirtualPresencial)
+                    setInformacionConfidencial(data.InformacionConfidencial)
                 }
               });
 
@@ -171,7 +190,7 @@ const RegistroTalleres = (props) => {
 
     return(
         <Container>
-        {alertActive && <Alert variant='warning'>porfavor verifique sus datos</Alert>}
+        {alertActive && <Alert variant='warning'>Por favor, verifique sus datos.</Alert>}
         <Form className="registroTaller">
             <Form.Label>
                 Escriba la descripción del taller.
@@ -202,6 +221,12 @@ const RegistroTalleres = (props) => {
             </Form.Label>
             <br/>
             <Form.Control type="text" placeholder="Prerrequisitos" id="Prerrequisitos" value={Prerequisitos} onChange={handleChangePrerequisitos} required={true}/>
+            <br/>
+            <Form.Label>
+                Escriba la información confidencial del taller.
+            </Form.Label>
+            <br/>
+            <Form.Control type="text" placeholder="Información confidencial" id="InformacionConfidencial" value={InformacionConfidencial} onChange={handleChangeInformacionConfidencial} required={true}/>
             <br/>
             <Form.Label>
                 Seleccione si el taller es virtual o presencial.

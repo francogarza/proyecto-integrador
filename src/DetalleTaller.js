@@ -12,6 +12,7 @@ const DetalleTaller = (props) => {
     const [Nombre, setNombre] = useState("");
     const [Prerequisitos, setPrerequisitos] = useState("");
     const [VirtualPresencial, setVirtualPresencial] = useState("");
+    const [InformacionConfidencial, setInformacionConfidencial] = useState("");
     
     useEffect(() => {
             //sacar el id
@@ -27,6 +28,7 @@ const DetalleTaller = (props) => {
                     setNombre(data.Nombre)
                     setPrerequisitos(data.Prerequisitos)
                     setVirtualPresencial(data.VirtualPresencial)
+                    setInformacionConfidencial(data.InformacionConfidencial)
                 }
               });
       }, [props.id])
@@ -59,6 +61,9 @@ const DetalleTaller = (props) => {
         setVirtualPresencial(e.target.value)
     }
 
+    const handleChangeInformacionConfidencial=(e)=>{
+        setInformacionConfidencial(e.target.value)
+    }
 
   return(
     <div>
@@ -70,17 +75,17 @@ const DetalleTaller = (props) => {
             <h4>{ImpartidoPor}</h4>
         </div>
         <div style={{backgroundColor : "gray",padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
-            <h3>Descripcion:</h3>
+            <h3>Descripción:</h3>
             <p>{Descripcion}</p>
         </div>
 
         <div style={{backgroundColor : "gray",padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
-            <h3>Prerequisitos:</h3>
+            <h3>Prerrequisitos:</h3>
             <p>{Prerequisitos}</p>
         </div>
 
         <div style={{backgroundColor : "gray",padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
-            <h3>virtual o presencial?</h3>
+            <h3>¿Virtual o presencial?</h3>
             <p>{VirtualPresencial}</p>
         </div>
 
@@ -91,7 +96,8 @@ const DetalleTaller = (props) => {
             asi se ponen los ifs aqui
             <p>{props.EstaInscrito ? {InformacionSecreta} : "para ver esta informacion primero inscriba el taller"}</p>
             */}
-            <h3>Informacion secreta:</h3>
+            <h3>Información secreta:</h3>
+            <p>{props.EstaInscrito ? {InformacionConfidencial} : "Para poder ver esta información, primero inscríbase al taller."}</p>
             
         </div>
     </div>

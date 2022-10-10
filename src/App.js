@@ -38,7 +38,7 @@ function App() {
         }
         />
         <Route path="/detalle-taller" element={
-          <DetalleTaller id={"36805bea4fa"} />
+          <DetalleTaller id={"16a2b3ee056"} EstaInscrito={false} />
         }
         />
       </Routes>
