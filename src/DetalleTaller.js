@@ -97,7 +97,7 @@ const DetalleTaller = (props) => {
             <p>{props.EstaInscrito ? {InformacionSecreta} : "para ver esta informacion primero inscriba el taller"}</p>
             */}
             <h3>Información secreta:</h3>
-            <p>{props.EstaInscrito ? {InformacionConfidencial} : "Para poder ver esta información, primero inscríbase al taller."}</p>
+            {props.EstaInscrito ? <p>{InformacionConfidencial}</p> : <p>"Para poder ver esta información, primero inscríbase al taller."</p>}
             
         </div>
     </div>
