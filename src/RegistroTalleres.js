@@ -6,6 +6,7 @@ import {useState,useEffect} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
 import {Button,Container,Form,Alert} from 'react-bootstrap'
+import { useLocation } from 'react-router-dom';
 
 
 ///
@@ -15,6 +16,7 @@ import {Button,Container,Form,Alert} from 'react-bootstrap'
 
 const RegistroTalleres = (props) => {
 
+    const location = useLocation();
     const [Descripcion, setDescripcion] = useState("");
     const [Fechas, setFechas] = useState("");
     const [Horarios, setHorarios] = useState("");
@@ -24,6 +26,8 @@ const RegistroTalleres = (props) => {
     const [VirtualPresencial, setVirtualPresencial] = useState("");
     const [InformacionConfidencial, setInformacionConfidencial] = useState("");
     const [alertActive, setAlertActive] = useState(false);
+    const [id,setId] = useState("");
+    const [isUpdate,setIsUpdate] = useState(false)
 
 
     const handleChangeDescripcion=(e)=>{
@@ -56,6 +60,14 @@ const RegistroTalleres = (props) => {
 
     const handleChangeInformacionConfidencial=(e)=>{
         setInformacionConfidencial(e.target.value)
+    }
+
+    const handleId=(e)=>{
+        setId(e.target.value)
+    }
+
+    const handleIsUpdate=(e)=>{
+        setIsUpdate(e.target.value)
     }
 
     function verificarDatos(){
@@ -137,9 +149,9 @@ const RegistroTalleres = (props) => {
     };
 
     const updateToDatabase = () => {
+        
         if(verificarDatos()){
-            const id = props.id
-
+            
             update(ref(db, 'Taller/'+ id), {
                 Descripcion,
                 Fechas,
@@ -166,10 +178,27 @@ const RegistroTalleres = (props) => {
 
 
     useEffect(() => {
-        if(props.isUpdate){//si viene como update
+        if(location.state != null){
+            if(location.state.id != null){
+                setId(location.state.id);
+            }
+            if(location.state.isUpdate != null){
+                setIsUpdate(location.state.isUpdate);
+            }
+        }else if(props != null){
+            if(props.id != null){
+                setId(props.id);
+            }
+            if(props.isUpdate != null){
+                setIsUpdate(props.isUpdate);
+            }
+        }
 
+    }, [props.isUpdate,props.id])
+
+    useEffect(() => {
+        if(isUpdate){//si viene como update
             //sacar el id
-            const id = props.id
 
             onValue(ref(db,'Taller/'+id),(snapshot) => {
                 const data = snapshot.val();
@@ -184,11 +213,11 @@ const RegistroTalleres = (props) => {
                     setInformacionConfidencial(data.InformacionConfidencial)
                 }
               });
-
         }
-      }, [props.id,props.isUpdate])
+      }, [id,isUpdate])
 
     return(
+        <div id='mainContainer'>
         <Container>
         {alertActive && <Alert variant='warning'>Por favor, verifique sus datos.</Alert>}
         <Form className="registroTaller">
@@ -238,11 +267,14 @@ const RegistroTalleres = (props) => {
             <input type="radio" id="Presencial" name="Presencial" value={VirtualPresencial} onChange={handleChangeVirtualPresencial}/>
             <label htmlFor="Presencial">Presencial</label>
             <br/>
-            <Button onClick={props.isUpdate ? updateToDatabase : writeToDatabase} className="registro" type="submit" style={{backgroundColor:"#864FBA"}}>
-                {props.isUpdate ? 'Actualizar Taller' : 'Registrar taller'}
+            {
+            <Button onClick={isUpdate ? updateToDatabase : writeToDatabase} className="registro" type="submit">
+                {isUpdate ? 'Actualizar Taller' : 'Registrar taller'}
             </Button>
+            }
         </Form>
         </Container>
+        </div>
     )
 }
 

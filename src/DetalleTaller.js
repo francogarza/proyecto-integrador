@@ -3,8 +3,10 @@ import {db} from './firebase';
 import {uid} from 'uid';
 import {set, ref,onValue,update} from 'firebase/database';
 import {useState,useEffect} from "react";
+import { useLocation } from 'react-router-dom';
 
 const DetalleTaller = (props) => {
+    const location = useLocation();
     const [Descripcion, setDescripcion] = useState("");
     const [Fechas, setFechas] = useState("");
     const [Horarios, setHorarios] = useState("");
@@ -13,11 +15,38 @@ const DetalleTaller = (props) => {
     const [Prerequisitos, setPrerequisitos] = useState("");
     const [VirtualPresencial, setVirtualPresencial] = useState("");
     const [InformacionConfidencial, setInformacionConfidencial] = useState("");
-    
-    useEffect(() => {
-            //sacar el id
-            const id = props.id
+    const [id,setId] = useState("");
+    const [EstaInscrito,setEstaInscrito] = useState(false);
 
+    const handleId=(e)=>{
+        setId(e.target.value)
+    }
+
+    const handleEstaInscrito=(e)=>{
+        setEstaInscrito(e.target.value)
+    }
+
+    useEffect(() => {
+        if(location.state != null){
+            if(location.state.id != null){
+                setId(location.state.id);
+            }
+            if(location.state.EstaInscrito != null){
+                setEstaInscrito(location.state.EstaInscrito);
+            }
+        }else if(props != null){
+            if(props.id != null){
+                setId(props.id);
+            }
+            if(props.EstaInscrito != null){
+                setEstaInscrito(props.EstaInscrito);
+            }
+        }
+
+    }, [props.EstaInscrito,props.id])
+
+    useEffect(() => {
+        if(id!=null){
             onValue(ref(db,'Taller/'+id),(snapshot) => {
                 const data = snapshot.val();
                 if(data !== null){
@@ -31,8 +60,11 @@ const DetalleTaller = (props) => {
                     setInformacionConfidencial(data.InformacionConfidencial)
                 }
               });
-      }, [props.id])
+        }
+      }, [id,EstaInscrito])
 
+
+      
 
       const handleChangeDescripcion=(e)=>{
         setDescripcion(e.target.value)
@@ -97,7 +129,7 @@ const DetalleTaller = (props) => {
             <p>{props.EstaInscrito ? {InformacionSecreta} : "para ver esta informacion primero inscriba el taller"}</p>
             */}
             <h3>Información secreta:</h3>
-            {props.EstaInscrito ? <p>{InformacionConfidencial}</p> : <p>"Para poder ver esta información, primero inscríbase al taller."</p>}
+            {EstaInscrito ? <p>{InformacionConfidencial}</p> : <p>"Para poder ver esta información, primero inscríbase al taller."</p>}
             
         </div>
     </div>

@@ -26,7 +26,7 @@ const CatalogoTalleres = (props) => {
 
   return(
     <div>
-        <div style={{padding: "50px", textAlign: "center", background: "#864fba", color: "#fdfffc", fontSize: "30px"}}>
+        <div style={{padding: "50px", textAlign: "center", background: "#F95828", color: "#fdfffc", fontSize: "30px"}}>
             <h1> Catálogo de talleres </h1>
             <p> Talleres disponibles </p>
         </div>

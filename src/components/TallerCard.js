@@ -4,7 +4,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import {db} from '../firebase';
-import { withRouter } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {set,ref,onValue,remove,update} from 'firebase/database';
 import { Button, CardMedia, CardActionArea, CardActions } from '@mui/material';
 
@@ -16,9 +16,16 @@ const mockTaller = {
 
 export default function TallerCard(props){
 
-    function handleUpdate(){
-        //aqui no se como se llama la pantalla de <RegistroTalleres /> asi
-        //<RegistroTalleres isUpdate={true} id={props.id}/>
+    let navigate = useNavigate();
+    const irTaller = () =>{
+        let path = '/detalle-taller';
+        navigate(path, {state:{id:props.id}});
+    }
+
+
+    const editarTaller = () =>{
+        let path = '/registro-taller-admin';
+        navigate(path, {state:{isUpdate:true,id:props.id}});
     }
 
     //delete
@@ -27,7 +34,7 @@ export default function TallerCard(props){
     }
 
     return (
-        <Card sx={{ minWidth: 300, maxWidth: 300}} style={{margin: 30}}>
+        <Card sx={{ minWidth: 300, maxWidth: 300,borderRadius:'15%'}} style={{margin: 30}}>
             <CardActionArea>
                 <CardMedia
                 component = "img"
@@ -46,13 +53,13 @@ export default function TallerCard(props){
             </CardActionArea>
             <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
                 {props.EsAdmin ? (
-                    <Button size="small" color="primary" onClick={handleUpdate}>
+                    <Button size="small" color="primary" onClick={editarTaller}>
                         Actualizar
                     </Button> 
                 ) 
                 : (
-                <Button size="small" color="primary">
-                    Inscribirse
+                <Button size="small" color="primary" onClick={irTaller}>
+                    Ver mas
                 </Button>)}
                 
                 {props.EsAdmin && <Button size="small" color="error" onClick={() => handleDelete(props.id)}>Borrar taller</Button>}

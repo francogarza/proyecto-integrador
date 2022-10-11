@@ -26,7 +26,7 @@ function App() {
         }
         />
         <Route path="/registro-taller-admin" element={
-          <RegistroTalleres />
+          <RegistroTalleres isUpdate={false} />
         }
         />
         <Route path="/catalogo-talleres" element={

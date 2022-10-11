@@ -70,39 +70,41 @@ const RegistroPadres = () => {
 
 
   return(
-    
-    <Container>
-    {alertActive && <Alert variant='warning'>porfavor verifique sus datos</Alert>}
-    <Form className="registroPadres">
-      <Form.Group>
-        <Form.Label>
-          Escriba su nombre completo.
-        </Form.Label>
+    <div id="mainContainer">
+      <Container>
+      {alertActive && <Alert variant='warning'>porfavor verifique sus datos</Alert>}
+      <Form className="registroPadres">
+        <Form.Group>
+          <Form.Label>
+            Escriba su nombre completo.
+          </Form.Label>
+          <br/>
+          <Form.Control type="text" placeholder="Nombre" id="Nombre" value={todoNombre} onChange={handleTodoChangeNombre}/>
+        </Form.Group>
         <br/>
-        <Form.Control type="text" placeholder="Nombre" id="Nombre" value={todoNombre} onChange={handleTodoChangeNombre}/>
-      </Form.Group>
-      <br/>
-      <Form.Group>
-        <label>
-          Escriba su correo electrónico.
-        </label>
+        <Form.Group>
+          <Form.Label>
+            Escriba su correo electrónico.
+          </Form.Label>
+          <br/>
+          <Form.Control type="text" placeholder="Correo" id="Mail" value={todoMail} onChange={handleTodoChangeMail}/>
+        </Form.Group>
         <br/>
-        <Form.Control type="text" placeholder="Correo" id="Mail" value={todoMail} onChange={handleTodoChangeMail}/>
-      </Form.Group>
-      <br/>
-      <Form.Group>
-        <label>
-          Escriba su número de teléfono.
-        </label>
+        <Form.Group>
+          <Form.Label>
+            Escriba su número de teléfono.
+          </Form.Label>
+          <br/>
+          <Form.Control type="number" placeholder="Teléfono" id="Celular" value={todoCelular} onChange={handleTodoChangeCelular}/>
+        </Form.Group>
         <br/>
-        <Form.Control type="number" placeholder="Teléfono" id="Celular" value={todoCelular} onChange={handleTodoChangeCelular}/>
-      </Form.Group>
-      <br/>
-      <Button onClick={writeToDatabase} style={{backgroundColor:"#864FBA"}}>
-        Registrarse
-      </Button>
-    </Form>
-    </Container>
+          <Button onClick={writeToDatabase} class='submit'>
+            Registrarse
+          </Button>
+        
+      </Form>
+      </Container>
+    </div>
   )
 }
 
