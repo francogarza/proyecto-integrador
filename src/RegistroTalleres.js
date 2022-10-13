@@ -24,7 +24,7 @@ const RegistroTalleres = (props) => {
     const [ImpartidoPor, setImpartidoPor] = useState("");
     const [Nombre, setNombre] = useState("");
     const [Prerequisitos, setPrerequisitos] = useState("");
-    const [VirtualPresencial, setVirtualPresencial] = useState("");
+    const [VirtualPresencial, setVirtualPresencial] = useState("presencial");
     const [InformacionConfidencial, setInformacionConfidencial] = useState("");
     const [alertActive, setAlertActive] = useState(false);
     const [id,setId] = useState("");
@@ -141,7 +141,6 @@ const RegistroTalleres = (props) => {
     const writeToDatabase = () => {
         if(verificarDatos()){
             const uuid = uid()
-            const ImgPath = `images/${uuid + img.name}`;
             const imgRef = ref_st(storage,`images/${uuid + img.name}`)
             uploadBytes(imgRef,img).then(()=>{
                 alert('image uploaded');
@@ -151,7 +150,11 @@ const RegistroTalleres = (props) => {
                 .then((url) => {
                         // `url` is the download URL for 'images/stars.jpg'
                     console.log(url);
+                    if(img.name == '' || img.name==null){
+                        url = null
+                    }
                     const imgUrl = url;
+                
                     set(ref_db(db, 'Taller/'+ uuid), {
                         Descripcion,
                         Fechas,
@@ -262,11 +265,17 @@ const RegistroTalleres = (props) => {
         <Container>
         {alertActive && <Alert variant='warning'>Por favor, verifique sus datos.</Alert>}
         <Form className="registroTaller">
+        <Form.Label>
+                Escriba el nombre del taller.
+            </Form.Label>
+            <br/>
+            <Form.Control type="text" placeholder="NombreTaller" id="Nombre" value={Nombre} onChange={handleChangeNombre} required={true}/>
+            <br/>
             <Form.Label>
                 Escriba la descripción del taller.
             </Form.Label>
             <br/>
-            <Form.Control type="text" placeholder="Descripción" id="Descripcion" value={Descripcion} onChange={handleChangeDescripcion} required={true}/>
+            <Form.Control as="textarea" type="textarea" placeholder="Descripción" className='description' id="Descripcion" value={Descripcion} onChange={handleChangeDescripcion} required={true}/>
             <br/>
             <Form.Label>
                 Seleccione la fecha de inicio del taller.
@@ -279,12 +288,6 @@ const RegistroTalleres = (props) => {
             </Form.Label>
             <br/>
             <Form.Control type="text" placeholder="NombreInstructor" id="ImpartidoPor" value={ImpartidoPor} onChange={handleChangeImpartidoPor} required={true}/>
-            <br/>
-            <Form.Label>
-                Escriba el nombre del taller.
-            </Form.Label>
-            <br/>
-            <Form.Control type="text" placeholder="NombreTaller" id="Nombre" value={Nombre} onChange={handleChangeNombre} required={true}/>
             <br/>
             <Form.Label>
                 Escriba los prerrequisitos del taller.
@@ -302,10 +305,11 @@ const RegistroTalleres = (props) => {
                 Seleccione si el taller es virtual o presencial.
             </Form.Label>
             <br/>
-            <input type="radio" id="Virtual" name="VirtualPresencial" value={VirtualPresencial} onChange={handleChangeVirtualPresencial}
-                   checked={true}/>
+            <input type="radio" id="Virtual" name="VirtualPresencial" value={'virtual'} onChange={handleChangeVirtualPresencial}
+                   checked={VirtualPresencial == 'virtual' ? true:false}/>
             <label htmlFor="Virtual">Virtual</label>
-            <input type="radio" id="Presencial" name="Presencial" value={VirtualPresencial} onChange={handleChangeVirtualPresencial}/>
+            <input type="radio" id="Presencial" name="Presencial" value={'presencial'}
+             onChange={handleChangeVirtualPresencial} checked={VirtualPresencial == 'presencial' ? true:false}/>
             <label htmlFor="Presencial">Presencial</label>
             <br/>
             <input type="file" onChange={handleChangeImg}></input>
