@@ -1,7 +1,8 @@
 import React from 'react';
-import {db} from './firebase';
+import {db,storage} from './firebase';
 import {uid} from 'uid';
-import {set, ref,onValue,update} from 'firebase/database';
+import {set, ref as ref_db,onValue,update} from 'firebase/database';
+import { getDownloadURL, ref as ref_st } from 'firebase/storage';
 import {useState,useEffect} from "react";
 import TallerCard from './components/TallerCard.js';
 
@@ -12,17 +13,25 @@ const CatalogoTalleres = (props) => {
 
     useEffect(() => {
 
-            onValue(ref(db,'Taller/'),(snapshot) => {
+            onValue(ref_db(db,'Taller/'),(snapshot) => {
                 setTalleres([]);
                 const data = snapshot.val();
                 if(data !== null){
                     //console.log(data);
                     Object.values(data).map((e) => {
+                        console.log(e.ImgPath)
+                        
                         setTalleres((oldArray) => [...oldArray,e])
                     });
                 }
               });
+              
+           
+
+                
+              
       }, [])
+
 
   return(
     <div>
@@ -32,8 +41,9 @@ const CatalogoTalleres = (props) => {
         </div>
         <div style={{padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
             {talleres.map(taller => (
+                
                 <div style={{display: "inline-block"}} key={taller.uuid}>
-                    {props.EsAdmin ? (<TallerCard EsAdmin={true} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion}></TallerCard>) : <TallerCard EsAdmin={false} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion}></TallerCard>}
+                    {props.EsAdmin ? (<TallerCard EsAdmin={true} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion} imgUrl={taller.imgUrl}></TallerCard>) : <TallerCard EsAdmin={false} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion} imgUrl={taller.imgUrl}></TallerCard>}
                 </div>
             ))}
         </div>

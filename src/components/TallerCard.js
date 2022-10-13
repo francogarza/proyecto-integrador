@@ -39,7 +39,7 @@ export default function TallerCard(props){
                 <CardMedia
                 component = "img"
                 height = "150"
-                image = {mockTaller.Foto}
+                image = {props.imgUrl == null? mockTaller.Foto:props.imgUrl}
                 alt = "Taller"
                 />
                 <CardContent>

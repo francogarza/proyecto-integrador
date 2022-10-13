@@ -1,5 +1,5 @@
 import React  from 'react';
-import { BrowserRouter as Router, Route, RouterProvider, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, RouterProvider, Routes, Navigate  } from "react-router-dom";
 import TallerCard from './components/TallerCard';
 import Home from './components/Home';
 import RegistroPadres from './RegistroPadres.js';
@@ -14,7 +14,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={
-          <Home/>
+          <Navigate to="/catalogo-talleres"/>
         }
         />
         <Route path="/registro-padres" element={
