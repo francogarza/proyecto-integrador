@@ -150,7 +150,7 @@ const RegistroTalleres = (props) => {
                 .then((url) => {
                         // `url` is the download URL for 'images/stars.jpg'
                     console.log(url);
-                    if(img.name == '' || img.name==null){
+                    if(img.name === '' || img.name==null){
                         url = null
                     }
                     const imgUrl = url;
@@ -306,10 +306,10 @@ const RegistroTalleres = (props) => {
             </Form.Label>
             <br/>
             <input type="radio" id="Virtual" name="VirtualPresencial" value={'virtual'} onChange={handleChangeVirtualPresencial}
-                   checked={VirtualPresencial == 'virtual' ? true:false}/>
+                   checked={VirtualPresencial === 'virtual' ? true:false}/>
             <label htmlFor="Virtual">Virtual</label>
             <input type="radio" id="Presencial" name="Presencial" value={'presencial'}
-             onChange={handleChangeVirtualPresencial} checked={VirtualPresencial == 'presencial' ? true:false}/>
+             onChange={handleChangeVirtualPresencial} checked={VirtualPresencial === 'presencial' ? true:false}/>
             <label htmlFor="Presencial">Presencial</label>
             <br/>
             <input type="file" onChange={handleChangeImg}></input>
