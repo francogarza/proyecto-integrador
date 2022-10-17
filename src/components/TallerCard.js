@@ -19,7 +19,7 @@ export default function TallerCard(props){
     let navigate = useNavigate();
     const irTaller = () =>{
         let path = '/detalle-taller';
-        navigate(path, {state:{id:props.id,EstaInscrito:true}});
+        navigate(path, {state:{id:props.id,EstaInscrito:false}});
     }
 
 

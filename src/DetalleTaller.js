@@ -1,11 +1,20 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {db} from './firebase';
 import {uid} from 'uid';
 import {set, ref,onValue,update} from 'firebase/database';
 import {useState,useEffect} from "react";
 import { useLocation } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './basic.css'
+import {Button,Container,Form,Alert, FormLabel} from 'react-bootstrap'
+import { UserContext } from './UserContext';
 
 const DetalleTaller = (props) => {
+
+    //global
+    const {userId, setUserId} = useContext(UserContext);
+    const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
+    //local
     const location = useLocation();
     const [Descripcion, setDescripcion] = useState("");
     const [Fechas, setFechas] = useState("");
@@ -64,7 +73,18 @@ const DetalleTaller = (props) => {
       }, [id,EstaInscrito])
 
 
-      
+      const inscribirTaller=()=>{
+        console.log(userId);
+
+        set(ref(db, 'Participante/'+ userId + '/talleres/' + id), {
+            id,
+            Nombre
+        });
+        
+        set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
+            userId
+        });
+      };
 
       const handleChangeDescripcion=(e)=>{
         setDescripcion(e.target.value)
@@ -131,6 +151,10 @@ const DetalleTaller = (props) => {
             <h3>Información secreta:</h3>
             {EstaInscrito ? <p>{InformacionConfidencial}</p> : <p>"Para poder ver esta información, primero inscríbase al taller."</p>}
             
+        </div>
+
+        <div>
+            {isLoggedIn && <Button onClick={inscribirTaller}>Inscribir</Button>}
         </div>
     </div>
   )
