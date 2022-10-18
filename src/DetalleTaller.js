@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import {db} from './firebase';
 import {uid} from 'uid';
-import {set, ref,onValue,update} from 'firebase/database';
+import {set, ref,onValue,update, remove} from 'firebase/database';
 import {useState,useEffect} from "react";
 import { useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -24,13 +24,9 @@ const DetalleTaller = () => {
     const [Prerequisitos, setPrerequisitos] = useState("");
     const [VirtualPresencial, setVirtualPresencial] = useState("");
     const [InformacionConfidencial, setInformacionConfidencial] = useState("");
-    const [id,setId] = useState("");
     const [EstaInscrito,setEstaInscrito] = useState(false);
     const [imgUrl,setImgUrl] = useState("");
 
-    const handleId=(e)=>{
-        setId(e.target.value)
-    }
 
     const handleEstaInscrito=(e)=>{
         setEstaInscrito(e.target.value)
@@ -50,22 +46,33 @@ const DetalleTaller = () => {
                 setPrerequisitos(data.Prerequisitos)
                 setVirtualPresencial(data.VirtualPresencial)
                 setInformacionConfidencial(data.InformacionConfidencial)
-                setImgUrl(data.imgUrl)
+                if(data.imgUrl != null){
+                    setImgUrl(data.imgUrl)
+                }else{
+                    setImgUrl(null);
+                }
             }
             });
 
       }, [])
 
 
+      const darDeBaja=()=>{
+        const id = location.state.id
+        remove(ref(db, 'Participante/'+ userId + '/talleres/' + id));
+        remove(ref(db, 'Taller/'+ id + '/participantes/' + userId));
+      }
+
       const inscribirTaller=()=>{
 
+        const id = location.state.id
         set(ref(db, 'Participante/'+ userId + '/talleres/' + id), {
             id,
             Nombre,
             Descripcion,
             imgUrl
         });
-        
+
         set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
             userId
         });
@@ -141,10 +148,14 @@ const DetalleTaller = () => {
             {location.state.EstaInscrito ? <p>{InformacionConfidencial}</p> : <p>"Para poder ver esta información, primero inscríbase al taller."</p>}
             
         </div>
-
-        <div>
-            {isLoggedIn && <Button onClick={inscribirTaller}>Inscribir</Button>}
-        </div>
+            
+                <div>
+                { 
+                    location.state.EstaInscrito ? <Button onClick={darDeBaja}>Dar de baja</Button> : <Button onClick={inscribirTaller}>Inscribir</Button>
+                }
+                </div>
+            
+        
     </div>
   )
 }
