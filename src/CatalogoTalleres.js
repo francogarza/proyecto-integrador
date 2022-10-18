@@ -17,23 +17,17 @@ const CatalogoTalleres = (props) => {
 
     useEffect(() => {
         setIsLoggedIn(true);
-        setUserId("f38e92828d2")
+        setUserId("f38e92828d2");
             onValue(ref_db(db,'Taller/'),(snapshot) => {
                 setTalleres([]);
                 const data = snapshot.val();
                 if(data !== null){
                     //console.log(data);
                     Object.values(data).map((e) => {
-                        
                         setTalleres((oldArray) => [...oldArray,e])
                     });
                 }
-              });
-              
-           
-
-                
-              
+            });
       }, [])
 
 
@@ -49,7 +43,7 @@ const CatalogoTalleres = (props) => {
             {talleres.map(taller => (
                 
                 <div style={{display: "inline-block"}} key={taller.uuid}>
-                    {props.EsAdmin ? (<TallerCard EsAdmin={true} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion} imgUrl={taller.imgUrl}></TallerCard>) : <TallerCard EsAdmin={false} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion} imgUrl={taller.imgUrl}></TallerCard>}
+                    {props.EsAdmin ? (<TallerCard EsAdmin={true} EstaInscrito={true} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion} imgUrl={taller.imgUrl}></TallerCard>) : <TallerCard EsAdmin={false} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion} imgUrl={taller.imgUrl}></TallerCard>}
                 </div>
             ))}
         </div>

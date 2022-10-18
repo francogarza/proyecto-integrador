@@ -9,7 +9,7 @@ import './basic.css'
 import {Button,Container,Form,Alert, FormLabel} from 'react-bootstrap'
 import { UserContext } from './UserContext';
 
-const DetalleTaller = (props) => {
+const DetalleTaller = () => {
 
     //global
     const {userId, setUserId} = useContext(UserContext);
@@ -26,6 +26,7 @@ const DetalleTaller = (props) => {
     const [InformacionConfidencial, setInformacionConfidencial] = useState("");
     const [id,setId] = useState("");
     const [EstaInscrito,setEstaInscrito] = useState(false);
+    const [imgUrl,setImgUrl] = useState("");
 
     const handleId=(e)=>{
         setId(e.target.value)
@@ -35,50 +36,34 @@ const DetalleTaller = (props) => {
         setEstaInscrito(e.target.value)
     }
 
-    useEffect(() => {
-        if(location.state != null){
-            if(location.state.id != null){
-                setId(location.state.id);
-            }
-            if(location.state.EstaInscrito != null){
-                setEstaInscrito(location.state.EstaInscrito);
-            }
-        }else if(props != null){
-            if(props.id != null){
-                setId(props.id);
-            }
-            if(props.EstaInscrito != null){
-                setEstaInscrito(props.EstaInscrito);
-            }
-        }
-
-    }, [props.EstaInscrito,props.id])
 
     useEffect(() => {
-        if(id!=null){
-            onValue(ref(db,'Taller/'+id),(snapshot) => {
-                const data = snapshot.val();
-                if(data !== null){
-                    setDescripcion(data.Descripcion)
-                    setFechas(data.Fechas)
-                    setHorarios(data.Horarios)
-                    setImpartidoPor(data.ImpartidoPor)
-                    setNombre(data.Nombre)
-                    setPrerequisitos(data.Prerequisitos)
-                    setVirtualPresencial(data.VirtualPresencial)
-                    setInformacionConfidencial(data.InformacionConfidencial)
-                }
-              });
-        }
-      }, [id,EstaInscrito])
+
+        onValue(ref(db,'Taller/'+location.state.id),(snapshot) => {
+            const data = snapshot.val();
+            if(data !== null){
+                setDescripcion(data.Descripcion)
+                setFechas(data.Fechas)
+                setHorarios(data.Horarios)
+                setImpartidoPor(data.ImpartidoPor)
+                setNombre(data.Nombre)
+                setPrerequisitos(data.Prerequisitos)
+                setVirtualPresencial(data.VirtualPresencial)
+                setInformacionConfidencial(data.InformacionConfidencial)
+                setImgUrl(data.imgUrl)
+            }
+            });
+
+      }, [])
 
 
       const inscribirTaller=()=>{
-        console.log(userId);
 
         set(ref(db, 'Participante/'+ userId + '/talleres/' + id), {
             id,
-            Nombre
+            Nombre,
+            Descripcion,
+            imgUrl
         });
         
         set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
@@ -111,6 +96,10 @@ const DetalleTaller = (props) => {
     }
     const handleChangeVirtualPresencial=(e)=>{
         setVirtualPresencial(e.target.value)
+    }
+
+    const handleChangeImageUrl=(e)=>{
+        setImgUrl(e.target.value);
     }
 
     const handleChangeInformacionConfidencial=(e)=>{
@@ -149,7 +138,7 @@ const DetalleTaller = (props) => {
             <p>{props.EstaInscrito ? {InformacionSecreta} : "para ver esta informacion primero inscriba el taller"}</p>
             */}
             <h3>Información secreta:</h3>
-            {EstaInscrito ? <p>{InformacionConfidencial}</p> : <p>"Para poder ver esta información, primero inscríbase al taller."</p>}
+            {location.state.EstaInscrito ? <p>{InformacionConfidencial}</p> : <p>"Para poder ver esta información, primero inscríbase al taller."</p>}
             
         </div>
 

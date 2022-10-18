@@ -7,6 +7,7 @@ import RegistroTaller from './RegistroTaller.js';
 import RegistroTalleres from './RegistroTalleres.js';
 import CatalogoTalleres from './CatalogoTalleres.js';
 import DetalleTaller from './DetalleTaller.js';
+import TalleresInscritos from './TalleresInscritos';
 import { UserContext } from './UserContext';
 
 function App() {
@@ -22,7 +23,10 @@ function App() {
               <Navigate to="/catalogo-talleres"/>
             }
             />
-            
+            <Route path="/talleres-inscritos" element={
+              <TalleresInscritos/>
+            }
+            />
             <Route path="/registro-padres" element={
               <RegistroPadres />
             }
@@ -44,7 +48,7 @@ function App() {
             }
             />
             <Route path="/detalle-taller" element={
-              <DetalleTaller id={"16a2b3ee056"} EstaInscrito={true} />
+              <DetalleTaller />
             }
             />
         
