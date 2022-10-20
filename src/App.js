@@ -8,6 +8,7 @@ import RegistroTalleres from './RegistroTalleres.js';
 import CatalogoTalleres from './CatalogoTalleres.js';
 import DetalleTaller from './DetalleTaller.js';
 import TalleresInscritos from './TalleresInscritos';
+import SendEmailTest from './SendEmailTest';
 import { UserContext } from './UserContext';
 
 function App() {
@@ -49,6 +50,11 @@ function App() {
             />
             <Route path="/detalle-taller" element={
               <DetalleTaller />
+            }
+            />
+
+            <Route path="/send-email-test" element={
+              <SendEmailTest />
             }
             />
         
