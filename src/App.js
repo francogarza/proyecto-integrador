@@ -10,6 +10,7 @@ import DetalleTaller from './DetalleTaller.js';
 import TalleresInscritos from './TalleresInscritos';
 import SendEmailTest from './SendEmailTest';
 import { UserContext } from './UserContext';
+import HorarioTalleres from './HorarioTalleres.js';
 
 function App() {
   
@@ -19,7 +20,6 @@ function App() {
     <UserContext.Provider value={{userId,setUserId,isLoggedIn,setIsLoggedIn}}>
     <Router>
       <Routes>
-        
             <Route path="/" element={
               <Navigate to="/catalogo-talleres"/>
             }
@@ -57,7 +57,10 @@ function App() {
               <SendEmailTest />
             }
             />
-        
+            <Route path="/horario-taller" element={
+              <HorarioTalleres />
+            }
+            />
       </Routes>
     </Router>
     </UserContext.Provider>
