@@ -48,8 +48,8 @@ const CatalogoTalleres = (props) => {
 
   return(
     <div>
-        {isLoggedIn?<p>logged in</p> : <p>logged out</p>}
-        {isLoggedIn && <h1>{userId}</h1>}
+        {/* {isLoggedIn?<p>logged in</p> : <p>logged out</p>}
+        {isLoggedIn && <h1>{userId}</h1>} */}
         <div style={{padding: "50px", textAlign: "center", background: "#F95828", color: "#fdfffc", fontSize: "30px"}}>
             <h1> Catálogo de talleres </h1>
             <p> Talleres disponibles </p>
