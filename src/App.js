@@ -7,6 +7,7 @@ import RegistroTaller from './RegistroTaller.js';
 import RegistroTalleres from './RegistroTalleres.js';
 import CatalogoTalleres from './CatalogoTalleres.js';
 import DetalleTaller from './DetalleTaller.js';
+import HorarioTalleres from './HorarioTalleres.js';
 
 function App() {
   
@@ -39,6 +40,10 @@ function App() {
         />
         <Route path="/detalle-taller" element={
           <DetalleTaller id={"16a2b3ee056"} EstaInscrito={true} />
+        }
+        />
+        <Route path="/horario-taller" element={
+          <HorarioTalleres />
         }
         />
       </Routes>
