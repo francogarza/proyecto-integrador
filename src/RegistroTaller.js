@@ -10,28 +10,30 @@ import {Button,Container,Form,Alert} from 'react-bootstrap'
 const RegistroTaller = (props) => {
 
     const [CelularTutorPadre, setCelularTutorPadre] = useState("");
-    const [ClaseProgra, setClaseProgra] = useState("");
-    const [ComoEntero, setComoEntero] = useState("");
+    const [ClaseProgra, setClaseProgra] = useState("true");
+    const [ComoEntero, setComoEntero] = useState("maestro");
     const [Correo, setCorreo] = useState("");
     const [Edad, setEdad] = useState("");
     const [Estado, setEstado] = useState("");
     const [FuturoTrabajo, setFuturoTrabajo] = useState("");
-    const [Genero, setGenero] = useState("");
+    const [Genero, setGenero] = useState("Masculino");
     const [Municipio, setMunicipio] = useState("");
     const [Nacimiento, setNacimiento] = useState("");
     const [Nombre, setNombre] = useState("");
     const [NombreEscuela, setNombreEscuela] = useState("");
     const [NombreTutorPadre, setNombreTutorPadre] = useState("");
-    const [ParticipadoAxta, setParticipadoAxta] = useState("");
-    const [TipoEscuela, setTipoEscuela] = useState("");
+    const [ParticipadoAxta, setParticipadoAxta] = useState("true");
+    const [TipoEscuela, setTipoEscuela] = useState("privada");
     const [UltimoGrado, setUltimoGrado] = useState("");
-    const [VivieEnMexico, setVivieEnMexico] = useState("");
+    const [VivieEnMexico, setVivieEnMexico] = useState("true");
     const [alertActive, setAlertActive] = useState(false);
     const [hijos, setHijos] = useState([]);
 
+
     const handleChangeCelularTutorPadre=(e)=>{
-        setCelularTutorPadre(e.target.value)
+        setCelularTutorPadre(e.target.value);
     }
+
 
     const handleChangeClaseProgra=(e)=>{
         setClaseProgra(e.target.value)
@@ -80,8 +82,10 @@ const RegistroTaller = (props) => {
     }
 
     const handleChangeParticipadoAxta=(e)=>{
+
         setParticipadoAxta(e.target.value)
     }
+
 
     const handleChangeTipoEscuela=(e)=>{
         setTipoEscuela(e.target.value)
@@ -151,6 +155,8 @@ const RegistroTaller = (props) => {
         if(verificarDatos()){
             const PadreId = props.PadreId;
             const uuid = uid()
+            
+
             set(ref(db, 'Participante/'+ uuid), {
                 CelularTutorPadre,
                 ClaseProgra,
@@ -224,11 +230,11 @@ const RegistroTaller = (props) => {
                     Seleccione su género.
                 </Form.Label>
                 <br/>
-                <input type="radio" id="Masculino" name="Genero" value={Genero} onChange={handleChangeGenero} checked={true}/>
+                <input type="radio" id="Masculino" name="Genero" value={"Masculino"} onChange={handleChangeGenero} checked={Genero === "Masculino"?true:false}/>
                 <Form.Label htmlFor="Masculino">Masculino</Form.Label>
-                <input type="radio" id="Femenino" name="Genero" value={Genero} onChange={handleChangeGenero}/>
+                <input type="radio" id="Femenino" name="Genero" value={"Femenino"} onChange={handleChangeGenero} checked={Genero === "Femenino"?true:false}/>
                 <Form.Label htmlFor="Femenino">Femenino</Form.Label>
-                <input type="radio" id="Otro" name="Genero" value={Genero} onChange={handleChangeGenero}/>
+                <input type="radio" id="Otro" name="Genero" value={"Otro"} onChange={handleChangeGenero} checked={Genero==="Otro"?true:false}/>
                 <Form.Label htmlFor="Otro">Otro</Form.Label>
                 <br/>
                 <Form.Label>
@@ -253,10 +259,9 @@ const RegistroTaller = (props) => {
                     ¿Vive en México?
                 </Form.Label>
                 <br/>
-                <input type="radio" id="Verdadero" name="VivieEnMexico" value={VivieEnMexico} onChange={handleChangeVivieEnMexico}
-                    checked={true}/>
+                <input type="radio" id="Verdadero" name="VivieEnMexico" value={"true"} onChange={handleChangeVivieEnMexico} checked={VivieEnMexico==="true"?true:false}/>
                 <Form.Label htmlFor="Verdadero">Verdadero</Form.Label>
-                <input type="radio" id="Falso" name="VivieEnMexico" value={VivieEnMexico} onChange={handleChangeVivieEnMexico}/>
+                <input type="radio" id="Falso" name="VivieEnMexico" value={"false"} onChange={handleChangeVivieEnMexico} checked={VivieEnMexico==="false"?true:false}/>
                 <Form.Label htmlFor="Falso">Falso</Form.Label>
                 <br/>
                 <Form.Label>
@@ -281,10 +286,11 @@ const RegistroTaller = (props) => {
                     Seleccione el tipo de escuela del participante.
                 </Form.Label>
                 <br/>
-                <input type="radio" id="Privada" name="TipoEscuela" value={TipoEscuela} onChange={handleChangeTipoEscuela}
-                    checked={true}/>
+                <input type="radio" id="Privada" name="TipoEscuela" value={"privada"} onChange={handleChangeTipoEscuela}
+                    checked={TipoEscuela==="privada"?true:false}/>
                 <Form.Label htmlFor="Privada">Privada</Form.Label>
-                <input type="radio" id="Publica" name="TipoEscuela" value={TipoEscuela} onChange={handleChangeTipoEscuela}/>
+                <input type="radio" id="Publica" name="TipoEscuela" value={"publica"} onChange={handleChangeTipoEscuela}
+                checked={TipoEscuela==="publica"?true:false}/>
                 <Form.Label htmlFor="Publica">Pública</Form.Label>
                 <br/>
                 <Form.Label>
@@ -297,20 +303,22 @@ const RegistroTaller = (props) => {
                     ¿Ha llevado clases de programación anteriormente el participante?
                 </Form.Label>
                 <br/>
-                <input type="radio" id="Verdadero" name="ClaseProgra" value={ClaseProgra} onChange={handleChangeClaseProgra}
-                    checked={true}/>
+                <input type="radio" id="Verdadero" name="ClaseProgra" value={"true"} onChange={handleChangeClaseProgra}
+                    checked={ClaseProgra==="true"?true:false}/>
                 <Form.Label htmlFor="Verdadero">Verdadero</Form.Label>
-                <input type="radio" id="Falso" name="ClaseProgra" value={ClaseProgra} onChange={handleChangeClaseProgra}/>
+                <input type="radio" id="Falso" name="ClaseProgra" value={"false"} onChange={handleChangeClaseProgra}
+                    checked={ClaseProgra==="false"?true:false}/>
                 <Form.Label htmlFor="Falso">Falso</Form.Label>
                 <br/>
                 <Form.Label>
                     ¿Ha participado con anterioridad en un taller de Axt@Teen?
                 </Form.Label>
                 <br/>
-                <input type="radio" id="Verdadero" name="ParticipadoAxta" value={ParticipadoAxta} onChange={handleChangeParticipadoAxta}
-                    checked={true}/>
+                <input type="radio" id="Verdadero" name="ParticipadoAxta" value={"true"} onChange={handleChangeParticipadoAxta}
+                    checked={ParticipadoAxta==="true"?true:false}/>
                 <Form.Label htmlFor="Verdadero">Verdadero</Form.Label>
-                <input type="radio" id="Falso" name="ParticipadoAxta" value={ParticipadoAxta} onChange={handleChangeParticipadoAxta}/>
+                <input type="radio" id="Falso" name="ParticipadoAxta" value={"false"} onChange={handleChangeParticipadoAxta}
+                checked={ParticipadoAxta==="false"?true:false}/>
                 <Form.Label htmlFor="Falso">Falso</Form.Label>
                 <br/>
                 <Form.Label>
@@ -323,14 +331,17 @@ const RegistroTaller = (props) => {
                     ¿Cómo se enteró de estos talleres?
                 </Form.Label>
                 <br/>
-                <input type="radio" id="Maestro" name="ComoEntero" value={ComoEntero} onChange={handleChangeComoEntero}
-                    checked={true}/>
+                <input type="radio" id="Maestro" name="ComoEntero" value={"maestro"} onChange={handleChangeComoEntero}
+                    checked={ComoEntero==="maestro"?true:false}/>
                 <Form.Label htmlFor="Maestro">Maestro</Form.Label>
-                <input type="radio" id="Amigo" name="ComoEntero" value={ComoEntero} onChange={handleChangeComoEntero}/>
+                <input type="radio" id="Amigo" name="ComoEntero" value={"amigo"} onChange={handleChangeComoEntero}
+                    checked={ComoEntero==="amigo"?true:false}/>
                 <Form.Label htmlFor="Amigo">Amigo</Form.Label>
-                <input type="radio" id="Publicidad" name="ComoEntero" value={ComoEntero} onChange={handleChangeComoEntero}/>
+                <input type="radio" id="Publicidad" name="ComoEntero" value={"publicidad"} onChange={handleChangeComoEntero}
+                    checked={ComoEntero==="publicidad"?true:false}/>
                 <Form.Label htmlFor="Publicidad">Publicidad</Form.Label>
-                <input type="radio" id="Otro" name="ComoEntero" value={ComoEntero} onChange={handleChangeComoEntero}/>
+                <input type="radio" id="Otro" name="ComoEntero" value={"otro"} onChange={handleChangeComoEntero}
+                    checked={ComoEntero==="otro"?true:false}/>
                 <Form.Label htmlFor="Otro">Otro</Form.Label>
                 <br/>
                 <Button onClick={writeToDatabase} className="registro" type="submit">

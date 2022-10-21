@@ -1,11 +1,21 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {db} from './firebase';
 import {uid} from 'uid';
-import {set, ref,onValue,update} from 'firebase/database';
+import {set, ref,onValue,update, remove} from 'firebase/database';
 import {useState,useEffect} from "react";
 import { useLocation } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './basic.css'
+import {Button,Container,Form,Alert, FormLabel} from 'react-bootstrap'
+import { UserContext } from './UserContext';
+import TallerCard from "./components/TallerCard";
 
 const DetalleTaller = (props) => {
+
+    //global
+    const {userId, setUserId} = useContext(UserContext);
+    const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
+    //local
     const location = useLocation();
     const [Descripcion, setDescripcion] = useState("");
     const [Fechas, setFechas] = useState("");
@@ -15,56 +25,76 @@ const DetalleTaller = (props) => {
     const [Prerequisitos, setPrerequisitos] = useState("");
     const [VirtualPresencial, setVirtualPresencial] = useState("");
     const [InformacionConfidencial, setInformacionConfidencial] = useState("");
-    const [id,setId] = useState("");
     const [EstaInscrito,setEstaInscrito] = useState(false);
-
-    const handleId=(e)=>{
-        setId(e.target.value)
-    }
+    const [imgUrl,setImgUrl] = useState("");
+    const [participantes,setParticipantes] = useState([]);
+    const [NombreU,setNombreU] = useState("");
 
     const handleEstaInscrito=(e)=>{
         setEstaInscrito(e.target.value)
     }
 
-    useEffect(() => {
-        if(location.state != null){
-            if(location.state.id != null){
-                setId(location.state.id);
-            }
-            if(location.state.EstaInscrito != null){
-                setEstaInscrito(location.state.EstaInscrito);
-            }
-        }else if(props != null){
-            if(props.id != null){
-                setId(props.id);
-            }
-            if(props.EstaInscrito != null){
-                setEstaInscrito(props.EstaInscrito);
-            }
-        }
-
-    }, [props.EstaInscrito,props.id])
 
     useEffect(() => {
-        if(id!=null){
-            onValue(ref(db,'Taller/'+id),(snapshot) => {
-                const data = snapshot.val();
-                if(data !== null){
-                    setDescripcion(data.Descripcion)
-                    setFechas(data.Fechas)
-                    setHorarios(data.Horarios)
-                    setImpartidoPor(data.ImpartidoPor)
-                    setNombre(data.Nombre)
-                    setPrerequisitos(data.Prerequisitos)
-                    setVirtualPresencial(data.VirtualPresencial)
-                    setInformacionConfidencial(data.InformacionConfidencial)
+
+        onValue(ref(db,'Taller/'+location.state.id),(snapshot) => {
+            const data = snapshot.val();
+            if(data !== null){
+                if(location.state.EsAdmin){
+                    Object.values(data.participantes).map((e) => {
+                        setParticipantes((oldArray) => [e])
+                    });
                 }
-              });
-        }
-      }, [id,EstaInscrito])
+                setDescripcion(data.Descripcion)
+                setFechas(data.Fechas)
+                setHorarios(data.Horarios)
+                setImpartidoPor(data.ImpartidoPor)
+                setNombre(data.Nombre)
+                setPrerequisitos(data.Prerequisitos)
+                setVirtualPresencial(data.VirtualPresencial)
+                setInformacionConfidencial(data.InformacionConfidencial)
+                if(data.imgUrl != null){
+                    setImgUrl(data.imgUrl)
+                }else{
+                    setImgUrl(null);
+                }
+            }
+            });
+
+      }, [isLoggedIn])
+
+    useEffect(() => {
+        onValue(ref(db,'Participante/'+userId),(snapshot) => {
+            const data = snapshot.val();
+            if(data !== null){
+                setNombreU(data.Nombre)
+            }
+        });
+
+    }, [])
 
 
-      
+      const darDeBaja=()=>{
+        const id = location.state.id
+        remove(ref(db, 'Participante/'+ userId + '/talleres/' + id));
+        remove(ref(db, 'Taller/'+ id + '/participantes/' + userId));
+      }
+
+      const inscribirTaller=()=>{
+
+        const id = location.state.id
+        set(ref(db, 'Participante/'+ userId + '/talleres/' + id), {
+            id,
+            Nombre,
+            Descripcion,
+            imgUrl
+        });
+
+        set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
+            userId,
+            NombreU
+        });
+      };
 
       const handleChangeDescripcion=(e)=>{
         setDescripcion(e.target.value)
@@ -91,6 +121,10 @@ const DetalleTaller = (props) => {
     }
     const handleChangeVirtualPresencial=(e)=>{
         setVirtualPresencial(e.target.value)
+    }
+
+    const handleChangeImageUrl=(e)=>{
+        setImgUrl(e.target.value);
     }
 
     const handleChangeInformacionConfidencial=(e)=>{
@@ -122,6 +156,19 @@ const DetalleTaller = (props) => {
         </div>
 
         <div style={{backgroundColor : "gray",padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
+            {participantes.map(participante => (
+                <div style={{display: "inline-block"}} key={participante.id}>
+                    {location.state.EsAdmin &&
+                    (<div>
+                        <h3>Lista Participantes</h3>
+                        <p>{userId}</p>
+                        <p>{NombreU}</p>
+                    </div>)}
+                </div>
+            ))}
+        </div>
+
+        <div style={{backgroundColor : "gray",padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
             {/*
             aqui va la parte de la informacion secreta, primero hay que hacer la variable InfoSecreta en registro talleres (el del admin) para que se guarde en firebase, luega se hace aqui un condicional para mostrar la informacion secreta si el usuario esta inscrito (por ahora pasa eso como un prop tipo <DetalleTaller EstaInscrito={true}/>)
 
@@ -129,9 +176,15 @@ const DetalleTaller = (props) => {
             <p>{props.EstaInscrito ? {InformacionSecreta} : "para ver esta informacion primero inscriba el taller"}</p>
             */}
             <h3>Información secreta:</h3>
-            {EstaInscrito ? <p>{InformacionConfidencial}</p> : <p>"Para poder ver esta información, primero inscríbase al taller."</p>}
+            {location.state.EstaInscrito ? <p>{InformacionConfidencial}</p> : <p>"Para poder ver esta información, primero inscríbase al taller."</p>}
             
         </div>
+            
+                <div>
+                { 
+                    location.state.EstaInscrito ? <Button onClick={darDeBaja}>Dar de baja</Button> : <Button onClick={inscribirTaller}>Inscribir</Button>
+                }
+                </div>
     </div>
   )
 }
