@@ -1,4 +1,5 @@
 import React, {useContext} from 'react';
+import emailjs from 'emailjs-com';
 import {db} from './firebase';
 import {uid} from 'uid';
 import {set, ref,onValue,update, remove} from 'firebase/database';
@@ -29,6 +30,42 @@ const DetalleTaller = (props) => {
     const [imgUrl,setImgUrl] = useState("");
     const [participantes,setParticipantes] = useState([]);
     const [NombreU,setNombreU] = useState("");
+
+    const correoBajaTaller = () => {
+
+        var templateParams = {
+            nombre_hijo: '',
+            nombre_taller: 'taller test',
+            link_catalogo_talleres: 'http://localhost:3000/catalogo-talleres',
+            link_detalle_taller: '',
+            to_email: 'francogarza98@gmail.com'
+        };
+
+        emailjs.send('service_l68b4ed', 'template_jrfyyws', templateParams, '7VB8KWioxv21zM4iQ')
+            .then(function(response) {
+            console.log('SUCCESS!', response.status, response.text);
+            }, function(error) {
+            console.log('FAILED...', error);
+        });
+
+    };
+
+    const correoInscripcionTaller = () => {
+
+        var templateParams = {
+            nombre_taller: 'taller test',
+            link_catalogo_talleres: 'http://localhost:3000/catalogo-talleres',
+            to_email: 'francogarza98@gmail.com'
+        };
+
+        emailjs.send('service_l68b4ed', 'template_jrfyyws', templateParams, '7VB8KWioxv21zM4iQ')
+            .then(function(response) {
+            console.log('SUCCESS!', response.status, response.text);
+            }, function(error) {
+            console.log('FAILED...', error);
+        });
+
+    };
 
     const handleEstaInscrito=(e)=>{
         setEstaInscrito(e.target.value)
@@ -78,6 +115,7 @@ const DetalleTaller = (props) => {
         const id = location.state.id
         remove(ref(db, 'Participante/'+ userId + '/talleres/' + id));
         remove(ref(db, 'Taller/'+ id + '/participantes/' + userId));
+        // correoBajaTaller()
       }
 
       const inscribirTaller=()=>{
@@ -94,6 +132,7 @@ const DetalleTaller = (props) => {
             userId,
             NombreU
         });
+        // correoInscripcionTaller()
       };
 
       const handleChangeDescripcion=(e)=>{
