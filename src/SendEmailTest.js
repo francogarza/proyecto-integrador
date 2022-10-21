@@ -6,21 +6,25 @@ export const SendEmailTest = () => {
 
   const sendEmail = (e) => {
     e.preventDefault();
-
-    emailjs.sendForm('service_l68b4ed', 'template_jrfyyws', form.current, '7VB8KWioxv21zM4iQ')
-      .then((result) => {
-          console.log(result.text);
-      }, (error) => {
-          console.log(error.text);
+        var templateParams = {
+          nombre_taller: 'taller test',
+          link_catalogo_talleres: 'http://localhost:3000/catalogo-talleres',
+          to_email: 'francogarza98@gmail.com'
+      };
+    emailjs.send('service_l68b4ed', 'template_jrfyyws', templateParams, '7VB8KWioxv21zM4iQ')
+      .then(function(response) {
+        console.log('SUCCESS!', response.status, response.text);
+      }, function(error) {
+        console.log('FAILED...', error);
       });
   };
 
   return (
     <form ref={form} onSubmit={sendEmail}>
-      <label>Name</label>
-      <input type="text" name="user_name" />
-      <label>Email</label>
-      <input type="email" name="user_email" />
+      <label>from</label>
+      <input type="text" name="from_name" />
+      <label>to_email</label>
+      <input type="email" name="to_email" />
       <label>Message</label>
       <textarea name="message" />
       <input type="submit" value="Send" />
