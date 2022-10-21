@@ -81,19 +81,22 @@ const DetalleTaller = (props) => {
       }
 
       const inscribirTaller=()=>{
+        if(location.state.EsAdmin){
+            console.log("para que quiere un admin meter una clase?")
+        }else{
+            const id = location.state.id
+            set(ref(db, 'Participante/'+ userId + '/talleres/' + id), {
+                id,
+                Nombre,
+                Descripcion,
+                imgUrl
+            });
 
-        const id = location.state.id
-        set(ref(db, 'Participante/'+ userId + '/talleres/' + id), {
-            id,
-            Nombre,
-            Descripcion,
-            imgUrl
-        });
-
-        set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
-            userId,
-            NombreU
-        });
+            set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
+                userId,
+                NombreU
+            });
+        }
       };
 
       const handleChangeDescripcion=(e)=>{
@@ -140,51 +143,56 @@ const DetalleTaller = (props) => {
             <h5>Impartido por:</h5>
             <h4>{ImpartidoPor}</h4>
         </div>
-        <div style={{backgroundColor : "gray",padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
+        <div className='container'>
             <h3>Descripción:</h3>
             <p>{Descripcion}</p>
         </div>
 
-        <div style={{backgroundColor : "gray",padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
+        <div className='container'>
             <h3>Prerrequisitos:</h3>
             <p>{Prerequisitos}</p>
         </div>
 
-        <div style={{backgroundColor : "gray",padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
+        <div className='container'>
             <h3>¿Virtual o presencial?</h3>
             <p>{VirtualPresencial}</p>
         </div>
-
-        <div style={{backgroundColor : "gray",padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
-            {participantes.map(participante => (
-                <div style={{display: "inline-block"}} key={participante.id}>
-                    {location.state.EsAdmin &&
-                    (<div>
-                        <h3>Lista Participantes</h3>
-                        <p>{userId}</p>
-                        <p>{NombreU}</p>
-                    </div>)}
-                </div>
-            ))}
+        {location.state.EsAdmin &&
+        <div className='container'>
+        {participantes.map(participante => (
+            <div style={{display: "inline-block"}} key={participante.id}>
+                {location.state.EsAdmin &&
+                (<div>
+                    <h3>Lista Participantes</h3>
+                    <p>{NombreU}</p>
+                    <p>{userId}</p>
+                    <br></br>
+                </div>)}
+            </div>
+        ))}
         </div>
+        }
+        
+        {(location.state.EstaInscrito || location.state.EsAdmin) &&
+        <div className='container'>
+        {/*
+        aqui va la parte de la informacion secreta, primero hay que hacer la variable InfoSecreta en registro talleres (el del admin) para que se guarde en firebase, luega se hace aqui un condicional para mostrar la informacion secreta si el usuario esta inscrito (por ahora pasa eso como un prop tipo <DetalleTaller EstaInscrito={true}/>)
 
-        <div style={{backgroundColor : "gray",padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
-            {/*
-            aqui va la parte de la informacion secreta, primero hay que hacer la variable InfoSecreta en registro talleres (el del admin) para que se guarde en firebase, luega se hace aqui un condicional para mostrar la informacion secreta si el usuario esta inscrito (por ahora pasa eso como un prop tipo <DetalleTaller EstaInscrito={true}/>)
-
-            asi se ponen los ifs aqui
-            <p>{props.EstaInscrito ? {InformacionSecreta} : "para ver esta informacion primero inscriba el taller"}</p>
-            */}
-            <h3>Información secreta:</h3>
-            {location.state.EstaInscrito ? <p>{InformacionConfidencial}</p> : <p>"Para poder ver esta información, primero inscríbase al taller."</p>}
-            
+        asi se ponen los ifs aqui
+        <p>{props.EstaInscrito ? {InformacionSecreta} : "para ver esta informacion primero inscriba el taller"}</p>
+        */}
+        <h3>Información secreta:</h3>
+        {(location.state.EstaInscrito || location.state.EsAdmin) ? <p>{InformacionConfidencial}</p> : <p></p>}
+        
         </div>
-            
+        }
+        
                 <div>
                 { 
-                    location.state.EstaInscrito ? <Button onClick={darDeBaja}>Dar de baja</Button> : <Button onClick={inscribirTaller}>Inscribir</Button>
+                    (location.state.EstaInscrito )? <Button onClick={darDeBaja}>Dar de baja</Button> : <Button onClick={inscribirTaller}>Inscribir</Button>
                 }
                 </div>
+                
     </div>
   )
 }
