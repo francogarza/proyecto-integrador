@@ -10,6 +10,7 @@ import './basic.css'
 import {Button,Container,Form,Alert, FormLabel} from 'react-bootstrap'
 import { UserContext } from './UserContext';
 import TallerCard from "./components/TallerCard";
+import { useNavigate } from 'react-router-dom';
 
 const DetalleTaller = (props) => {
 
@@ -30,7 +31,7 @@ const DetalleTaller = (props) => {
     const [imgUrl,setImgUrl] = useState("");
     const [participantes,setParticipantes] = useState([]);
     const [NombreU,setNombreU] = useState("");
-
+    const navigate = useNavigate();
     const correoBajaTaller = () => {
 
         var templateParams = {
@@ -115,6 +116,7 @@ const DetalleTaller = (props) => {
         const id = location.state.id
         remove(ref(db, 'Participante/'+ userId + '/talleres/' + id));
         remove(ref(db, 'Taller/'+ id + '/participantes/' + userId));
+        navigate('/talleres-inscritos');
         // correoBajaTaller()
       }
 
@@ -136,6 +138,7 @@ const DetalleTaller = (props) => {
             NombreU
         });
         }
+        navigate('/catalogo-talleres');
         // correoInscripcionTaller()
       };
 

@@ -31,6 +31,7 @@ label{
 
 .container{
     padding: 30px;
+    background-color: white;
     border: 2px solid #000000;
     border-width: 3px;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -67,6 +68,10 @@ html{
     background: rgba(228, 255, 255, 0.5);
 }
 
+p{
+    word-break: break-all;
+}
+
 input[type="radio"]{
     background-color: #fff;
     margin-right: 5px;
@@ -83,7 +88,10 @@ input[type="radio"]{
 
 .btn-primary{
     font-size: 14px;
-    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
     display: block;
     font-family: inter;
     background: #F95828;

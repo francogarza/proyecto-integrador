@@ -46,7 +46,7 @@ export default function TallerCard(props){
                     <Typography variant="h5" gutterBottom justifyContent="center" textAlign="center">
                         {props.Nombre}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" justifyContent="center" textAlign="center">
+                    <Typography variant="body2" noWrap="true" color="text.secondary" justifyContent="center" textAlign="center">
                         {props.Descripcion}
                     </Typography>
                 </CardContent>
