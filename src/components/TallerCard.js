@@ -19,7 +19,7 @@ export default function TallerCard(props){
     let navigate = useNavigate();
     const irTaller = () =>{
         let path = '/detalle-taller';
-        navigate(path, {state:{id:props.id,EstaInscrito:props.EstaInscrito}});
+        navigate(path, {state:{id:props.id,EstaInscrito:props.EstaInscrito,EsAdmin:props.EsAdmin}});
     }
 
 
@@ -53,9 +53,15 @@ export default function TallerCard(props){
             </CardActionArea>
             <CardActions style={{ display: 'flex', justifyContent: 'center' }}>
                 {props.EsAdmin ? (
-                    <Button size="small" color="primary" onClick={editarTaller}>
-                        Actualizar
-                    </Button> 
+                    <div>
+                        <Button size="small" color="primary" onClick={editarTaller}>
+                            Actualizar
+                        </Button>
+
+                        <Button size="small" color="primary" onClick={irTaller}>
+                            Ver mas
+                        </Button>
+                    </div>
                 ) 
                 : (
                 <Button size="small" color="primary" onClick={irTaller}>

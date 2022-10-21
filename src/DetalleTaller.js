@@ -8,8 +8,9 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
 import {Button,Container,Form,Alert, FormLabel} from 'react-bootstrap'
 import { UserContext } from './UserContext';
+import TallerCard from "./components/TallerCard";
 
-const DetalleTaller = () => {
+const DetalleTaller = (props) => {
 
     //global
     const {userId, setUserId} = useContext(UserContext);
@@ -26,7 +27,8 @@ const DetalleTaller = () => {
     const [InformacionConfidencial, setInformacionConfidencial] = useState("");
     const [EstaInscrito,setEstaInscrito] = useState(false);
     const [imgUrl,setImgUrl] = useState("");
-
+    const [participantes,setParticipantes] = useState([]);
+    const [NombreU,setNombreU] = useState("");
 
     const handleEstaInscrito=(e)=>{
         setEstaInscrito(e.target.value)
@@ -38,6 +40,11 @@ const DetalleTaller = () => {
         onValue(ref(db,'Taller/'+location.state.id),(snapshot) => {
             const data = snapshot.val();
             if(data !== null){
+                if(location.state.EsAdmin){
+                    Object.values(data.participantes).map((e) => {
+                        setParticipantes((oldArray) => [e])
+                    });
+                }
                 setDescripcion(data.Descripcion)
                 setFechas(data.Fechas)
                 setHorarios(data.Horarios)
@@ -54,7 +61,17 @@ const DetalleTaller = () => {
             }
             });
 
-      }, [])
+      }, [isLoggedIn])
+
+    useEffect(() => {
+        onValue(ref(db,'Participante/'+userId),(snapshot) => {
+            const data = snapshot.val();
+            if(data !== null){
+                setNombreU(data.Nombre)
+            }
+        });
+
+    }, [])
 
 
       const darDeBaja=()=>{
@@ -74,7 +91,8 @@ const DetalleTaller = () => {
         });
 
         set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
-            userId
+            userId,
+            NombreU
         });
       };
 
@@ -138,6 +156,19 @@ const DetalleTaller = () => {
         </div>
 
         <div style={{backgroundColor : "gray",padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
+            {participantes.map(participante => (
+                <div style={{display: "inline-block"}} key={participante.id}>
+                    {location.state.EsAdmin &&
+                    (<div>
+                        <h3>Lista Participantes</h3>
+                        <p>{userId}</p>
+                        <p>{NombreU}</p>
+                    </div>)}
+                </div>
+            ))}
+        </div>
+
+        <div style={{backgroundColor : "gray",padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
             {/*
             aqui va la parte de la informacion secreta, primero hay que hacer la variable InfoSecreta en registro talleres (el del admin) para que se guarde en firebase, luega se hace aqui un condicional para mostrar la informacion secreta si el usuario esta inscrito (por ahora pasa eso como un prop tipo <DetalleTaller EstaInscrito={true}/>)
 
@@ -154,8 +185,6 @@ const DetalleTaller = () => {
                     location.state.EstaInscrito ? <Button onClick={darDeBaja}>Dar de baja</Button> : <Button onClick={inscribirTaller}>Inscribir</Button>
                 }
                 </div>
-            
-        
     </div>
   )
 }
