@@ -11,6 +11,7 @@ import TalleresInscritos from './TalleresInscritos';
 import SendEmailTest from './SendEmailTest';
 import { UserContext } from './UserContext';
 import HorarioTalleres from './HorarioTalleres.js';
+import LogIn from './login.js'
 
 function App() {
   
@@ -61,6 +62,9 @@ function App() {
               <HorarioTalleres />
             }
             />
+            <Route path="/login" element={
+              <LogIn/>
+            }/>
       </Routes>
     </Router>
     </UserContext.Provider>

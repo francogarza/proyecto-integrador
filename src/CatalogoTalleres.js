@@ -16,11 +16,6 @@ const CatalogoTalleres = (props) => {
     const [talleres,setTalleres] = useState([])
     const [talleresInscritos,setTalleresInscritos] = useState([])
 
-    useEffect(()=>{
-        setIsLoggedIn(true);
-        setUserId("f38e92828d2");
-    },[])
-
     useEffect(() => {
             onValue(ref_db(db,'Taller/'),(snapshot) => {
                 setTalleres([]);
