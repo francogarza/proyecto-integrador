@@ -75,7 +75,7 @@ const RegistroPadres = () => {
       .then((userCredential) => {
         console.log(userCredential);
         const uuid = userCredential.user.uid
-        const hijos = [""]
+        const hijos = [{}]
         set(ref(db,'Padre/' + uuid), {
           Nombre,
           Mail,

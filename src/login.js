@@ -1,13 +1,15 @@
-import React, {useContext} from 'react';
+import React, {useContext,useEffect} from 'react';
 import {db} from './firebase';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword  } from 'firebase/auth';
 import {uid} from 'uid';
+import { useNavigate } from 'react-router-dom';
 import {set, ref} from 'firebase/database';
 import {useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
 import {Button,Container,Form,Alert} from 'react-bootstrap'
 import { UserContext } from './UserContext';
+import { Navigate } from 'react-router-dom';
 
 const LogIn = () => {
 
@@ -15,11 +17,12 @@ const LogIn = () => {
       
 const {userId, setUserId} = useContext(UserContext);
 const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
+const {parentId,setParentId} = useContext(UserContext);
 
 const [Mail, setMail] = useState("");
 const [Password,setPassword] = useState("");
 const [alertActive, setAlertActive] = useState(false);
-
+let navigate = useNavigate();
 
 const handleChangeMail=(e)=>{
     setMail(e.target.value)
@@ -37,6 +40,8 @@ signInWithEmailAndPassword(auth,Mail,Password)
 .then((userCredential) =>{
     console.log(userCredential.user.uid)
     setIsLoggedIn(true);
+    setParentId(userCredential.user.uid)
+    navigate('/manage-children')
     //hay que poner al padre
     //setUserId(userCredential.user.uid);
 })
@@ -45,8 +50,6 @@ signInWithEmailAndPassword(auth,Mail,Password)
 })
 
 };
-
-
 
 return(
 <div id="mainContainer">

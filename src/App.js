@@ -12,13 +12,17 @@ import SendEmailTest from './SendEmailTest';
 import { UserContext } from './UserContext';
 import HorarioTalleres from './HorarioTalleres.js';
 import LogIn from './login.js'
+import ManageChild from './manageChild';
 
 function App() {
   
   const [userId, setUserId] = useState(false);
+  const [userSelected,setUserSelected] = useState(false);
+  const [parentId,setParentId] = useState(false);
   const [isLoggedIn,setIsLoggedIn] = useState(false);
+
   return (
-    <UserContext.Provider value={{userId,setUserId,isLoggedIn,setIsLoggedIn}}>
+    <UserContext.Provider value={{userId,setUserId,userSelected,setUserSelected,parentId,setParentId,isLoggedIn,setIsLoggedIn}}>
     <Router>
       <Routes>
             <Route path="/" element={
@@ -34,7 +38,7 @@ function App() {
             }
             />
             <Route path="/registro-taller-usuario" element={
-              <RegistroTaller PadreId={"10366ae44ab"}/>
+              <RegistroTaller />
             }
             />
             <Route path="/registro-taller-admin" element={
@@ -65,6 +69,10 @@ function App() {
             <Route path="/login" element={
               <LogIn/>
             }/>
+            <Route path='/manage-children' element={
+              <ManageChild/>
+            }
+            />
       </Routes>
     </Router>
     </UserContext.Provider>

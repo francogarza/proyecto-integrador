@@ -12,6 +12,7 @@ const CatalogoTalleres = (props) => {
     //global
     const {userId, setUserId} = useContext(UserContext);
     const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
+    const {userSelected,setUserSelected} = useContext(UserContext);
     //local
     const [talleres,setTalleres] = useState([])
     const [talleresInscritos,setTalleresInscritos] = useState([])
