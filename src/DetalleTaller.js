@@ -52,7 +52,6 @@ const DetalleTaller = (props) => {
     };
 
     const correoInscripcionTaller = () => {
-
         var templateParams = {
             nombre_taller: 'taller test',
             link_catalogo_talleres: 'http://localhost:3000/catalogo-talleres',
@@ -106,6 +105,10 @@ const DetalleTaller = (props) => {
             const data = snapshot.val();
             if(data !== null){
                 setNombreU(data.Nombre)
+                console.log("nombreU")
+                console.log(data.Nombre)
+                console.log("userId");
+                console.log(userId)
             }
         });
 
@@ -177,8 +180,13 @@ const DetalleTaller = (props) => {
         setInformacionConfidencial(e.target.value)
     }
 
+    const goBack=()=>{
+        navigate(-1);
+    }
+
   return(
     <div>
+        <Button onClick={goBack}>regresar</Button>
         <div style={{padding: "50px", textAlign: "center", background: "#864fba", color: "#fdfffc", fontSize: "30px"}}>
         </div>
         <div style={{padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>

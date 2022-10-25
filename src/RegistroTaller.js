@@ -2,13 +2,17 @@ import React from 'react';
 import {db} from './firebase';
 import {uid} from 'uid';
 import {set, ref, onValue,update} from 'firebase/database';
-import {useState,useEffect} from "react";
+import {useState,useEffect,useContext} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
 import {Button,Container,Form,Alert} from 'react-bootstrap'
+import { UserContext } from './UserContext';
 
-const RegistroTaller = (props) => {
-
+const RegistroTaller = () => {
+    //global
+    const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
+    const {parentId,setParentId} = useContext(UserContext);
+    //local
     const [CelularTutorPadre, setCelularTutorPadre] = useState("");
     const [ClaseProgra, setClaseProgra] = useState("true");
     const [ComoEntero, setComoEntero] = useState("maestro");
@@ -153,7 +157,7 @@ const RegistroTaller = (props) => {
 
     const writeToDatabase = () => {
         if(verificarDatos()){
-            const PadreId = props.PadreId;
+            const PadreId = parentId;
             const uuid = uid()
             
 

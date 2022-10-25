@@ -1,5 +1,6 @@
 import React from 'react';
 import {db} from './firebase';
+import { getAuth, createUserWithEmailAndPassword  } from 'firebase/auth';
 import {uid} from 'uid';
 import {set, ref} from 'firebase/database';
 import {useState} from "react";
@@ -9,24 +10,33 @@ import {Button,Container,Form,Alert} from 'react-bootstrap'
 
 const RegistroPadres = () => {
   
-  const [todoNombre, setTodoNombre] = useState("");
-  const [todoMail, setTodoMail] = useState("");
-  const [todoCelular, setTodoCelular] = useState("");
+  const [Nombre, setNombre] = useState("");
+  const [Mail, setMail] = useState("");
+  const [Password,setPassword] = useState("");
+  const [Password2,setPassword2] = useState("");
+  const [Celular, setCelular] = useState("");
   const [alertActive, setAlertActive] = useState(false);
 
 
-  const handleTodoChangeNombre=(e)=>{
-    setTodoNombre(e.target.value)
+  const handleChangeNombre=(e)=>{
+    setNombre(e.target.value)
   }
 
-  const handleTodoChangeMail=(e)=>{
-    setTodoMail(e.target.value)
+  const handleChangeMail=(e)=>{
+    setMail(e.target.value)
+  }
+
+  const HandlePasswordChange=(e)=>{
+    setPassword(e.target.value)
+  }
+
+  const HandlePassword2Change=(e)=>{
+    setPassword2(e.target.value)
   }
 
 
-
-  const handleTodoChangeCelular=(e)=>{
-    setTodoCelular(e.target.value)
+  const handleChangeCelular=(e)=>{
+    setCelular(e.target.value)
   }
 
   function validaMail(mail){
@@ -38,29 +48,49 @@ const RegistroPadres = () => {
   }
 
   function verificarDatos(){
-    if(validaMail(todoMail) && todoNombre.length>0 && validaCelular(todoCelular)){
+    if(validaMail(Mail) && Nombre.length>0 && validaCelular(Celular) && validarPassword()){
       return true
     }else{
       return false
     }
   }
 
+  function validarPassword(){
+    if(Password===""){
+      return false
+    }else if(Password === Password2){
+      return true
+    }
+    return false
+  }
+
   const writeToDatabase = () => {
+
     if(verificarDatos()){
-      const uuid = uid()
-      const hijos = [""]
-      set(ref(db,'Padre/' + uuid), {
-        todoNombre,
-        todoMail,
-        todoCelular,
-        hijos,
-        uuid,
-      });
-      setTodoNombre("");
-      setTodoMail("");
-      setTodoCelular("");
-    }else{
-      console.log("wow");
+
+          //prueba crear usuario
+      const auth = getAuth();
+
+      createUserWithEmailAndPassword(auth,Mail,Password)
+      .then((userCredential) => {
+        console.log(userCredential);
+        const uuid = userCredential.user.uid
+        const hijos = [{}]
+        set(ref(db,'Padre/' + uuid), {
+          Nombre,
+          Mail,
+          Celular,
+          hijos,
+          uuid,
+        });
+        setNombre("");
+        setMail("");
+        setCelular("");
+      })
+      .catch((error)=>{
+        console.log(error);
+      })
+      }else{
       setAlertActive(true);
       
     }
@@ -79,7 +109,7 @@ const RegistroPadres = () => {
             Escriba su nombre completo.
           </Form.Label>
           <br/>
-          <Form.Control type="text" placeholder="Nombre" id="Nombre" value={todoNombre} onChange={handleTodoChangeNombre}/>
+          <Form.Control type="text" placeholder="Nombre" id="Nombre" value={Nombre} onChange={handleChangeNombre}/>
         </Form.Group>
         <br/>
         <Form.Group>
@@ -87,7 +117,23 @@ const RegistroPadres = () => {
             Escriba su correo electrónico.
           </Form.Label>
           <br/>
-          <Form.Control type="text" placeholder="Correo" id="Mail" value={todoMail} onChange={handleTodoChangeMail}/>
+          <Form.Control type="text" placeholder="Correo" id="Mail" value={Mail} onChange={handleChangeMail}/>
+        </Form.Group>
+        <br/>
+        <Form.Group>
+          <Form.Label>
+            Escriba su contraseña.
+          </Form.Label>
+          <br/>
+          <Form.Control type="password" placeholder="password" id="Password" value={Password} onChange={HandlePasswordChange}/>
+        </Form.Group>
+        <br/>
+        <Form.Group>
+          <Form.Label>
+            Por favor confirme su contraseña
+          </Form.Label>
+          <br/>
+          <Form.Control type="password" placeholder="password" id="Password2" value={Password2} onChange={HandlePassword2Change}/>
         </Form.Group>
         <br/>
         <Form.Group>
@@ -95,7 +141,7 @@ const RegistroPadres = () => {
             Escriba su número de teléfono.
           </Form.Label>
           <br/>
-          <Form.Control type="number" placeholder="Teléfono" id="Celular" value={todoCelular} onChange={handleTodoChangeCelular}/>
+          <Form.Control type="number" placeholder="Teléfono" id="Celular" value={Celular} onChange={handleChangeCelular}/>
         </Form.Group>
         <br/>
           <Button onClick={writeToDatabase} class='submit'>
