@@ -20,9 +20,6 @@ const TalleresInscritos = (props) => {
     const [realTalleres,setRealTalleres] = useState([]);
 
     useEffect(() => {
-        setIsLoggedIn(true);
-        setUserId("f38e92828d2");
-
         onValue(ref(db,'Participante/'+userId+'/talleres/'),(snapshot) => {
             setTalleres([]);
             const data = snapshot.val();

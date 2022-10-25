@@ -53,6 +53,14 @@ const seleccionarHijo = (id) =>{
     setUserSelected(true);
 }
 
+const irCatalogo = () => {
+    navigate('/catalogo-talleres')
+}
+
+const verTalleresInscritos=(e)=>{
+    setUserId(e)
+    navigate('/talleres-inscritos')
+}
 
 
 return(
@@ -67,12 +75,14 @@ return(
                 <div style={{display: "inline-block"}} key={hijo.uuid}>
                         <p>{hijo.Nombre}{hijo.uuid===userId && "(seleccionado)"}</p>
                         <Button onClick={() => seleccionarHijo(hijo.uuid)}>Seleccionar hijo</Button>
+                        <Button onClick={() => verTalleresInscritos(hijo.uuid)}>Ver talleres inscritos</Button>
                         <Button>editar hijo</Button>
                         <Button>Borrar hijo</Button>
                 </div>
             ))}
     </div>
     <Button onClick={agregarHijo}>agregar hijo</Button>
+    <Button onClick={irCatalogo}>Catalogo</Button>
 </div>  
 )
 }

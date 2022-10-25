@@ -4,7 +4,9 @@ import {uid} from 'uid';
 import {set, ref as ref_db,onValue,update} from 'firebase/database';
 import { getDownloadURL, ref as ref_st } from 'firebase/storage';
 import {useState,useEffect} from "react";
+import { useNavigate } from 'react-router-dom';
 import TallerCard from './components/TallerCard.js';
+import {Button,Container,Form,Alert} from 'react-bootstrap'
 import { UserContext } from './UserContext';
 
 const CatalogoTalleres = (props) => {
@@ -16,6 +18,7 @@ const CatalogoTalleres = (props) => {
     //local
     const [talleres,setTalleres] = useState([])
     const [talleresInscritos,setTalleresInscritos] = useState([])
+    let navigate = useNavigate();
 
     useEffect(() => {
             onValue(ref_db(db,'Taller/'),(snapshot) => {
@@ -39,13 +42,16 @@ const CatalogoTalleres = (props) => {
             });
       }, [userId])
 
-
-
+const goBack=()=>{
+    navigate(-1);
+}
 
   return(
     <div>
         {/* {isLoggedIn?<p>logged in</p> : <p>logged out</p>}
         {isLoggedIn && <h1>{userId}</h1>} */}
+        <h1>{userId}</h1>
+        <Button onClick={goBack}>Regresar</Button>
         <div style={{padding: "50px", textAlign: "center", background: "#F95828", color: "#fdfffc", fontSize: "30px"}}>
             <h1> Catálogo de talleres </h1>
             <p> Talleres disponibles </p>
