@@ -31,6 +31,7 @@ const DetalleTaller = (props) => {
     const [imgUrl,setImgUrl] = useState("");
     const [participantes,setParticipantes] = useState([]);
     const [NombreU,setNombreU] = useState("");
+    const [maxCap,setMaxCap] = useState("");
     const navigate = useNavigate();
     const correoBajaTaller = () => {
 
@@ -48,7 +49,6 @@ const DetalleTaller = (props) => {
             }, function(error) {
             console.log('FAILED...', error);
         });
-
     };
 
     const correoInscripcionTaller = () => {
@@ -90,6 +90,7 @@ const DetalleTaller = (props) => {
                 setPrerequisitos(data.Prerequisitos)
                 setVirtualPresencial(data.VirtualPresencial)
                 setInformacionConfidencial(data.InformacionConfidencial)
+                setMaxCap(data.maxCap);
                 if(data.imgUrl != null){
                     setImgUrl(data.imgUrl)
                 }else{

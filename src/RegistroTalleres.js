@@ -31,7 +31,11 @@ const RegistroTalleres = (props) => {
     const [isUpdate,setIsUpdate] = useState(false)
     const [img,setImg] = useState("");
     const [ImgUrl,setImgUrl] = useState("");
+    const [maxCap,setMaxCap] = useState("");
 
+    const handleChangeMaxCap=(e)=>{
+        setMaxCap(e.target.value)
+    }
 
     const handleChangeDescripcion=(e)=>{
         setDescripcion(e.target.value)
@@ -165,7 +169,8 @@ const RegistroTalleres = (props) => {
                         VirtualPresencial,
                         InformacionConfidencial,
                         uuid,
-                        imgUrl
+                        imgUrl,
+                        maxCap
                     });
         
                     setDescripcion("");
@@ -205,6 +210,7 @@ const RegistroTalleres = (props) => {
                 Prerequisitos,
                 VirtualPresencial,
                 InformacionConfidencial,
+                maxCap,
             });
             setDescripcion("");
             setFechas("");
@@ -214,6 +220,7 @@ const RegistroTalleres = (props) => {
             setPrerequisitos("");
             setVirtualPresencial("");
             setInformacionConfidencial("");
+            setMaxCap(0);
         }else{
             setAlertActive(true);
         }
@@ -265,7 +272,7 @@ const RegistroTalleres = (props) => {
         <Container>
         {alertActive && <Alert variant='warning'>Por favor, verifique sus datos.</Alert>}
         <Form className="registroTaller">
-        <Form.Label>
+            <Form.Label>
                 Escriba el nombre del taller.
             </Form.Label>
             <br/>
@@ -313,6 +320,12 @@ const RegistroTalleres = (props) => {
             <label htmlFor="Presencial">Presencial</label>
             <br/>
             <input type="file" onChange={handleChangeImg}></input>
+            <br/>
+            <Form.Label>
+                Cupo maximo
+            </Form.Label>
+            <br/>
+            <Form.Control type="number" placeholder="Capacidad maxima" id="maxCap" value={maxCap} onChange={handleChangeMaxCap} required={true}/>
             <br/>
             {
             <Button onClick={isUpdate ? updateToDatabase : writeToDatabase} className="registro">
