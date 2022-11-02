@@ -32,7 +32,10 @@ const DetalleTaller = (props) => {
     const [participantes,setParticipantes] = useState([]);
     const [NombreU,setNombreU] = useState("");
     const [maxCap,setMaxCap] = useState("");
+    const [isCapped,setIsCapped] = useState("");
+
     const navigate = useNavigate();
+
     const correoBajaTaller = () => {
 
         var templateParams = {
@@ -75,13 +78,16 @@ const DetalleTaller = (props) => {
     useEffect(() => {
 
         onValue(ref(db,'Taller/'+location.state.id),(snapshot) => {
+            setParticipantes([]);
             const data = snapshot.val();
             if(data !== null){
-                if(location.state.EsAdmin){
+                
+                if(typeof data.participantes!=='undefined'){
                     Object.values(data.participantes).map((e) => {
-                        setParticipantes((oldArray) => [e])
+                        setParticipantes((oldArray) => [...oldArray,e])
                     });
                 }
+                
                 setDescripcion(data.Descripcion)
                 setFechas(data.Fechas)
                 setHorarios(data.Horarios)
@@ -91,6 +97,7 @@ const DetalleTaller = (props) => {
                 setVirtualPresencial(data.VirtualPresencial)
                 setInformacionConfidencial(data.InformacionConfidencial)
                 setMaxCap(data.maxCap);
+                setIsCapped(data.isCapped)
                 if(data.imgUrl != null){
                     setImgUrl(data.imgUrl)
                 }else{
@@ -106,10 +113,6 @@ const DetalleTaller = (props) => {
             const data = snapshot.val();
             if(data !== null){
                 setNombreU(data.Nombre)
-                console.log("nombreU")
-                console.log(data.Nombre)
-                console.log("userId");
-                console.log(userId)
             }
         });
 
@@ -128,22 +131,26 @@ const DetalleTaller = (props) => {
         if(location.state.EsAdmin){
             console.log("para que quiere un admin meter una clase?")
         }else{
-            
-        const id = location.state.id
-        set(ref(db, 'Participante/'+ userId + '/talleres/' + id), {
-            id,
-            Nombre,
-            Descripcion,
-            imgUrl
-        });
+        if(participantes.length<maxCap && isCapped=='false'){
+            const id = location.state.id
+            set(ref(db, 'Participante/'+ userId + '/talleres/' + id), {
+                id,
+                Nombre,
+                Descripcion,
+                imgUrl
+            });
 
-        set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
-            userId,
-            NombreU
-        });
+            set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
+                userId,
+                NombreU
+            });
+            navigate('/catalogo-talleres');
+            // correoInscripcionTaller()
+            }else{
+                alert("No se puede inscribir porque el taller esta lleno o esta bloqueado");
+            }
         }
-        navigate('/catalogo-talleres');
-        // correoInscripcionTaller()
+        
       };
 
       const handleChangeDescripcion=(e)=>{
@@ -194,6 +201,12 @@ const DetalleTaller = (props) => {
             <h1>{Nombre}</h1>
             <h5>Impartido por:</h5>
             <h4>{ImpartidoPor}</h4>
+            {isCapped=='true'? <h5>cupo lleno</h5>: 
+                <div>
+                <h5>Cupo: {participantes.length+" de "+maxCap}</h5>
+                </div>
+            }
+            
         </div>
         <div className='container'>
             <h3>Descripción:</h3>
@@ -238,13 +251,13 @@ const DetalleTaller = (props) => {
         
         </div>
         }
-        
+            {isLoggedIn &&
                 <div>
-                { 
-                    (location.state.EstaInscrito )? <Button onClick={darDeBaja}>Dar de baja</Button> : <Button onClick={inscribirTaller}>Inscribir</Button>
-                }
+                    { 
+                        (location.state.EstaInscrito )? <Button onClick={darDeBaja}>Dar de baja</Button> : <Button onClick={inscribirTaller}>Inscribir</Button>
+                    }
                 </div>
-                
+            }
     </div>
   )
 }
