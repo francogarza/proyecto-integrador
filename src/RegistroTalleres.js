@@ -31,7 +31,16 @@ const RegistroTalleres = (props) => {
     const [isUpdate,setIsUpdate] = useState(false)
     const [img,setImg] = useState("");
     const [ImgUrl,setImgUrl] = useState("");
+    const [maxCap,setMaxCap] = useState("");
+    const [isCapped,setIsCapped] = useState("false");
 
+    const handleChangeIsCapped=(e)=>{
+        setIsCapped(e.target.value)
+    }
+
+    const handleChangeMaxCap=(e)=>{
+        setMaxCap(e.target.value)
+    }
 
     const handleChangeDescripcion=(e)=>{
         setDescripcion(e.target.value)
@@ -143,7 +152,6 @@ const RegistroTalleres = (props) => {
             const uuid = uid()
             const imgRef = ref_st(storage,`images/${uuid + img.name}`)
             uploadBytes(imgRef,img).then(()=>{
-                alert('image uploaded');
                 
             }).then(() =>{
                 getDownloadURL(imgRef)
@@ -165,7 +173,9 @@ const RegistroTalleres = (props) => {
                         VirtualPresencial,
                         InformacionConfidencial,
                         uuid,
-                        imgUrl
+                        imgUrl,
+                        maxCap,
+                        isCapped
                     });
         
                     setDescripcion("");
@@ -205,6 +215,8 @@ const RegistroTalleres = (props) => {
                 Prerequisitos,
                 VirtualPresencial,
                 InformacionConfidencial,
+                maxCap,
+                isCapped
             });
             setDescripcion("");
             setFechas("");
@@ -214,6 +226,7 @@ const RegistroTalleres = (props) => {
             setPrerequisitos("");
             setVirtualPresencial("");
             setInformacionConfidencial("");
+            setMaxCap(0);
         }else{
             setAlertActive(true);
         }
@@ -255,6 +268,8 @@ const RegistroTalleres = (props) => {
                     setPrerequisitos(data.Prerequisitos)
                     setVirtualPresencial(data.VirtualPresencial)
                     setInformacionConfidencial(data.InformacionConfidencial)
+                    setIsCapped(data.isCapped)
+                    setMaxCap(data.maxCap)
                 }
               });
         }
@@ -265,7 +280,7 @@ const RegistroTalleres = (props) => {
         <Container>
         {alertActive && <Alert variant='warning'>Por favor, verifique sus datos.</Alert>}
         <Form className="registroTaller">
-        <Form.Label>
+            <Form.Label>
                 Escriba el nombre del taller.
             </Form.Label>
             <br/>
@@ -313,6 +328,23 @@ const RegistroTalleres = (props) => {
             <label htmlFor="Presencial">Presencial</label>
             <br/>
             <input type="file" onChange={handleChangeImg}></input>
+            <br/>
+            <Form.Label>
+                Cupo maximo
+            </Form.Label>
+            <br/>
+            <Form.Control type="number" placeholder="Capacidad maxima" id="maxCap" value={maxCap} onChange={handleChangeMaxCap} required={true}/>
+            <br/>
+            <Form.Label>
+                Bloquear inscripciones
+            </Form.Label>
+            <br/>
+            <input type="radio" id="Capped" name="Capped" value={'true'} onChange={handleChangeIsCapped}
+                   checked={isCapped === 'true' ? true:false}/>
+            <label htmlFor="Capped">Bloqueado</label>
+            <input type="radio" id="NoCapped" name="NoCapped" value={'false'}
+             onChange={handleChangeIsCapped} checked={isCapped === 'false' ? true:false}/>
+            <label htmlFor="NoCapped">No bloqueado</label>
             <br/>
             {
             <Button onClick={isUpdate ? updateToDatabase : writeToDatabase} className="registro">

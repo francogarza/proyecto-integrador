@@ -31,10 +31,30 @@ const DetalleTaller = (props) => {
     const [imgUrl,setImgUrl] = useState("");
     const [participantes,setParticipantes] = useState([]);
     const [NombreU,setNombreU] = useState("");
+
+    const [maxCap,setMaxCap] = useState("");
+    const [isCapped,setIsCapped] = useState("");
     const [Correo,setCorreo] = useState("");
+
     const navigate = useNavigate();
 
-    
+    const correoBajaTaller = () => {
+
+        var templateParams = {
+            nombre_hijo: '',
+            nombre_taller: 'taller test',
+            link_catalogo_talleres: 'http://localhost:3000/catalogo-talleres',
+            link_detalle_taller: '',
+            to_email: 'francogarza98@gmail.com'
+        };
+
+        emailjs.send('service_l68b4ed', 'template_jrfyyws', templateParams, '7VB8KWioxv21zM4iQ')
+            .then(function(response) {
+            console.log('SUCCESS!', response.status, response.text);
+            }, function(error) {
+            console.log('FAILED...', error);
+        });
+    };
 
     
 
@@ -45,13 +65,16 @@ const DetalleTaller = (props) => {
     useEffect(() => {
 
         onValue(ref(db,'Taller/'+location.state.id),(snapshot) => {
+            setParticipantes([]);
             const data = snapshot.val();
             if(data !== null){
-                if(location.state.EsAdmin){
+                
+                if(typeof data.participantes!=='undefined'){
                     Object.values(data.participantes).map((e) => {
-                        setParticipantes((oldArray) => [e])
+                        setParticipantes((oldArray) => [...oldArray,e])
                     });
                 }
+                
                 setDescripcion(data.Descripcion)
                 setFechas(data.Fechas)
                 setHorarios(data.Horarios)
@@ -60,6 +83,8 @@ const DetalleTaller = (props) => {
                 setPrerequisitos(data.Prerequisitos)
                 setVirtualPresencial(data.VirtualPresencial)
                 setInformacionConfidencial(data.InformacionConfidencial)
+                setMaxCap(data.maxCap);
+                setIsCapped(data.isCapped)
                 if(data.imgUrl != null){
                     setImgUrl(data.imgUrl)
                 }else{
@@ -77,13 +102,9 @@ const DetalleTaller = (props) => {
             const data = snapshot.val();
             if(data !== null){
                 setNombreU(data.Nombre)
+
                 setCorreo(data.Correo)
-                console.log("Correo")
-                console.log(Correo)
-                console.log("nombreU")
-                console.log(data.Nombre)
-                console.log("userId");
-                console.log(userId)
+
             }
         });
     }, [])
@@ -134,23 +155,30 @@ const DetalleTaller = (props) => {
         if(location.state.EsAdmin){
             console.log("para que quiere un admin meter una clase?")
         }else{
-            
-        const id = location.state.id
-        set(ref(db, 'Participante/'+ userId + '/talleres/' + id), {
-            id,
-            Nombre,
-            Descripcion,
-            imgUrl
-        });
+        if(participantes.length<maxCap && isCapped=='false'){
+            const id = location.state.id
+            set(ref(db, 'Participante/'+ userId + '/talleres/' + id), {
+                id,
+                Nombre,
+                Descripcion,
+                imgUrl
+            });
 
-        set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
-            userId,
-            NombreU
-        });
+            set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
+                userId,
+                NombreU
+            });
+            navigate('/catalogo-talleres');
+            // correoInscripcionTaller()
+            }else{
+                alert("No se puede inscribir porque el taller esta lleno o esta bloqueado");
+            }
         }
+
         navigate('/catalogo-talleres');
         // enviarCorreoInscripcionTaller()
     };
+
 
       const handleChangeDescripcion=(e)=>{
         setDescripcion(e.target.value)
@@ -200,6 +228,12 @@ const DetalleTaller = (props) => {
             <h1>{Nombre}</h1>
             <h5>Impartido por:</h5>
             <h4>{ImpartidoPor}</h4>
+            {isCapped=='true'? <h5>cupo lleno</h5>: 
+                <div>
+                <h5>Cupo: {participantes.length+" de "+maxCap}</h5>
+                </div>
+            }
+            
         </div>
         <div className='container'>
             <h3>Descripción:</h3>
@@ -244,13 +278,13 @@ const DetalleTaller = (props) => {
         
         </div>
         }
-        
+            {isLoggedIn &&
                 <div>
-                { 
-                    (location.state.EstaInscrito )? <Button onClick={darDeBaja}>Dar de baja</Button> : <Button onClick={inscribirTaller}>Inscribir</Button>
-                }
+                    { 
+                        (location.state.EstaInscrito )? <Button onClick={darDeBaja}>Dar de baja</Button> : <Button onClick={inscribirTaller}>Inscribir</Button>
+                    }
                 </div>
-                
+            }
     </div>
   )
 }

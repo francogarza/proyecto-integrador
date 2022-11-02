@@ -75,7 +75,6 @@ return(
         <Button onClick={writeToDatabase} class='submit'>
         Ingresar
         </Button>
-    
     </Form>
     </Container>
 </div>
