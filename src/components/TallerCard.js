@@ -4,6 +4,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import {db} from '../firebase';
+import {useState,useEffect} from "react";
 import { useNavigate } from 'react-router-dom'
 import {set,ref,onValue,remove,update} from 'firebase/database';
 import { Button, CardMedia, CardActionArea, CardActions } from '@mui/material';
@@ -15,22 +16,55 @@ const mockTaller = {
 }
 
 export default function TallerCard(props){
-
     let navigate = useNavigate();
     const irTaller = () =>{
         let path = '/detalle-taller';
         navigate(path, {state:{id:props.id,EstaInscrito:props.EstaInscrito,EsAdmin:props.EsAdmin}});
     }
-
-
     const editarTaller = () =>{
         let path = '/registro-taller-admin';
         navigate(path, {state:{isUpdate:true,id:props.id}});
     }
 
+    const [participantes,setParticipantes] = useState([]);
+
+    const enviarCorreoATodosLosParticipantes = (e) => {
+        onValue(ref(db,'Taller/16a2b3ee056'),(snapshot) => {
+        // onValue(ref(db,'Taller/16a2b3ee056'),(snapshot) => {
+            const data = snapshot.val();
+            if(data !== null){
+                data.participantes.map(function (name) {
+                    console.log(name)
+                })
+                console.log(participantes)
+                console.log("test1")
+                console.log(data.participantes)
+            }
+        });
+        for (let i = 0; i < participantes.length; i++) { 
+            console.log(participantes[i])
+        }
+        // var templateParams = {
+        //     nombre_taller: Nombre,
+        //     nombre_hijo: NombreU,
+        //     link_talleres_inscritos: 'http://localhost:3000/talleres-inscritos',
+        //     // quitar este comment para mandar al correo del usuario
+        //     // to_email: Correo,
+        //     // quitar este comment para usar mi direccion de correo y hacer pruebas 
+        //     to_email: 'francogarza98@gmail.com'
+        // };
+        // emailjs.send('service_l68b4ed', 'template_jrfyyws', templateParams, '7VB8KWioxv21zM4iQ')
+        //     .then(function(response) {
+        //     console.log('SUCCESS!', response.status, response.text);
+        //     }, function(error) {
+        //     console.log('FAILED...', error);
+        // });
+    };
     //delete
     const handleDelete = (e) => {
         remove(ref(db,'Taller/' + e));
+        // console.log("hello")
+        // enviarCorreoATodosLosParticipantes(e);
     }
 
     return (

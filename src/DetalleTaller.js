@@ -31,8 +31,10 @@ const DetalleTaller = (props) => {
     const [imgUrl,setImgUrl] = useState("");
     const [participantes,setParticipantes] = useState([]);
     const [NombreU,setNombreU] = useState("");
+
     const [maxCap,setMaxCap] = useState("");
     const [isCapped,setIsCapped] = useState("");
+    const [Correo,setCorreo] = useState("");
 
     const navigate = useNavigate();
 
@@ -54,26 +56,11 @@ const DetalleTaller = (props) => {
         });
     };
 
-    const correoInscripcionTaller = () => {
-        var templateParams = {
-            nombre_taller: 'taller test',
-            link_catalogo_talleres: 'http://localhost:3000/catalogo-talleres',
-            to_email: 'francogarza98@gmail.com'
-        };
-
-        emailjs.send('service_l68b4ed', 'template_jrfyyws', templateParams, '7VB8KWioxv21zM4iQ')
-            .then(function(response) {
-            console.log('SUCCESS!', response.status, response.text);
-            }, function(error) {
-            console.log('FAILED...', error);
-        });
-
-    };
+    
 
     const handleEstaInscrito=(e)=>{
         setEstaInscrito(e.target.value)
     }
-
 
     useEffect(() => {
 
@@ -109,25 +96,62 @@ const DetalleTaller = (props) => {
       }, [isLoggedIn])
 
     useEffect(() => {
+        // quitar el siguiente comentario para probar con un taller en especifico
+        // onValue(ref(db,'Participante/03409e71a2a'),(snapshot) => {
         onValue(ref(db,'Participante/'+userId),(snapshot) => {
             const data = snapshot.val();
             if(data !== null){
                 setNombreU(data.Nombre)
+
+                setCorreo(data.Correo)
+
             }
         });
-
     }, [])
 
-
-      const darDeBaja=()=>{
+    const correoBajaTaller = () => {
+        var templateParams = {
+            nombre_hijo: NombreU,
+            nombre_taller: Nombre,
+            link_catalogo_talleres: 'http://localhost:3000/catalogo-talleres',
+            // quitar este comment para mandar al correo del usuario
+            // to_email: Correo,
+            // quitar este comment para usar mi direccion de correo y hacer pruebas 
+            to_email: 'francogarza98@gmail.com'
+        };
+        emailjs.send('service_l68b4ed', 'template_jrfyyws', templateParams, '7VB8KWioxv21zM4iQ')
+            .then(function(response) {
+            console.log('SUCCESS!', response.status, response.text);
+            }, function(error) {
+            console.log('FAILED...', error);
+        });
+    };
+    const darDeBaja=()=>{
         const id = location.state.id
         remove(ref(db, 'Participante/'+ userId + '/talleres/' + id));
         remove(ref(db, 'Taller/'+ id + '/participantes/' + userId));
         navigate('/talleres-inscritos');
         // correoBajaTaller()
-      }
+    }
 
-      const inscribirTaller=()=>{
+    const enviarCorreoInscripcionTaller = () => {
+        var templateParams = {
+            nombre_taller: Nombre,
+            nombre_hijo: NombreU,
+            link_talleres_inscritos: 'http://localhost:3000/talleres-inscritos',
+            // quitar este comment para mandar al correo del usuario
+            // to_email: Correo,
+            // quitar este comment para usar mi direccion de correo y hacer pruebas 
+            to_email: 'francogarza98@gmail.com'
+        };
+        emailjs.send('service_l68b4ed', 'template_jrfyyws', templateParams, '7VB8KWioxv21zM4iQ')
+            .then(function(response) {
+            console.log('SUCCESS!', response.status, response.text);
+            }, function(error) {
+            console.log('FAILED...', error);
+        });
+    };
+    const inscribirTaller=()=>{
         if(location.state.EsAdmin){
             console.log("para que quiere un admin meter una clase?")
         }else{
@@ -150,8 +174,11 @@ const DetalleTaller = (props) => {
                 alert("No se puede inscribir porque el taller esta lleno o esta bloqueado");
             }
         }
-        
-      };
+
+        navigate('/catalogo-talleres');
+        // enviarCorreoInscripcionTaller()
+    };
+
 
       const handleChangeDescripcion=(e)=>{
         setDescripcion(e.target.value)
