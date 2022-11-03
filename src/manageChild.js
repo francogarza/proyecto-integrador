@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
 import {Button,Container,Form,Alert} from 'react-bootstrap'
 import { UserContext } from './UserContext';
+import Box from '@mui/material/Box';
 
 const ManageChild = () => {
 
@@ -64,26 +65,35 @@ const verTalleresInscritos=(e)=>{
 
 
 return(
-<div>
-    {/* {isLoggedIn?<p>logged in</p> : <p>logged out</p>}
-    {isLoggedIn && <h1>{userId}</h1>} */}
-    <div style={{padding: "50px", textAlign: "center", background: "#F95828", color: "#fdfffc", fontSize: "30px"}}>
-        <h1> Seleccionar hijo </h1>
-    </div>
-    <div style={{padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
-    {hijos.map(hijo => (
-                <div style={{display: "inline-block"}} key={hijo.uuid}>
-                        <p>{hijo.Nombre}{hijo.uuid===userId && "(seleccionado)"}</p>
-                        <Button onClick={() => seleccionarHijo(hijo.uuid)}>Seleccionar hijo</Button>
-                        <Button onClick={() => verTalleresInscritos(hijo.uuid)}>Ver talleres inscritos</Button>
-                        <Button>editar hijo</Button>
-                        <Button>Borrar hijo</Button>
-                </div>
-            ))}
-    </div>
-    <Button onClick={agregarHijo}>agregar hijo</Button>
-    <Button onClick={irCatalogo}>Catalogo</Button>
-</div>  
+    <Box
+        component="main"
+        sx={{
+            flexGrow: 1,
+            height: '100vh',
+            overflow: 'auto',
+        }}
+    >
+        <div>
+            {/* {isLoggedIn?<p>logged in</p> : <p>logged out</p>}
+            {isLoggedIn && <h1>{userId}</h1>} */}
+            <div style={{padding: "50px", textAlign: "center", background: "#F95828", color: "#fdfffc", fontSize: "30px"}}>
+                <h1> Seleccionar hijo </h1>
+            </div>
+            <div style={{padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
+            {hijos.map(hijo => (
+                        <div style={{display: "inline-block"}} key={hijo.uuid}>
+                                <p>{hijo.Nombre}{hijo.uuid===userId && "(seleccionado)"}</p>
+                                <Button onClick={() => seleccionarHijo(hijo.uuid)}>Seleccionar hijo</Button>
+                                <Button onClick={() => verTalleresInscritos(hijo.uuid)}>Ver talleres inscritos</Button>
+                                <Button>editar hijo</Button>
+                                <Button>Borrar hijo</Button>
+                        </div>
+                    ))}
+            </div>
+            <Button onClick={agregarHijo}>agregar hijo</Button>
+            <Button onClick={irCatalogo}>Catalogo</Button>
+        </div>
+    </Box>
 )
 }
 

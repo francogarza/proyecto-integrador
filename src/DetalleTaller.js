@@ -11,6 +11,7 @@ import {Button,Container,Form,Alert, FormLabel} from 'react-bootstrap'
 import { UserContext } from './UserContext';
 import TallerCard from "./components/TallerCard";
 import { useNavigate } from 'react-router-dom';
+import Box from '@mui/material/Box';
 
 const DetalleTaller = (props) => {
 
@@ -191,68 +192,77 @@ const DetalleTaller = (props) => {
         navigate(-1);
     }
 
-  return(
-    <div>
-        <Button onClick={goBack}>regresar</Button>
-        <div style={{padding: "50px", textAlign: "center", background: "#864fba", color: "#fdfffc", fontSize: "30px"}}>
-        </div>
-        <div style={{padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
-            <h1>{Nombre}</h1>
-            <h5>Impartido por:</h5>
-            <h4>{ImpartidoPor}</h4>
-        </div>
-        <div className='container'>
-            <h3>Descripción:</h3>
-            <p>{Descripcion}</p>
-        </div>
-
-        <div className='container'>
-            <h3>Prerrequisitos:</h3>
-            <p>{Prerequisitos}</p>
-        </div>
-
-        <div className='container'>
-            <h3>¿Virtual o presencial?</h3>
-            <p>{VirtualPresencial}</p>
-        </div>
-        {location.state.EsAdmin &&
-        <div className='container'>
-        {participantes.map(participante => (
-            <div style={{display: "inline-block"}} key={participante.id}>
-                {location.state.EsAdmin &&
-                (<div>
-                    <h3>Lista Participantes</h3>
-                    <p>{NombreU}</p>
-                    <p>{userId}</p>
-                    <br></br>
-                </div>)}
-            </div>
-        ))}
-        </div>
-        }
-        
-        {(location.state.EstaInscrito || location.state.EsAdmin) &&
-        <div className='container'>
-        {/*
-        aqui va la parte de la informacion secreta, primero hay que hacer la variable InfoSecreta en registro talleres (el del admin) para que se guarde en firebase, luega se hace aqui un condicional para mostrar la informacion secreta si el usuario esta inscrito (por ahora pasa eso como un prop tipo <DetalleTaller EstaInscrito={true}/>)
-
-        asi se ponen los ifs aqui
-        <p>{props.EstaInscrito ? {InformacionSecreta} : "para ver esta informacion primero inscriba el taller"}</p>
-        */}
-        <h3>Información secreta:</h3>
-        {(location.state.EstaInscrito || location.state.EsAdmin) ? <p>{InformacionConfidencial}</p> : <p></p>}
-        
-        </div>
-        }
-        
-                <div>
-                { 
-                    (location.state.EstaInscrito )? <Button onClick={darDeBaja}>Dar de baja</Button> : <Button onClick={inscribirTaller}>Inscribir</Button>
-                }
+    return(
+        <Box
+        component="main"
+        sx={{
+            flexGrow: 1,
+            height: '100vh',
+            overflow: 'auto',
+        }}
+        >
+            <div>
+                <Button onClick={goBack}>regresar</Button>
+                <div style={{padding: "50px", textAlign: "center", background: "#864fba", color: "#fdfffc", fontSize: "30px"}}>
                 </div>
+                <div style={{padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
+                    <h1>{Nombre}</h1>
+                    <h5>Impartido por:</h5>
+                    <h4>{ImpartidoPor}</h4>
+                </div>
+                <div className='container'>
+                    <h3>Descripción:</h3>
+                    <p>{Descripcion}</p>
+                </div>
+
+                <div className='container'>
+                    <h3>Prerrequisitos:</h3>
+                    <p>{Prerequisitos}</p>
+                </div>
+
+                <div className='container'>
+                    <h3>¿Virtual o presencial?</h3>
+                    <p>{VirtualPresencial}</p>
+                </div>
+                {location.state.EsAdmin &&
+                <div className='container'>
+                {participantes.map(participante => (
+                    <div style={{display: "inline-block"}} key={participante.id}>
+                        {location.state.EsAdmin &&
+                        (<div>
+                            <h3>Lista Participantes</h3>
+                            <p>{NombreU}</p>
+                            <p>{userId}</p>
+                            <br></br>
+                        </div>)}
+                    </div>
+                ))}
+                </div>
+                }
                 
-    </div>
-  )
+                {(location.state.EstaInscrito || location.state.EsAdmin) &&
+                <div className='container'>
+                {/*
+                aqui va la parte de la informacion secreta, primero hay que hacer la variable InfoSecreta en registro talleres (el del admin) para que se guarde en firebase, luega se hace aqui un condicional para mostrar la informacion secreta si el usuario esta inscrito (por ahora pasa eso como un prop tipo <DetalleTaller EstaInscrito={true}/>)
+
+                asi se ponen los ifs aqui
+                <p>{props.EstaInscrito ? {InformacionSecreta} : "para ver esta informacion primero inscriba el taller"}</p>
+                */}
+                <h3>Información secreta:</h3>
+                {(location.state.EstaInscrito || location.state.EsAdmin) ? <p>{InformacionConfidencial}</p> : <p></p>}
+                
+                </div>
+                }
+                
+                        <div>
+                        { 
+                            (location.state.EstaInscrito )? <Button onClick={darDeBaja}>Dar de baja</Button> : <Button onClick={inscribirTaller}>Inscribir</Button>
+                        }
+                        </div>
+                        
+            </div>
+        </Box>
+    )
 }
 
 export default DetalleTaller

@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import TallerCard from './components/TallerCard.js';
 import {Button,Container,Form,Alert} from 'react-bootstrap'
 import { UserContext } from './UserContext';
+import Box from '@mui/material/Box';
 
 const CatalogoTalleres = (props) => {
     
@@ -47,23 +48,32 @@ const goBack=()=>{
 }
 
   return(
-    <div>
-        {/* {isLoggedIn?<p>logged in</p> : <p>logged out</p>}
-        {isLoggedIn && <h1>{userId}</h1>} */}
-        <h1>{userId}</h1>
-        <Button onClick={goBack}>Regresar</Button>
-        <div style={{padding: "50px", textAlign: "center", background: "#F95828", color: "#fdfffc", fontSize: "30px"}}>
-            <h1> Catálogo de talleres </h1>
-            <p> Talleres disponibles </p>
+    <Box
+        component="main"
+        sx={{
+            flexGrow: 1,
+            height: '100vh',
+            overflow: 'auto',
+        }}
+    >
+        <div>
+            {/* {isLoggedIn?<p>logged in</p> : <p>logged out</p>}
+            {isLoggedIn && <h1>{userId}</h1>} */}
+            <h1>{userId}</h1>
+            <Button onClick={goBack}>Regresar</Button>
+            <div style={{padding: "50px", textAlign: "center", background: "#F95828", color: "#fdfffc", fontSize: "30px"}}>
+                <h1> Catálogo de talleres </h1>
+                <p> Talleres disponibles </p>
+            </div>
+            <div style={{padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
+                {talleres.map((taller) => (
+                    <div style={{display: "inline-block"}} key={taller.uuid}>
+                        {props.EsAdmin ? (<TallerCard EsAdmin={true} key={taller.uuid} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion} imgUrl={taller.imgUrl}></TallerCard>) : <TallerCard key={taller.uuid} EsAdmin={false} EstaInscrito={taller.EstaInscrito} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion} imgUrl={taller.imgUrl}></TallerCard>}
+                    </div>
+                ))}
+            </div>
         </div>
-        <div style={{padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
-            {talleres.map((taller) => (
-                <div style={{display: "inline-block"}} key={taller.uuid}>
-                    {props.EsAdmin ? (<TallerCard EsAdmin={true} key={taller.uuid} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion} imgUrl={taller.imgUrl}></TallerCard>) : <TallerCard key={taller.uuid} EsAdmin={false} EstaInscrito={taller.EstaInscrito} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion} imgUrl={taller.imgUrl}></TallerCard>}
-                </div>
-            ))}
-        </div>
-    </div>
+    </Box>
   )
 }
 
