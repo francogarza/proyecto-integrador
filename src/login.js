@@ -10,75 +10,85 @@ import './basic.css'
 import {Button,Container,Form,Alert} from 'react-bootstrap'
 import { UserContext } from './UserContext';
 import { Navigate } from 'react-router-dom';
+import Box from '@mui/material/Box';
 
 const LogIn = () => {
 
-//global
-      
-const {userId, setUserId} = useContext(UserContext);
-const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
-const {parentId,setParentId} = useContext(UserContext);
+    //global
+    const {userId, setUserId} = useContext(UserContext);
+    const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
+    const {parentId,setParentId} = useContext(UserContext);
 
-const [Mail, setMail] = useState("");
-const [Password,setPassword] = useState("");
-const [alertActive, setAlertActive] = useState(false);
-let navigate = useNavigate();
+    const [Mail, setMail] = useState("");
+    const [Password,setPassword] = useState("");
+    const [alertActive, setAlertActive] = useState(false);
+    let navigate = useNavigate();
 
-const handleChangeMail=(e)=>{
-    setMail(e.target.value)
-}
+    const handleChangeMail=(e)=>{
+        setMail(e.target.value)
+    }
 
-const HandlePasswordChange=(e)=>{
-    setPassword(e.target.value)
-}
+    const HandlePasswordChange=(e)=>{
+        setPassword(e.target.value)
+    }
 
-const writeToDatabase = () => {
+    const writeToDatabase = () => {
 
-const auth = getAuth();
+    const auth = getAuth();
 
-signInWithEmailAndPassword(auth,Mail,Password)
-.then((userCredential) =>{
-    console.log(userCredential.user.uid)
-    setIsLoggedIn(true);
-    setParentId(userCredential.user.uid)
-    navigate('/manage-children')
-    //hay que poner al padre
-    //setUserId(userCredential.user.uid);
-})
-.catch((error) =>{
-    console.log(error);
-})
+    signInWithEmailAndPassword(auth,Mail,Password)
+    .then((userCredential) =>{
+        console.log(userCredential.user.uid)
+        setIsLoggedIn(true);
+        setParentId(userCredential.user.uid)
+        navigate('/manage-children')
+        //hay que poner al padre
+        //setUserId(userCredential.user.uid);
+    })
+    .catch((error) =>{
+        console.log(error);
+    })
 
-};
+    };
 
-return(
-<div id="mainContainer">
-    <Container>
-    {alertActive && <Alert variant='warning'>porfavor verifique sus datos</Alert>}
-    <Form className="login">
-    <Form.Group>
-        <Form.Label>
-        Escriba su correo electrónico.
-        </Form.Label>
-        <br/>
-        <Form.Control type="text" placeholder="Correo" id="Mail" value={Mail} onChange={handleChangeMail}/>
-    </Form.Group>
-    <br/>
-    <Form.Group>
-        <Form.Label>
-        Escriba su contraseña.
-        </Form.Label>
-        <br/>
-        <Form.Control type="password" placeholder="password" id="Password" value={Password} onChange={HandlePasswordChange}/>
-    </Form.Group>
-    <br/>
-        <Button onClick={writeToDatabase} class='submit'>
-        Ingresar
-        </Button>
-    </Form>
-    </Container>
-</div>
-)
+    return(
+        <Box
+            component="main"
+            sx={{
+                flexGrow: 1,
+                height: '100vh',
+                overflow: 'auto',
+            }}
+        >
+            <div id="mainContainer">
+                <Container>
+                {alertActive && <Alert variant='warning'>porfavor verifique sus datos</Alert>}
+                <Form className="login">
+                <Form.Group>
+                    <Form.Label>
+                    Escriba su correo electrónico.
+                    </Form.Label>
+                    <br/>
+                    <Form.Control type="text" placeholder="Correo" id="Mail" value={Mail} onChange={handleChangeMail}/>
+                </Form.Group>
+                <br/>
+                <Form.Group>
+                    <Form.Label>
+                    Escriba su contraseña.
+                    </Form.Label>
+                    <br/>
+                    <Form.Control type="password" placeholder="password" id="Password" value={Password} onChange={HandlePasswordChange}/>
+                </Form.Group>
+                <br/>
+                    <Button onClick={writeToDatabase} class='submit'>
+                    Ingresar
+                    </Button>
+                
+                </Form>
+                </Container>
+            </div>
+        </Box>
+    )
 }
 
 export default LogIn
