@@ -1,6 +1,8 @@
 import React, {useContext} from 'react';
 import emailjs from 'emailjs-com';
 import {db} from './firebase';
+import * as FileSaver from "file-saver";
+import * as XLSX from "xlsx";
 import {uid} from 'uid';
 import {set, ref,onValue,update, remove} from 'firebase/database';
 import {useState,useEffect} from "react";
@@ -108,6 +110,62 @@ const DetalleTaller = (props) => {
         });
     };
 
+    function ArchivoXLSX(){
+        const ParticipantesT = [];
+        onValue(ref(db,'Taller/'+ location.state.id + '/participantes/'),(snapshot) => {
+            const data = snapshot.val();
+            snapshot.forEach (function (data) {
+                ParticipantesT.push (data.key);
+            });
+            console.log(ParticipantesT);
+        });
+
+        const Participantes = []
+        onValue(ref(db,'Participante/'),(snapshot) => {
+            const data = snapshot.val();
+            snapshot.forEach (function (data) {
+                if(ParticipantesT.includes(data.key)){
+                    var item = {
+                        Nombre: data.val ().Nombre,
+                        Edad: data.val ().Edad,
+                        Nacimiento: data.val ().Nacimiento,
+                        Genero: data.val ().Genero,
+                        FuturoTrabajo: data.val ().FuturoTrabajo,
+
+                        NombreTutorPadre: data.val ().NombreTutorPadre,
+                        CelularTutorPadre: data.val ().CelularTutorPadre,
+                        Correo: data.val ().Correo,
+
+                        UltimoGrado: data.val ().UltimoGrado,
+                        ClaseProgra: data.val ().ClaseProgra,
+                        ParticipadoAxta: data.val ().ParticipadoAxta,
+
+                        NombreEscuela: data.val ().NombreEscuela,
+                        TipoEscuela: data.val ().TipoEscuela,
+
+                        VivieEnMexico: data.val ().VivieEnMexico,
+                        Estado: data.val ().Estado,
+                        Municipio: data.val ().Municipio,
+                        ComoEntero: data.val ().ComoEntero
+
+                    }
+                    Participantes.push (item);
+                }
+            });
+            console.log(Participantes);
+        });
+
+        const DEFAULT_FILENAME = "InformacionParticipantes_" + Nombre;
+
+        const fileType =  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+        const fileExtension = ".xlsx";
+
+        const ws = XLSX.utils.json_to_sheet(Participantes);
+        const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        const data = new Blob([excelBuffer], { type: fileType });
+        FileSaver.saveAs(data, DEFAULT_FILENAME + fileExtension);
+    }
 
     const darDeBaja=()=>{
         const id = location.state.id
@@ -232,6 +290,11 @@ const DetalleTaller = (props) => {
             <h3>¿Virtual o presencial?</h3>
             <p>{VirtualPresencial}</p>
         </div>
+
+        {location.state.EsAdmin &&
+        <Button onClick={ArchivoXLSX}>Prueba</Button>
+        }
+
         {location.state.EsAdmin &&
         <div className='container'>
         {participantes.map(participante => (
