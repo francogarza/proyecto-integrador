@@ -1,6 +1,8 @@
 import React, {useContext} from 'react';
 import emailjs from 'emailjs-com';
 import {db} from './firebase';
+import * as FileSaver from "file-saver";
+import * as XLSX from "xlsx";
 import {uid} from 'uid';
 import {set, ref,onValue,update, remove} from 'firebase/database';
 import {useState,useEffect} from "react";
@@ -32,12 +34,13 @@ const DetalleTaller = (props) => {
     const [imgUrl,setImgUrl] = useState("");
     const [participantes,setParticipantes] = useState([]);
     const [NombreU,setNombreU] = useState("");
+
+    const [maxCap,setMaxCap] = useState("");
+    const [isCapped,setIsCapped] = useState("");
     const [Correo,setCorreo] = useState("");
+
     const navigate = useNavigate();
 
-    
-
-    
 
     const handleEstaInscrito=(e)=>{
         setEstaInscrito(e.target.value)
@@ -46,13 +49,16 @@ const DetalleTaller = (props) => {
     useEffect(() => {
 
         onValue(ref(db,'Taller/'+location.state.id),(snapshot) => {
+            setParticipantes([]);
             const data = snapshot.val();
             if(data !== null){
-                if(location.state.EsAdmin){
+                
+                if(typeof data.participantes!=='undefined'){
                     Object.values(data.participantes).map((e) => {
-                        setParticipantes((oldArray) => [e])
+                        setParticipantes((oldArray) => [...oldArray,e])
                     });
                 }
+                
                 setDescripcion(data.Descripcion)
                 setFechas(data.Fechas)
                 setHorarios(data.Horarios)
@@ -61,6 +67,8 @@ const DetalleTaller = (props) => {
                 setPrerequisitos(data.Prerequisitos)
                 setVirtualPresencial(data.VirtualPresencial)
                 setInformacionConfidencial(data.InformacionConfidencial)
+                setMaxCap(data.maxCap);
+                setIsCapped(data.isCapped)
                 if(data.imgUrl != null){
                     setImgUrl(data.imgUrl)
                 }else{
@@ -78,13 +86,9 @@ const DetalleTaller = (props) => {
             const data = snapshot.val();
             if(data !== null){
                 setNombreU(data.Nombre)
+
                 setCorreo(data.Correo)
-                console.log("Correo")
-                console.log(Correo)
-                console.log("nombreU")
-                console.log(data.Nombre)
-                console.log("userId");
-                console.log(userId)
+
             }
         });
     }, [])
@@ -106,6 +110,64 @@ const DetalleTaller = (props) => {
             console.log('FAILED...', error);
         });
     };
+
+    function ArchivoXLSX(){
+        const ParticipantesT = [];
+        onValue(ref(db,'Taller/'+ location.state.id + '/participantes/'),(snapshot) => {
+            const data = snapshot.val();
+            snapshot.forEach (function (data) {
+                ParticipantesT.push (data.key);
+            });
+            console.log(ParticipantesT);
+        });
+
+        const Participantes = []
+        onValue(ref(db,'Participante/'),(snapshot) => {
+            const data = snapshot.val();
+            snapshot.forEach (function (data) {
+                if(ParticipantesT.includes(data.key)){
+                    var item = {
+                        Nombre: data.val ().Nombre,
+                        Edad: data.val ().Edad,
+                        Nacimiento: data.val ().Nacimiento,
+                        Genero: data.val ().Genero,
+                        FuturoTrabajo: data.val ().FuturoTrabajo,
+
+                        NombreTutorPadre: data.val ().NombreTutorPadre,
+                        CelularTutorPadre: data.val ().CelularTutorPadre,
+                        Correo: data.val ().Correo,
+
+                        UltimoGrado: data.val ().UltimoGrado,
+                        ClaseProgra: data.val ().ClaseProgra,
+                        ParticipadoAxta: data.val ().ParticipadoAxta,
+
+                        NombreEscuela: data.val ().NombreEscuela,
+                        TipoEscuela: data.val ().TipoEscuela,
+
+                        VivieEnMexico: data.val ().VivieEnMexico,
+                        Estado: data.val ().Estado,
+                        Municipio: data.val ().Municipio,
+                        ComoEntero: data.val ().ComoEntero
+
+                    }
+                    Participantes.push (item);
+                }
+            });
+            console.log(Participantes);
+        });
+
+        const DEFAULT_FILENAME = "InformacionParticipantes_" + Nombre;
+
+        const fileType =  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+        const fileExtension = ".xlsx";
+
+        const ws = XLSX.utils.json_to_sheet(Participantes);
+        const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+        const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+        const data = new Blob([excelBuffer], { type: fileType });
+        FileSaver.saveAs(data, DEFAULT_FILENAME + fileExtension);
+    }
+
     const darDeBaja=()=>{
         const id = location.state.id
         remove(ref(db, 'Participante/'+ userId + '/talleres/' + id));
@@ -135,23 +197,30 @@ const DetalleTaller = (props) => {
         if(location.state.EsAdmin){
             console.log("para que quiere un admin meter una clase?")
         }else{
-            
-        const id = location.state.id
-        set(ref(db, 'Participante/'+ userId + '/talleres/' + id), {
-            id,
-            Nombre,
-            Descripcion,
-            imgUrl
-        });
+        if(participantes.length<maxCap && isCapped=='false'){
+            const id = location.state.id
+            set(ref(db, 'Participante/'+ userId + '/talleres/' + id), {
+                id,
+                Nombre,
+                Descripcion,
+                imgUrl
+            });
 
-        set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
-            userId,
-            NombreU
-        });
+            set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
+                userId,
+                NombreU
+            });
+            navigate('/catalogo-talleres');
+            // correoInscripcionTaller()
+            }else{
+                alert("No se puede inscribir porque el taller esta lleno o esta bloqueado");
+            }
         }
+
         navigate('/catalogo-talleres');
         // enviarCorreoInscripcionTaller()
     };
+
 
       const handleChangeDescripcion=(e)=>{
         setDescripcion(e.target.value)
@@ -209,6 +278,11 @@ const DetalleTaller = (props) => {
                     <h1>{Nombre}</h1>
                     <h5>Impartido por:</h5>
                     <h4>{ImpartidoPor}</h4>
+                    {isCapped=='true'? <h5>cupo lleno</h5>: 
+                      <div>
+                        <h5>Cupo: {participantes.length+" de "+maxCap}</h5>
+                      </div>
+                    }
                 </div>
                 <div className='container'>
                     <h3>Descripción:</h3>
@@ -220,49 +294,54 @@ const DetalleTaller = (props) => {
                     <p>{Prerequisitos}</p>
                 </div>
 
-                <div className='container'>
-                    <h3>¿Virtual o presencial?</h3>
-                    <p>{VirtualPresencial}</p>
-                </div>
-                {location.state.EsAdmin &&
-                <div className='container'>
-                {participantes.map(participante => (
-                    <div style={{display: "inline-block"}} key={participante.id}>
-                        {location.state.EsAdmin &&
-                        (<div>
-                            <h3>Lista Participantes</h3>
-                            <p>{NombreU}</p>
-                            <p>{userId}</p>
-                            <br></br>
-                        </div>)}
-                    </div>
-                ))}
-                </div>
-                }
-                
-                {(location.state.EstaInscrito || location.state.EsAdmin) &&
-                <div className='container'>
-                {/*
-                aqui va la parte de la informacion secreta, primero hay que hacer la variable InfoSecreta en registro talleres (el del admin) para que se guarde en firebase, luega se hace aqui un condicional para mostrar la informacion secreta si el usuario esta inscrito (por ahora pasa eso como un prop tipo <DetalleTaller EstaInscrito={true}/>)
+          <div className='container'>
+              <h3>¿Virtual o presencial?</h3>
+              <p>{VirtualPresencial}</p>
+          </div>
 
-                asi se ponen los ifs aqui
-                <p>{props.EstaInscrito ? {InformacionSecreta} : "para ver esta informacion primero inscriba el taller"}</p>
-                */}
-                <h3>Información secreta:</h3>
-                {(location.state.EstaInscrito || location.state.EsAdmin) ? <p>{InformacionConfidencial}</p> : <p></p>}
-                
-                </div>
-                }
-                
-                        <div>
-                        { 
-                            (location.state.EstaInscrito )? <Button onClick={darDeBaja}>Dar de baja</Button> : <Button onClick={inscribirTaller}>Inscribir</Button>
-                        }
-                        </div>
-                        
-            </div>
-        </Box>
-    )
+          {location.state.EsAdmin &&
+          <Button onClick={ArchivoXLSX}>Prueba</Button>
+          }
+
+          {location.state.EsAdmin &&
+          <div className='container'>
+          {participantes.map(participante => (
+              <div style={{display: "inline-block"}} key={participante.id}>
+                  {location.state.EsAdmin &&
+                  (<div>
+                      <h3>Lista Participantes</h3>
+                      <p>{NombreU}</p>
+                      <p>{userId}</p>
+                      <br></br>
+                  </div>)}
+              </div>
+          ))}
+          </div>
+          }
+
+          {(location.state.EstaInscrito || location.state.EsAdmin) &&
+          <div className='container'>
+          {/*
+          aqui va la parte de la informacion secreta, primero hay que hacer la variable InfoSecreta en registro talleres (el del admin) para que se guarde en firebase, luega se hace aqui un condicional para mostrar la informacion secreta si el usuario esta inscrito (por ahora pasa eso como un prop tipo <DetalleTaller EstaInscrito={true}/>)
+
+          asi se ponen los ifs aqui
+          <p>{props.EstaInscrito ? {InformacionSecreta} : "para ver esta informacion primero inscriba el taller"}</p>
+          */}
+          <h3>Información secreta:</h3>
+          {(location.state.EstaInscrito || location.state.EsAdmin) ? <p>{InformacionConfidencial}</p> : <p></p>}
+
+          </div>
+          }
+              {isLoggedIn &&
+                  <div>
+                      { 
+                          (location.state.EstaInscrito )? <Button onClick={darDeBaja}>Dar de baja</Button> : <Button onClick={inscribirTaller}>Inscribir</Button>
+                      }
+                  </div>
+              }
+      </div>
+    </Box>
+  )
 }
 
 export default DetalleTaller
