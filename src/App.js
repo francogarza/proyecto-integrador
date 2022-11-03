@@ -13,6 +13,8 @@ import { UserContext } from './UserContext';
 import HorarioTalleres from './HorarioTalleres.js';
 import LogIn from './login.js'
 import ManageChild from './manageChild';
+import Navbar from './Navbar'
+import Box from '@mui/material/Box';
 
 function App() {
   
@@ -23,58 +25,61 @@ function App() {
 
   return (
     <UserContext.Provider value={{userId,setUserId,userSelected,setUserSelected,parentId,setParentId,isLoggedIn,setIsLoggedIn}}>
-    <Router>
-      <Routes>
-            <Route path="/" element={
-              <Navigate to="/catalogo-talleres"/>
-            }
-            />
-            <Route path="/talleres-inscritos" element={
-              <TalleresInscritos/>
-            }
-            />
-            <Route path="/registro-padres" element={
-              <RegistroPadres />
-            }
-            />
-            <Route path="/registro-taller-usuario" element={
-              <RegistroTaller />
-            }
-            />
-            <Route path="/registro-taller-admin" element={
-              <RegistroTalleres isUpdate={false} />
-            }
-            />
-            <Route path="/catalogo-talleres" element={
-              <CatalogoTalleres EsAdmin={false} />
-            }
-            />
-            <Route path="/catalogo-talleres-admin" element={
-              <CatalogoTalleres EsAdmin={true} />
-            }
-            />
-            <Route path="/detalle-taller" element={
-              <DetalleTaller />
-            }
-            />
+      <Box sx={{ display: 'flex' }}>
+        <Router>
+          <Navbar/>
+          <Routes>
+                <Route path="/" element={
+                  <Navigate to="/catalogo-talleres"/>
+                }
+                />
+                <Route path="/talleres-inscritos" element={
+                  <TalleresInscritos/>
+                }
+                />
+                <Route path="/registro-padres" element={
+                  <RegistroPadres />
+                }
+                />
+                <Route path="/registro-taller-usuario" element={
+                  <RegistroTaller />
+                }
+                />
+                <Route path="/registro-taller-admin" element={
+                  <RegistroTalleres isUpdate={false} />
+                }
+                />
+                <Route path="/catalogo-talleres" element={
+                  <CatalogoTalleres EsAdmin={false} />
+                }
+                />
+                <Route path="/catalogo-talleres-admin" element={
+                  <CatalogoTalleres EsAdmin={true} />
+                }
+                />
+                <Route path="/detalle-taller" element={
+                  <DetalleTaller />
+                }
+                />
 
-            <Route path="/send-email-test" element={
-              <SendEmailTest />
-            }
-            />
-            <Route path="/horario-taller" element={
-              <HorarioTalleres />
-            }
-            />
-            <Route path="/login" element={
-              <LogIn/>
-            }/>
-            <Route path='/manage-children' element={
-              <ManageChild/>
-            }
-            />
-      </Routes>
-    </Router>
+                <Route path="/send-email-test" element={
+                  <SendEmailTest />
+                }
+                />
+                <Route path="/horario-taller" element={
+                  <HorarioTalleres />
+                }
+                />
+                <Route path="/login" element={
+                  <LogIn/>
+                }/>
+                <Route path='/manage-children' element={
+                  <ManageChild/>
+                }
+                />
+          </Routes>
+        </Router>
+        </Box>
     </UserContext.Provider>
   )
 }
