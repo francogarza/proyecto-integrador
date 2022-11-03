@@ -57,10 +57,12 @@ const RegistroPadres = () => {
 
   function validarPassword(){
     if(Password===""){
+      alert("La contraseña no puede estar vacia")
       return false
-    }else if(Password === Password2){
+    }else if(Password === Password2 && Password.length > 5){
       return true
     }
+    alert("la contraseña tiene que ser igual y debe de tener 6 o mas caracteres")
     return false
   }
 

@@ -2,7 +2,7 @@ import React, {useContext,useEffect} from 'react';
 import {db} from './firebase';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword  } from 'firebase/auth';
 import {uid} from 'uid';
-import {set, ref,onValue} from 'firebase/database';
+import {set, ref,onValue,remove} from 'firebase/database';
 import {useState} from "react";
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -62,6 +62,11 @@ const verTalleresInscritos=(e)=>{
     navigate('/talleres-inscritos')
 }
 
+const borrarHijo=(e)=>{
+    remove(ref(db,'Participante/'+e));
+    remove(ref(db,'Padre/'+parentId+'/hijos/'+e));
+}
+
 
 return(
 <div>
@@ -77,7 +82,7 @@ return(
                         <Button onClick={() => seleccionarHijo(hijo.uuid)}>Seleccionar hijo</Button>
                         <Button onClick={() => verTalleresInscritos(hijo.uuid)}>Ver talleres inscritos</Button>
                         <Button>editar hijo</Button>
-                        <Button>Borrar hijo</Button>
+                        <Button onClick={() => borrarHijo(hijo.uuid)}>Borrar hijo</Button>
                 </div>
             ))}
     </div>
