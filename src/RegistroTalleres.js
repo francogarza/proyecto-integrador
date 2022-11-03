@@ -8,6 +8,11 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
 import {Button,Container,Form,Alert, FormLabel} from 'react-bootstrap'
 import { useLocation } from 'react-router-dom';
+import TimePicker from 'react-time-picker';
+import { TimePickerComponent } from '@syncfusion/ej2-react-calendars';
+import { TimePickerView } from '@material-ui/pickers';
+import { DateTimePicker } from '@mui/lab';
+
 
 
 ///
@@ -19,7 +24,6 @@ const RegistroTalleres = (props) => {
 
     const location = useLocation();
     const [Descripcion, setDescripcion] = useState("");
-    const [Fechas, setFechas] = useState("");
     const [Horarios, setHorarios] = useState("");
     const [ImpartidoPor, setImpartidoPor] = useState("");
     const [Nombre, setNombre] = useState("");
@@ -33,6 +37,79 @@ const RegistroTalleres = (props) => {
     const [ImgUrl,setImgUrl] = useState("");
     const [maxCap,setMaxCap] = useState("");
     const [isCapped,setIsCapped] = useState("false");
+    const [FechaInicio, setFechaInicio] = useState("");
+    const [FechaFin,setFechaFin] = useState("");
+    const [lunesI,setLunesI] = useState("");
+    const [lunesF,setLunesF] = useState("");
+    const [martesI,setMartesI] = useState("");
+    const [martesF,setMartesF] = useState("");
+    const [miercolesI,setMiercolesI] = useState("");
+    const [miercolesF,setMiercolesF] = useState("");
+    const [juevesI,setJuevesI] = useState("");
+    const [juevesF,setJuevesF] = useState("");
+    const [viernesI,setViernesI] = useState("");
+    const [viernesF,setViernesF] = useState("");
+    const [sabadoI,setSabadoI] = useState("");
+    const [sabadoF,setSabadoF] = useState("");
+    const [domingoI,setDomingoI] = useState("");
+    const [domingoF,setDomingoF] = useState("");
+
+
+    const handleChangeLunesI=(e)=>{
+        setLunesI(e.target.value)
+    }
+
+    const handleChangeLunesF=(e)=>{
+        setLunesF(e.target.value)
+    }
+
+    const handleChangeMartesI=(e)=>{
+        setMartesI(e.target.value)
+    }
+
+    const handleChangeMartesF=(e)=>{
+        setMartesF(e.target.value)
+    }
+
+    const handleChangeMiercolesI=(e)=>{
+        setMiercolesI(e.target.value)
+    }
+
+    const handleChangeMiercolesF=(e)=>{
+        setMiercolesF(e.target.value)
+    }
+
+    const handleChangeJuevesI=(e)=>{
+        setJuevesI(e.target.value)
+    }
+
+    const handleChangeJuevesF=(e)=>{
+        setJuevesF(e.target.value)
+    }
+
+    const handleChangeViernesI=(e)=>{
+        setViernesI(e.target.value)
+    }
+
+    const handleChangeViernesF=(e)=>{
+        setViernesF(e.target.value)
+    }
+
+    const handleChangeSabadoI=(e)=>{
+        setSabadoI(e.target.value)
+    }
+
+    const handleChangeSabadoF=(e)=>{
+        setSabadoF(e.target.value)
+    }
+
+    const handleChangeDomingoI=(e)=>{
+        setDomingoI(e.target.value)
+    }
+
+    const handleChangeDomingoF=(e)=>{
+        setDomingoF(e.target.value)
+    }
 
     const handleChangeIsCapped=(e)=>{
         setIsCapped(e.target.value)
@@ -46,8 +123,12 @@ const RegistroTalleres = (props) => {
         setDescripcion(e.target.value)
     }
 
-    const handleChangeFechas=(e)=>{
-        setFechas(e.target.value)
+    const handleChangeFechaInicio=(e)=>{
+        setFechaInicio(e.target.value)
+    }
+
+    const handleChangeFechaFin=(e)=>{
+        setFechaFin(e.target.value)
     }
 
     const handleChangeHorarios=(e)=>{
@@ -165,7 +246,8 @@ const RegistroTalleres = (props) => {
                 
                     set(ref_db(db, 'Taller/'+ uuid), {
                         Descripcion,
-                        Fechas,
+                        FechaInicio,
+                        FechaFin,
                         Horarios,
                         ImpartidoPor,
                         Nombre,
@@ -175,17 +257,47 @@ const RegistroTalleres = (props) => {
                         uuid,
                         imgUrl,
                         maxCap,
-                        isCapped
+                        isCapped,
+                        lunesI,
+                        lunesF,
+                        martesI,
+                        martesF,
+                        miercolesI,
+                        miercolesF,
+                        juevesI,
+                        juevesF,
+                        viernesI,
+                        viernesF,
+                        sabadoI,
+                        sabadoF,
+                        domingoI,
+                        domingoF,
                     });
         
                     setDescripcion("");
-                    setFechas("");
+                    setFechaInicio("");
+                    setFechaFin("");
                     setHorarios("");
                     setImpartidoPor("");
                     setNombre("");
                     setPrerequisitos("");
                     setVirtualPresencial("");
                     setInformacionConfidencial("");
+                    setMaxCap("")
+                    setLunesI("");
+                    setLunesF("");
+                    setMartesI("");
+                    setMartesF("");
+                    setMiercolesI("");
+                    setMiercolesF("");
+                    setJuevesI("");
+                    setJuevesF("")
+                    setViernesI("");
+                    setViernesF("");
+                    setSabadoI("");
+                    setSabadoF("");
+                    setDomingoI("");
+                    setDomingoF("");
                 })
                     .catch((error) => {
                         // Handle any errors
@@ -208,7 +320,8 @@ const RegistroTalleres = (props) => {
             
             update(ref_db(db, 'Taller/'+ id), {
                 Descripcion,
-                Fechas,
+                FechaInicio,
+                FechaFin,
                 Horarios,
                 ImpartidoPor,
                 Nombre,
@@ -216,17 +329,46 @@ const RegistroTalleres = (props) => {
                 VirtualPresencial,
                 InformacionConfidencial,
                 maxCap,
-                isCapped
+                isCapped,
+                lunesI,
+                lunesF,
+                martesI,
+                martesF,
+                miercolesI,
+                miercolesF,
+                juevesI,
+                juevesF,
+                viernesI,
+                viernesF,
+                sabadoI,
+                sabadoF,
+                domingoI,
+                domingoF,
             });
             setDescripcion("");
-            setFechas("");
+            setFechaInicio("");
+            setFechaFin("");
             setHorarios("");
             setImpartidoPor("");
             setNombre("");
             setPrerequisitos("");
             setVirtualPresencial("");
             setInformacionConfidencial("");
-            setMaxCap(0);
+            setMaxCap("");
+            setLunesI("");
+            setLunesF("");
+            setMartesI("");
+            setMartesF("");
+            setMiercolesI("");
+            setMiercolesF("");
+            setJuevesI("");
+            setJuevesF("")
+            setViernesI("");
+            setViernesF("");
+            setSabadoI("");
+            setSabadoF("");
+            setDomingoI("");
+            setDomingoF("");
         }else{
             setAlertActive(true);
         }
@@ -261,7 +403,8 @@ const RegistroTalleres = (props) => {
                 const data = snapshot.val();
                 if(data !== null){
                     setDescripcion(data.Descripcion)
-                    setFechas(data.Fechas)
+                    setFechaInicio(data.FechaInicio)
+                    setFechaFin(data.FechaFin)
                     setHorarios(data.Horarios)
                     setImpartidoPor(data.ImpartidoPor)
                     setNombre(data.Nombre)
@@ -270,6 +413,20 @@ const RegistroTalleres = (props) => {
                     setInformacionConfidencial(data.InformacionConfidencial)
                     setIsCapped(data.isCapped)
                     setMaxCap(data.maxCap)
+                    setLunesI(data.lunesI);
+                    setLunesF(data.lunesF);
+                    setMartesI(data.martesI);
+                    setMartesF(data.martesF);
+                    setMiercolesI(data.miercolesI);
+                    setMiercolesF(data.miercolesF);
+                    setJuevesI(data.juevesI);
+                    setJuevesF(data.juevesF)
+                    setViernesI(data.viernesI);
+                    setViernesF(data.viernesF);
+                    setSabadoI(data.sabadoI);
+                    setSabadoF(data.sabadoF);
+                    setDomingoI(data.domingoI);
+                    setDomingoF(data.domingoF);
                 }
               });
         }
@@ -291,12 +448,6 @@ const RegistroTalleres = (props) => {
             </Form.Label>
             <br/>
             <Form.Control as="textarea" type="textarea" placeholder="Descripción" className='description' id="Descripcion" value={Descripcion} onChange={handleChangeDescripcion} required={true}/>
-            <br/>
-            <Form.Label>
-                Seleccione la fecha de inicio del taller.
-            </Form.Label>
-            <br/>
-            <Form.Control type="date" id="Fechas" value={Fechas} onChange={handleChangeFechas} required={true}/>
             <br/>
             <Form.Label>
                 Escriba el nombre de quien imparte el taller.
@@ -327,8 +478,127 @@ const RegistroTalleres = (props) => {
              onChange={handleChangeVirtualPresencial} checked={VirtualPresencial === 'presencial' ? true:false}/>
             <label htmlFor="Presencial">Presencial</label>
             <br/>
+            <Form.Label>
+                Foto
+            </Form.Label>
+            <br/>
             <input type="file" onChange={handleChangeImg}></input>
             <br/>
+            <br/>
+            <Form.Label>
+                Horarios
+            </Form.Label>   
+            <br/>
+            <Form.Label>
+                Seleccione la fecha de inicio del taller.
+            </Form.Label>
+            <br/>
+            <Form.Control type="date" id="FechaInicio" value={FechaInicio} onChange={handleChangeFechaInicio} required={true}/>
+            <br/>
+            <Form.Label>
+                Seleccione la fecha final del taller.
+            </Form.Label>
+            <br/>
+            <Form.Control type="date" id="FechaFin" value={FechaFin} onChange={handleChangeFechaFin} required={true}/>
+            <br/>
+            <Form.Label>
+                Lunes 
+            </Form.Label>
+            <br/>
+            <Form.Label>
+                Inicio
+            </Form.Label>
+            <Form.Control type="time" id="lunesI" value={lunesI} onChange={handleChangeLunesI} required={true}/>
+            <Form.Label>
+                Fin
+            </Form.Label>
+            <Form.Control type="time" id="lunesF" value={lunesF} onChange={handleChangeLunesF} required={true}/>
+            <br/>
+
+            <Form.Label>
+                Martes 
+            </Form.Label>
+            <br/>
+            <Form.Label>
+                Inicio
+            </Form.Label>
+            <Form.Control type="time" id="lunesI" value={martesI} onChange={handleChangeMartesI} required={true}/>
+            <Form.Label>
+                Fin
+            </Form.Label>
+            <Form.Control type="time" id="martesF" value={martesF} onChange={handleChangeMartesF} required={true}/>
+            <br/>
+
+            <Form.Label>
+                Miercoles
+            </Form.Label>
+            <br/>
+            <Form.Label>
+                Inicio
+            </Form.Label>
+            <Form.Control type="time" id="miercolesI" value={miercolesI} onChange={handleChangeMiercolesI} required={true}/>
+            <Form.Label>
+                Fin
+            </Form.Label>
+            <Form.Control type="time" id="miercolesF" value={miercolesF} onChange={handleChangeMiercolesF} required={true}/>
+            <br/>
+
+            <Form.Label>
+                Jueves 
+            </Form.Label>
+            <br/>
+            <Form.Label>
+                Inicio
+            </Form.Label>
+            <Form.Control type="time" id="juevesI" value={juevesI} onChange={handleChangeJuevesI} required={true}/>
+            <Form.Label>
+                Fin
+            </Form.Label>
+            <Form.Control type="time" id="juevesF" value={juevesF} onChange={handleChangeJuevesF} required={true}/>
+            <br/>
+
+            <Form.Label>
+                Viernes 
+            </Form.Label>
+            <br/>
+            <Form.Label>
+                Inicio
+            </Form.Label>
+            <Form.Control type="time" id="vierenesI" value={viernesI} onChange={handleChangeViernesI} required={true}/>
+            <Form.Label>
+                Fin
+            </Form.Label>
+            <Form.Control type="time" id="viernesF" value={viernesF} onChange={handleChangeViernesF} required={true}/>
+            <br/>
+
+            <Form.Label>
+                Sabado 
+            </Form.Label>
+            <br/>
+            <Form.Label>
+                Inicio
+            </Form.Label>
+            <Form.Control type="time" id="sabadoI" value={sabadoI} onChange={handleChangeSabadoI} required={true}/>
+            <Form.Label>
+                Fin
+            </Form.Label>
+            <Form.Control type="time" id="sabadoF" value={sabadoF} onChange={handleChangeSabadoF} required={true}/>
+            <br/>
+
+            <Form.Label>
+                Domingo 
+            </Form.Label>
+            <br/>
+            <Form.Label>
+                Inicio
+            </Form.Label>
+            <Form.Control type="time" id="domingoI" value={domingoI} onChange={handleChangeDomingoI} required={true}/>
+            <Form.Label>
+                Fin
+            </Form.Label>
+            <Form.Control type="time" id="domingoF" value={domingoF} onChange={handleChangeDomingoF} required={true}/>
+            <br/>
+
             <Form.Label>
                 Cupo maximo
             </Form.Label>
