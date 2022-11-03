@@ -112,6 +112,19 @@ const DetalleTaller = (props) => {
     };
 
     function ArchivoXLSX(){
+        const Taller = [];
+        var item = {
+            Nombre: Nombre,
+            Descripcion: Descripcion,
+            Fechas: Fechas,
+            Horarios: Horarios,
+            ImpartidoPor: ImpartidoPor,
+            Prerequisitos: Prerequisitos,
+            VirtualPresencial: VirtualPresencial,
+            InformacionConfidencial: InformacionConfidencial
+        }
+        Taller.push (item);
+
         const ParticipantesT = [];
         onValue(ref(db,'Taller/'+ location.state.id + '/participantes/'),(snapshot) => {
             const data = snapshot.val();
@@ -161,8 +174,12 @@ const DetalleTaller = (props) => {
         const fileType =  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
         const fileExtension = ".xlsx";
 
-        const ws = XLSX.utils.json_to_sheet(Participantes);
-        const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+        const ws = XLSX.utils.json_to_sheet(Taller);
+        const ws2 = XLSX.utils.json_to_sheet(Participantes);
+        //const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Taller");
+        XLSX.utils.book_append_sheet(wb, ws2, "Participantes");
         const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
         const data = new Blob([excelBuffer], { type: fileType });
         FileSaver.saveAs(data, DEFAULT_FILENAME + fileExtension);
@@ -299,9 +316,8 @@ const DetalleTaller = (props) => {
               <p>{VirtualPresencial}</p>
           </div>
 
-          {location.state.EsAdmin &&
           <Button onClick={ArchivoXLSX}>Prueba</Button>
-          }
+
 
           {location.state.EsAdmin &&
           <div className='container'>
