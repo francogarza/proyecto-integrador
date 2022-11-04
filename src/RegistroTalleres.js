@@ -87,7 +87,9 @@ const RegistroTalleres = (props) => {
     }
 
     const handleChangeImg=(e)=>{
-        setImg(e.target.files[0])
+        if (e.target.files[0]) {
+            setImg(e.target.files[0]);
+        }
     }
 
     function verificarDatos(){
@@ -204,6 +206,18 @@ const RegistroTalleres = (props) => {
 
     const updateToDatabase = () => {
         
+        const imageRef = ref_st(storage, "img");
+        uploadBytes(imageRef, img).then(() => {
+            getDownloadURL(imageRef).then((ImgUrl) => {
+                setImgUrl(ImgUrl)
+            }).catch(error => {
+                console.log(error.message, "Hubo un error al conseguir la imagen.");
+            });
+            setImg(null);
+        }).catch(error => {
+            console.log(error.message);
+        });
+
         if(verificarDatos()){
             
             update(ref_db(db, 'Taller/'+ id), {
