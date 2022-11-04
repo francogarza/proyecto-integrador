@@ -4,7 +4,7 @@ import {db} from './firebase';
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
 import {uid} from 'uid';
-import {set, ref,onValue,update, remove} from 'firebase/database';
+import {set, ref,onValue,get, remove, child} from 'firebase/database';
 import {useState,useEffect} from "react";
 import { useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -111,63 +111,64 @@ const DetalleTaller = (props) => {
         });
     };
 
-    function ArchivoXLSX(){
-        const Taller = [];
-        var item = {
-            Nombre: Nombre,
-            Descripcion: Descripcion,
-            Fechas: Fechas,
-            Horarios: Horarios,
-            ImpartidoPor: ImpartidoPor,
-            Prerequisitos: Prerequisitos,
-            VirtualPresencial: VirtualPresencial,
-            InformacionConfidencial: InformacionConfidencial
-        }
-        Taller.push (item);
+    function getParticipantes(){
 
-        const ParticipantesT = [];
-        onValue(ref(db,'Taller/'+ location.state.id + '/participantes/'),(snapshot) => {
-            const data = snapshot.val();
-            snapshot.forEach (function (data) {
-                ParticipantesT.push (data.key);
-            });
-            console.log(ParticipantesT);
-        });
-
-        const Participantes = []
-        onValue(ref(db,'Participante/'),(snapshot) => {
-            const data = snapshot.val();
-            snapshot.forEach (function (data) {
-                if(ParticipantesT.includes(data.key)){
-                    var item = {
-                        Nombre: data.val ().Nombre,
-                        Edad: data.val ().Edad,
-                        Nacimiento: data.val ().Nacimiento,
-                        Genero: data.val ().Genero,
-                        FuturoTrabajo: data.val ().FuturoTrabajo,
-
-                        NombreTutorPadre: data.val ().NombreTutorPadre,
-                        CelularTutorPadre: data.val ().CelularTutorPadre,
-                        Correo: data.val ().Correo,
-
-                        UltimoGrado: data.val ().UltimoGrado,
-                        ClaseProgra: data.val ().ClaseProgra,
-                        ParticipadoAxta: data.val ().ParticipadoAxta,
-
-                        NombreEscuela: data.val ().NombreEscuela,
-                        TipoEscuela: data.val ().TipoEscuela,
-
-                        VivieEnMexico: data.val ().VivieEnMexico,
-                        Estado: data.val ().Estado,
-                        Municipio: data.val ().Municipio,
-                        ComoEntero: data.val ().ComoEntero
-
-                    }
-                    Participantes.push (item);
+        return new Promise((resolve, reject) => {
+            get(child(ref(db) ,'Taller/'+ location.state.id + '/participantes/'))
+            .then((snapshot) => {
+                const ParticipantesT = [];
+                if (snapshot.exists()) {
+                    snapshot.forEach (function (data) {
+                        ParticipantesT.push (data.key);
+                    });
+                    return ParticipantesT;
+                } else {
+                    console.log("No data available");
                 }
-            });
-            console.log(Participantes);
-        });
+            })
+            .then((ParticipantesT) => {
+                get(child(ref(db), 'Participante/')).then((snapshot) => {
+                    const Participantes = [];
+                    if (snapshot.exists()) {
+                        console.log(ParticipantesT);
+                        snapshot.forEach (function (data) {
+                            if (ParticipantesT.includes(data.key)) {
+                                var item = {
+                                    Nombre: data.val().Nombre,
+                                    Edad: data.val().Edad,
+                                    Nacimiento: data.val().Nacimiento,
+                                    Genero: data.val().Genero,
+                                    FuturoTrabajo: data.val().FuturoTrabajo,
+
+                                    NombreTutorPadre: data.val().NombreTutorPadre,
+                                    CelularTutorPadre: data.val().CelularTutorPadre,
+                                    Correo: data.val().Correo,
+
+                                    UltimoGrado: data.val().UltimoGrado,
+                                    ClaseProgra: data.val().ClaseProgra,
+                                    ParticipadoAxta: data.val().ParticipadoAxta,
+
+                                    NombreEscuela: data.val().NombreEscuela,
+                                    TipoEscuela: data.val().TipoEscuela,
+
+                                    VivieEnMexico: data.val().VivieEnMexico,
+                                    Estado: data.val().Estado,
+                                    Municipio: data.val().Municipio,
+                                    ComoEntero: data.val().ComoEntero
+
+                                }
+                                Participantes.push(item);
+                            }
+                        });
+                        console.log(Participantes);
+                        resolve(Participantes);
+                    }
+                })
+            })
+        })
+    }
+
+    function hacerArchivo(Taller, Participantes){
 
         const DEFAULT_FILENAME = "InformacionParticipantes_" + Nombre;
 
@@ -183,6 +184,25 @@ const DetalleTaller = (props) => {
         const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
         const data = new Blob([excelBuffer], { type: fileType });
         FileSaver.saveAs(data, DEFAULT_FILENAME + fileExtension);
+    }
+
+    function ArchivoXLSX(){
+        const Taller = [];
+        var item = {
+            Nombre: Nombre,
+            Descripcion: Descripcion,
+            Fechas: Fechas,
+            Horarios: Horarios,
+            ImpartidoPor: ImpartidoPor,
+            Prerequisitos: Prerequisitos,
+            VirtualPresencial: VirtualPresencial,
+            InformacionConfidencial: InformacionConfidencial
+        }
+        Taller.push (item);
+
+        getParticipantes().then((Participantes) => {
+            hacerArchivo(Taller, Participantes);
+        });
     }
 
     const darDeBaja=()=>{
@@ -316,23 +336,8 @@ const DetalleTaller = (props) => {
               <p>{VirtualPresencial}</p>
           </div>
 
-          <Button onClick={ArchivoXLSX}>Prueba</Button>
-
-
           {location.state.EsAdmin &&
-          <div className='container'>
-          {participantes.map(participante => (
-              <div style={{display: "inline-block"}} key={participante.id}>
-                  {location.state.EsAdmin &&
-                  (<div>
-                      <h3>Lista Participantes</h3>
-                      <p>{NombreU}</p>
-                      <p>{userId}</p>
-                      <br></br>
-                  </div>)}
-              </div>
-          ))}
-          </div>
+          <Button onClick={ArchivoXLSX}>Descargar Información</Button>
           }
 
           {(location.state.EstaInscrito || location.state.EsAdmin) &&
