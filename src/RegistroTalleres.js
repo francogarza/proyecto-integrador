@@ -208,20 +208,18 @@ const RegistroTalleres = (props) => {
 
         if(verificarDatos()){
 
-            const uuid = uid()
-            const imageRef = ref_st(storage,`images/${uuid + img.name}`)
+            const imageRef = ref_st(storage,`images/${id + img.name}`)
             uploadBytes(imageRef,img).then(()=>{
                 
             }).then(() =>{
                 getDownloadURL(imageRef).then((url) => {
-                    setImgUrl(url)
                     console.log(url);
                     if(img.name === '' || img.name==null){
                         url = null
                     }
                     const imgUrl = url;
             
-                    update(ref_db(db, 'Taller/'+ uuid), {
+                    update(ref_db(db, 'Taller/'+ id), {
                         Descripcion,
                         Fechas,
                         Horarios,
@@ -230,7 +228,6 @@ const RegistroTalleres = (props) => {
                         Prerequisitos,
                         VirtualPresencial,
                         InformacionConfidencial,
-                        uuid,
                         imgUrl,
                         maxCap,
                         isCapped
