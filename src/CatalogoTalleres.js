@@ -59,7 +59,7 @@ const goBack=()=>{
         <div>
             {/* {isLoggedIn?<p>logged in</p> : <p>logged out</p>}
             {isLoggedIn && <h1>{userId}</h1>} */}
-            <h1>{userId}</h1>
+            
             <Button onClick={goBack}>Regresar</Button>
             <div style={{padding: "50px", textAlign: "center", background: "#F95828", color: "#fdfffc", fontSize: "30px"}}>
                 <h1> Catálogo de talleres </h1>

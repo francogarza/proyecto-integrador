@@ -46,7 +46,7 @@ useEffect(() => {
 }, [userId,userSelected])
 
 const agregarHijo = () => {
-    navigate('/registro-taller-usuario')
+    navigate('/registro-hijo',{state:{isUpdate:false}})
 }
 
 const seleccionarHijo = (id) =>{
@@ -66,6 +66,11 @@ const verTalleresInscritos=(e)=>{
 const borrarHijo=(e)=>{
     remove(ref(db,'Participante/'+e));
     remove(ref(db,'Padre/'+parentId+'/hijos/'+e));
+}
+
+
+const editarHijo=(idEditar)=>{
+    navigate('/registro-hijo',{state:{isUpdate:true,idEditar:idEditar}})
 }
 
 
@@ -90,7 +95,7 @@ return(
                                 <p>{hijo.Nombre}{hijo.uuid===userId && "(seleccionado)"}</p>
                                 <Button onClick={() => seleccionarHijo(hijo.uuid)}>Seleccionar hijo</Button>
                                 <Button onClick={() => verTalleresInscritos(hijo.uuid)}>Ver talleres inscritos</Button>
-                                <Button>editar hijo</Button>
+                                <Button onClick={() => editarHijo(hijo.uuid)}>editar hijo</Button>
                                 <Button onClick={() => borrarHijo(hijo.uuid)}>Borrar hijo</Button>
                         </div>
                     ))}

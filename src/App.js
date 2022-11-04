@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, RouterProvider, Routes, Navigate  } fro
 import TallerCard from './components/TallerCard';
 import Home from './components/Home';
 import RegistroPadres from './RegistroPadres.js';
-import RegistroTaller from './RegistroTaller.js';
 import RegistroTalleres from './RegistroTalleres.js';
 import CatalogoTalleres from './CatalogoTalleres.js';
 import DetalleTaller from './DetalleTaller.js';
@@ -15,6 +14,7 @@ import LogIn from './login.js'
 import ManageChild from './manageChild';
 import Navbar from './Navbar'
 import Box from '@mui/material/Box';
+import RegistroHijo from './RegistroHijo.js';
 
 function App() {
   
@@ -41,8 +41,8 @@ function App() {
                   <RegistroPadres />
                 }
                 />
-                <Route path="/registro-taller-usuario" element={
-                  <RegistroTaller />
+                <Route path="/registro-hijo" element={
+                  <RegistroHijo />
                 }
                 />
                 <Route path="/registro-taller-admin" element={
