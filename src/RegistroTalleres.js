@@ -205,46 +205,44 @@ const RegistroTalleres = (props) => {
     }
 
     const updateToDatabase = () => {
-        
-        const imageRef = ref_st(storage, "img");
-        uploadBytes(imageRef, img).then(() => {
-            getDownloadURL(imageRef).then((ImgUrl) => {
-                setImgUrl(ImgUrl)
-            }).catch(error => {
-                console.log(error.message, "Hubo un error al conseguir la imagen.");
-            });
-            setImg(null);
-        }).catch(error => {
-            console.log(error.message);
-        });
 
         if(verificarDatos()){
+
+            const uuid = uid()
+            const imageRef = ref_st(storage,`images/${uuid + img.name}`)
+            uploadBytes(imageRef,img).then(()=>{
+                
+            }).then(() =>{
+                getDownloadURL(imageRef).then((url) => {
+                    setImgUrl(url)
+                    console.log(url);
+                    if(img.name === '' || img.name==null){
+                        url = null
+                    }
+                    const imgUrl = url;
             
-            update(ref_db(db, 'Taller/'+ id), {
-                Descripcion,
-                Fechas,
-                Horarios,
-                ImpartidoPor,
-                Nombre,
-                Prerequisitos,
-                VirtualPresencial,
-                InformacionConfidencial,
-                maxCap,
-                isCapped
-            });
-            setDescripcion("");
-            setFechas("");
-            setHorarios("");
-            setImpartidoPor("");
-            setNombre("");
-            setPrerequisitos("");
-            setVirtualPresencial("");
-            setInformacionConfidencial("");
-            setMaxCap(0);
+                    update(ref_db(db, 'Taller/'+ uuid), {
+                        Descripcion,
+                        Fechas,
+                        Horarios,
+                        ImpartidoPor,
+                        Nombre,
+                        Prerequisitos,
+                        VirtualPresencial,
+                        InformacionConfidencial,
+                        uuid,
+                        imgUrl,
+                        maxCap,
+                        isCapped
+                    });
+                })
+                .catch((error) => {
+                    // Handle any errors
+                });
+            })
         }else{
             setAlertActive(true);
         }
-        
     };
 
 
