@@ -177,7 +177,7 @@ const RegistroTalleres = (props) => {
                         maxCap,
                         isCapped
                     });
-        
+                    
                     setDescripcion("");
                     setFechas("");
                     setHorarios("");
