@@ -87,7 +87,9 @@ const RegistroTalleres = (props) => {
     }
 
     const handleChangeImg=(e)=>{
-        setImg(e.target.files[0])
+        if (e.target.files[0]) {
+            setImg(e.target.files[0]);
+        }
     }
 
     function verificarDatos(){
@@ -203,34 +205,41 @@ const RegistroTalleres = (props) => {
     }
 
     const updateToDatabase = () => {
-        
+
         if(verificarDatos()){
+
+            const imageRef = ref_st(storage,`images/${id + img.name}`)
+            uploadBytes(imageRef,img).then(()=>{
+                
+            }).then(() =>{
+                getDownloadURL(imageRef).then((url) => {
+                    console.log(url);
+                    if(img.name === '' || img.name==null){
+                        url = null
+                    }
+                    const imgUrl = url;
             
-            update(ref_db(db, 'Taller/'+ id), {
-                Descripcion,
-                Fechas,
-                Horarios,
-                ImpartidoPor,
-                Nombre,
-                Prerequisitos,
-                VirtualPresencial,
-                InformacionConfidencial,
-                maxCap,
-                isCapped
-            });
-            setDescripcion("");
-            setFechas("");
-            setHorarios("");
-            setImpartidoPor("");
-            setNombre("");
-            setPrerequisitos("");
-            setVirtualPresencial("");
-            setInformacionConfidencial("");
-            setMaxCap(0);
+                    update(ref_db(db, 'Taller/'+ id), {
+                        Descripcion,
+                        Fechas,
+                        Horarios,
+                        ImpartidoPor,
+                        Nombre,
+                        Prerequisitos,
+                        VirtualPresencial,
+                        InformacionConfidencial,
+                        imgUrl,
+                        maxCap,
+                        isCapped
+                    });
+                })
+                .catch((error) => {
+                    // Handle any errors
+                });
+            })
         }else{
             setAlertActive(true);
         }
-        
     };
 
 
