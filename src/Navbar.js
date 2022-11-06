@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useEffect, useState, useCallback, useContext} from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import MuiDrawer from '@mui/material/Drawer';
@@ -15,11 +15,13 @@ import AppsIcon from '@mui/icons-material/Apps';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from '@mui/icons-material/Logout';
 import Face3Icon from '@mui/icons-material/Face3';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import OpenInBrowserIcon from '@mui/icons-material/OpenInBrowser';
 import Link from '@mui/material/Link';
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from './UserContext';
 
 const drawerWidth = 240;
 
@@ -51,12 +53,20 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 function Navbar() {
     const [open, setOpen] = React.useState(true);
+    const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
+    const {parentId,setParentId} = useContext(UserContext);
 
     let navigate = useNavigate();
 
     const toggleDrawer = () => {
         setOpen(!open);
     };
+
+    function handleLogOut() {
+        setIsLoggedIn(false);
+        setParentId(null);
+        navigate("/catalogo-talleres"); // whichever component you want it to route to
+    }
     
     return (
         <Drawer variant="permanent" open={!open}>
@@ -74,7 +84,7 @@ function Navbar() {
             </Toolbar>
             <Divider />
             <List component="nav">
-                <Link href="/catalogo-talleres">
+                <Link onClick={() => navigate("/catalogo-talleres")}>
                     <ListItemButton>
                         <ListItemIcon>
                             <AppsIcon />
@@ -82,38 +92,30 @@ function Navbar() {
                         <ListItemText primary="Catalogo Talleres" />
                     </ListItemButton>
                 </Link>
-                <Link href="/talleres-inscritos">
+                {isLoggedIn ? <Link onClick={() => navigate("/talleres-inscritos")}>
                     <ListItemButton>
                         <ListItemIcon>
                             <AppRegistrationIcon />
                         </ListItemIcon>
                         <ListItemText primary="Talleres Inscritos" />
                     </ListItemButton>
-                </Link>
-                <Link href="/horario-taller" >
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <ScheduleIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Horario" />
-                    </ListItemButton>
-                </Link>
-                <Link href="/login" >
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <LoginIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Log In" />
-                    </ListItemButton>
-                </Link>
-                <Link href="/manage-children" >
+                </Link> : null}
+                {isLoggedIn ?<Link onClick={() => navigate("/manage-children")} >
                     <ListItemButton>
                         <ListItemIcon>
                             <Face3Icon />
                         </ListItemIcon>
                         <ListItemText primary="Manejo de Hijos" />
                     </ListItemButton>
-                </Link>
+                </Link> : null}
+                {isLoggedIn ? <Link onClick={() => navigate("/horario-taller")} >
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <ScheduleIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Horario" />
+                    </ListItemButton>
+                </Link> : null}
                 <Link href="/registro-padres" >
                     <ListItemButton>
                         <ListItemIcon>
@@ -122,22 +124,38 @@ function Navbar() {
                         <ListItemText primary="Nueva cuenta" />
                     </ListItemButton>
                 </Link>
-                <Link href="/catalogo-talleres-admin" >
+                {isLoggedIn ? <Link onClick={handleLogOut} >
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <LogoutIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Log Out" />
+                    </ListItemButton> 
+                </Link> : null }
+                {!isLoggedIn ? <Link href="/login" >
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <LoginIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Log In" />
+                    </ListItemButton>
+                </Link> : null }
+                {!isLoggedIn ? <Link href="/catalogo-talleres-admin" >
                     <ListItemButton>
                         <ListItemIcon>
                             <AppsIcon />
                         </ListItemIcon>
                         <ListItemText primary="Talleres ADMIN" />
                     </ListItemButton>
-                </Link>
-                <Link href="/registro-taller-admin" >
+                </Link> : null }
+                {!isLoggedIn ? <Link href="/registro-taller-admin" >
                     <ListItemButton>
                         <ListItemIcon>
                             <OpenInBrowserIcon />
                         </ListItemIcon>
                         <ListItemText primary="Nuevo Taller" />
                     </ListItemButton>
-                </Link>
+                </Link> : null}
                 <Divider sx={{ my: 1 }} />
             </List>
         </Drawer>
