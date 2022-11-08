@@ -22,9 +22,10 @@ function App() {
   const [userSelected,setUserSelected] = useState(false);
   const [parentId,setParentId] = useState(false);
   const [isLoggedIn,setIsLoggedIn] = useState(false);
+  const [EsAdmin,setEsAdmin] = useState(false);
 
   return (
-    <UserContext.Provider value={{userId,setUserId,userSelected,setUserSelected,parentId,setParentId,isLoggedIn,setIsLoggedIn}}>
+    <UserContext.Provider value={{userId,setUserId,userSelected,setUserSelected,parentId,setParentId,isLoggedIn,setIsLoggedIn,EsAdmin,setEsAdmin}}>
       <Box sx={{ display: 'flex' }}>
         <Router>
           <Navbar/>
@@ -53,15 +54,10 @@ function App() {
                   <CatalogoTalleres EsAdmin={false} />
                 }
                 />
-                <Route path="/catalogo-talleres-admin" element={
-                  <CatalogoTalleres EsAdmin={true} />
-                }
-                />
                 <Route path="/detalle-taller" element={
                   <DetalleTaller />
                 }
                 />
-
                 <Route path="/send-email-test" element={
                   <SendEmailTest />
                 }
