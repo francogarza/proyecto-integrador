@@ -121,7 +121,7 @@ function Navbar() {
                         <ListItemText primary="Horario" />
                     </ListItemButton>
                 </Link> : null}
-                {!EsAdmin && !isLoggedIn ? <Link href="/registro-padres" >
+                {!EsAdmin && !isLoggedIn ? <Link onClick={() => navigate("/registro-padres")}>
                     <ListItemButton>
                         <ListItemIcon>
                             <AddCircleIcon />
@@ -145,7 +145,7 @@ function Navbar() {
                         <ListItemText primary="Log Out" />
                     </ListItemButton> 
                 </Link> : null }
-                {!isLoggedIn && !EsAdmin ? <Link href="/login" >
+                {!isLoggedIn && !EsAdmin ? <Link onClick={() => navigate("/login")}>
                     <ListItemButton>
                         <ListItemIcon>
                             <LoginIcon />
