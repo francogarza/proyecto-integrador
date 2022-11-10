@@ -16,6 +16,7 @@ const CatalogoTalleres = (props) => {
     const {userId, setUserId} = useContext(UserContext);
     const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
     const {userSelected,setUserSelected} = useContext(UserContext);
+    const {EsAdmin,setEsAdmin} = useContext(UserContext)
     //local
     const [talleres,setTalleres] = useState([])
     const [talleresInscritos,setTalleresInscritos] = useState([])
@@ -57,9 +58,7 @@ const goBack=()=>{
         }}
     >
         <div>
-            {/* {isLoggedIn?<p>logged in</p> : <p>logged out</p>}
-            {isLoggedIn && <h1>{userId}</h1>} */}
-            <h1>{userId}</h1>
+            
             <Button onClick={goBack}>Regresar</Button>
             <div style={{padding: "50px", textAlign: "center", background: "#F95828", color: "#fdfffc", fontSize: "30px"}}>
                 <h1> Catálogo de talleres </h1>
@@ -68,7 +67,7 @@ const goBack=()=>{
             <div style={{padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
                 {talleres.map((taller) => (
                     <div style={{display: "inline-block"}} key={taller.uuid}>
-                        {props.EsAdmin ? (<TallerCard EsAdmin={true} key={taller.uuid} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion} imgUrl={taller.imgUrl}></TallerCard>) : <TallerCard key={taller.uuid} EsAdmin={false} EstaInscrito={taller.EstaInscrito} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion} imgUrl={taller.imgUrl}></TallerCard>}
+                        {EsAdmin ? (<TallerCard EsAdmin={true} key={taller.uuid} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion} imgUrl={taller.imgUrl}></TallerCard>) : <TallerCard key={taller.uuid} EsAdmin={false} EstaInscrito={taller.EstaInscrito} id={taller.uuid} Nombre={taller.Nombre} Descripcion={taller.Descripcion} imgUrl={taller.imgUrl}></TallerCard>}
                     </div>
                 ))}
             </div>

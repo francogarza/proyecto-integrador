@@ -1,6 +1,6 @@
 import React, {useContext,useEffect} from 'react';
 import {db} from './firebase';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword  } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail  } from 'firebase/auth';
 import {uid} from 'uid';
 import { useNavigate } from 'react-router-dom';
 import {set, ref} from 'firebase/database';
@@ -18,10 +18,12 @@ const LogIn = () => {
     const {userId, setUserId} = useContext(UserContext);
     const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
     const {parentId,setParentId} = useContext(UserContext);
+    const {EsAdmin,setEsAdmin} = useContext(UserContext);
 
     const [Mail, setMail] = useState("");
     const [Password,setPassword] = useState("");
     const [alertActive, setAlertActive] = useState(false);
+    const [isPasswordReset,setIsPasswordReset] = useState(false);
     let navigate = useNavigate();
 
     const handleChangeMail=(e)=>{
@@ -32,24 +34,54 @@ const LogIn = () => {
         setPassword(e.target.value)
     }
 
-    const writeToDatabase = () => {
-
-    const auth = getAuth();
-
-    signInWithEmailAndPassword(auth,Mail,Password)
-    .then((userCredential) =>{
-        console.log(userCredential.user.uid)
-        setIsLoggedIn(true);
-        setParentId(userCredential.user.uid)
-        navigate('/manage-children')
-        //hay que poner al padre
-        //setUserId(userCredential.user.uid);
-    })
-    .catch((error) =>{
-        console.log(error);
-    })
-
+    const writeToDatabase = () => {//funcion general para hacer login
+    
+        if(checkAdmin()){
+            setEsAdmin(true);
+            console.log('es admin')
+            navigate('/catalogo-talleres')
+        }else{
+            const auth = getAuth();
+            signInWithEmailAndPassword(auth,Mail,Password)
+            .then((userCredential) =>{
+                console.log(userCredential.user.uid)
+                setIsLoggedIn(true);
+                setParentId(userCredential.user.uid)
+                navigate('/manage-children')
+                //hay que poner al padre
+                //setUserId(userCredential.user.uid);
+            })
+            .catch((error) =>{
+                console.log(error);
+            })
+        }
     };
+    
+    const setPasswordReset=(e)=>{
+        setIsPasswordReset(true);
+    }
+
+    const passwordReset=()=>{
+        const auth = getAuth();
+        sendPasswordResetEmail(auth, Mail)
+        .then(() => {
+            alert('se mando un correo a su cuenta de email para re-establecer su contraseña, si no encuentra el mail porfavor verificar su carpeta de spam')
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log('error');
+        });
+    }
+
+    function checkAdmin(){
+        if(Mail==="admin" && Password==="csoftmty2022"){
+            console.log("what")
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     return(
         <Box
@@ -72,18 +104,24 @@ const LogIn = () => {
                     <Form.Control type="text" placeholder="Correo" id="Mail" value={Mail} onChange={handleChangeMail}/>
                 </Form.Group>
                 <br/>
+                {!isPasswordReset &&
                 <Form.Group>
-                    <Form.Label>
-                    Escriba su contraseña.
-                    </Form.Label>
-                    <br/>
-                    <Form.Control type="password" placeholder="password" id="Password" value={Password} onChange={HandlePasswordChange}/>
-                </Form.Group>
+                <Form.Label>
+                Escriba su contraseña.
+                </Form.Label>
                 <br/>
-                    <Button onClick={writeToDatabase} class='submit'>
-                    Ingresar
-                    </Button>
+                <Form.Control type="password" placeholder="password" id="Password" value={Password} onChange={HandlePasswordChange}/>
+                </Form.Group>
+                }
                 
+                <br/>
+                
+                    <Button onClick={isPasswordReset ? passwordReset : writeToDatabase} class='submit'>
+                    {isPasswordReset ? "Recuperar contraseña" : "Ingresar"} 
+                    </Button>
+                    {!isPasswordReset && 
+                    <Button onClick={setPasswordReset}>olvidaste tu contraseña?</Button>}
+                    
                 </Form>
                 </Container>
             </div>

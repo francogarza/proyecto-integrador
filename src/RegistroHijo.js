@@ -7,8 +7,13 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
 import {Button,Container,Form,Alert} from 'react-bootstrap'
 import { UserContext } from './UserContext';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const RegistroTaller = () => {
+const RegistroHijo = () => {
+
+    const location = useLocation();
+
     //global
     const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
     const {parentId,setParentId} = useContext(UserContext);
@@ -32,7 +37,10 @@ const RegistroTaller = () => {
     const [VivieEnMexico, setVivieEnMexico] = useState("true");
     const [alertActive, setAlertActive] = useState(false);
     const [hijos, setHijos] = useState([]);
+    const [isUpdate,setIsUpdate]=useState(false);
+    const [idEditar,setIdEditar] = useState("");
 
+    const navigate = useNavigate();
 
     const handleChangeCelularTutorPadre=(e)=>{
         setCelularTutorPadre(e.target.value);
@@ -180,7 +188,7 @@ const RegistroTaller = () => {
                 UltimoGrado,
                 VivieEnMexico,
             });
-
+            
             update(ref(db, 'Padre/'+ PadreId+ "/hijos/" + uuid), {
                 Nombre,
                 uuid
@@ -204,14 +212,82 @@ const RegistroTaller = () => {
         }else{
             setAlertActive(true);
         }
-        
+        navigate(-1);
     };
+
+    useEffect(() =>{
+        if(isUpdate){
+            onValue(ref(db,'Participante/'+idEditar),(snapshot)=>{
+                const data = snapshot.val();
+                if(data!==null){
+                    setCelularTutorPadre(data.CelularTutorPadre);
+                    setClaseProgra(data.ClaseProgra);
+                    setComoEntero(data.ComoEntero);
+                    setCorreo(data.Correo);
+                    setEdad(data.Edad);
+                    setEstado(data.Estado);
+                    setFuturoTrabajo(data.FuturoTrabajo);
+                    setGenero(data.Genero);
+                    setMunicipio(data.Municipio);
+                    setNacimiento(data.Nacimiento);
+                    setNombre(data.Nombre);
+                    setNombreEscuela(data.NombreEscuela);
+                    setNombreTutorPadre(data.NombreTutorPadre);
+                    setParticipadoAxta(data.ParticipadoAxta);
+                    setUltimoGrado(data.UltimoGrado);
+                    setVivieEnMexico(data.VivieEnMexico);
+                }
+            });
+        }
+    },[isUpdate,idEditar])
+
+    const updateToDatabase=()=>{
+        if(verificarDatos()){
+            const PadreId = parentId;
+            
+            update(ref(db, 'Participante/'+ idEditar), {
+                CelularTutorPadre,
+                ClaseProgra,
+                ComoEntero,
+                Correo,
+                Edad,
+                Estado,
+                FuturoTrabajo,
+                Genero,
+                Municipio,
+                Nacimiento,
+                Nombre,
+                NombreEscuela,
+                NombreTutorPadre,
+                ParticipadoAxta,
+                TipoEscuela,
+                UltimoGrado,
+                VivieEnMexico,
+            });
+            const uuid = idEditar;
+            update(ref(db, 'Padre/'+ PadreId+ "/hijos/" + idEditar), {
+                Nombre,
+                uuid
+            });
+            navigate(-1);
+        }
+    }
+
+    useEffect(()=>{
+        if(location.state !== null){
+            if(location.state.isUpdate !== null){
+                setIsUpdate(location.state.isUpdate);
+                setIdEditar(location.state.idEditar);
+            }
+        }
+    },[])
+
 
     return(
         <div id="mainContainer">
             <Container>
             {alertActive && <Alert variant='warning'>porfavor verifique sus datos</Alert>}
-            <Form className="registroTaller">
+            <div className="registroTaller">
                 <Form.Label>
                     Escriba el nombre completo del participante.
                 </Form.Label>
@@ -348,10 +424,10 @@ const RegistroTaller = () => {
                     checked={ComoEntero==="otro"?true:false}/>
                 <Form.Label htmlFor="Otro">Otro</Form.Label>
                 <br/>
-                <Button onClick={writeToDatabase} className="registro" type="submit">
-                    Registrarse
+                <Button onClick={isUpdate ? updateToDatabase : writeToDatabase} className="registro" type="submit">
+                    {isUpdate ?  "Actualizar" : "Registrarse"}
                 </Button>
-            </Form>
+            </div>
             </Container>
             <div id="bottomPadding"></div>
         </div>
@@ -359,4 +435,4 @@ const RegistroTaller = () => {
     )
 }
 
-export default RegistroTaller
+export default RegistroHijo
