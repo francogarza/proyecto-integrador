@@ -54,6 +54,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 function Navbar() {
     const [open, setOpen] = React.useState(true);
     const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
+    const {EsAdmin,setEsAdmin} = useContext(UserContext)
     const {parentId,setParentId} = useContext(UserContext);
 
     let navigate = useNavigate();
@@ -63,8 +64,12 @@ function Navbar() {
     };
 
     function handleLogOut() {
-        setIsLoggedIn(false);
-        setParentId(null);
+        if(EsAdmin){
+            setEsAdmin(false);
+        }else{
+            setIsLoggedIn(false);
+            setParentId(null);
+        }
         navigate("/catalogo-talleres"); // whichever component you want it to route to
     }
     
@@ -116,39 +121,15 @@ function Navbar() {
                         <ListItemText primary="Horario" />
                     </ListItemButton>
                 </Link> : null}
-                <Link href="/registro-padres" >
+                {!EsAdmin && !isLoggedIn ? <Link href="/registro-padres" >
                     <ListItemButton>
                         <ListItemIcon>
                             <AddCircleIcon />
                         </ListItemIcon>
                         <ListItemText primary="Nueva cuenta" />
                     </ListItemButton>
-                </Link>
-                {isLoggedIn ? <Link onClick={handleLogOut} >
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <LogoutIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Log Out" />
-                    </ListItemButton> 
-                </Link> : null }
-                {!isLoggedIn ? <Link href="/login" >
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <LoginIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Log In" />
-                    </ListItemButton>
-                </Link> : null }
-                {!isLoggedIn ? <Link href="/catalogo-talleres-admin" >
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <AppsIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Talleres ADMIN" />
-                    </ListItemButton>
-                </Link> : null }
-                {!isLoggedIn ? <Link href="/registro-taller-admin" >
+                </Link> : null}
+                {EsAdmin ? <Link onClick={() => navigate("/registro-taller-admin")} >
                     <ListItemButton>
                         <ListItemIcon>
                             <OpenInBrowserIcon />
@@ -156,6 +137,22 @@ function Navbar() {
                         <ListItemText primary="Nuevo Taller" />
                     </ListItemButton>
                 </Link> : null}
+                {isLoggedIn || EsAdmin ? <Link onClick={handleLogOut} >
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <LogoutIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Log Out" />
+                    </ListItemButton> 
+                </Link> : null }
+                {!isLoggedIn && !EsAdmin ? <Link href="/login" >
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <LoginIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Log In" />
+                    </ListItemButton>
+                </Link> : null }
                 <Divider sx={{ my: 1 }} />
             </List>
         </Drawer>
