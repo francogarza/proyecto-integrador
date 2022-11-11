@@ -39,6 +39,10 @@ const DetalleTaller = (props) => {
     const [isCapped,setIsCapped] = useState("");
     const [Correo,setCorreo] = useState("");
 
+    const [FechaCierre, setFechaCierre] = useState("");
+    const [HorarioFin, setHorarioFin] = useState("");
+    const [selectedDays, setSelectedDays] = useState("");
+
     const navigate = useNavigate();
 
 
@@ -74,6 +78,9 @@ const DetalleTaller = (props) => {
                 }else{
                     setImgUrl(null);
                 }
+                setFechaCierre(data.FechaCierre)
+                setHorarioFin(data.HorarioFin)
+                setSelectedDays(data.selectedDays)
             }
             });
 
@@ -258,6 +265,30 @@ const DetalleTaller = (props) => {
         // enviarCorreoInscripcionTaller()
     };
 
+    function checkDays () {
+        let myUpdatedDates = "";
+        for(var i=0; i < selectedDays.length; i++){
+            switch(selectedDays.charAt(i)){
+                case 'L':
+                    i > 0 ? myUpdatedDates += ", Lunes" : myUpdatedDates += "Lunes"
+                    break;
+                case 'M':
+                    i > 0 ? myUpdatedDates += ", Martes" : myUpdatedDates += "Martes"
+                    break;
+                case 'W':
+                    i > 0 ? myUpdatedDates += ", Miercoles" : myUpdatedDates += "Miercoles"
+                    break;
+                case 'J':
+                    i > 0 ? myUpdatedDates += ", Jueves" : myUpdatedDates += "Jueves"
+                    break;
+                default:
+                    i > 0 ? myUpdatedDates += ", Viernes" : myUpdatedDates += "Viernes"
+                    break;
+            }
+        }
+        return myUpdatedDates;
+    }
+
 
       const handleChangeDescripcion=(e)=>{
         setDescripcion(e.target.value)
@@ -325,7 +356,19 @@ const DetalleTaller = (props) => {
                     <h3>Descripción:</h3>
                     <p>{Descripcion}</p>
                 </div>
-
+                <div className='container'>
+                    <h3>Fechas:</h3>
+                    <p>Fecha de inicio: {Fechas}</p>
+                    <p>Fecha de cierre: {FechaCierre}</p>
+                </div>
+                <div className='container'>
+                    <h3>Horarios:</h3>
+                    <p>De {Horarios} a {HorarioFin}</p>
+                </div>
+                <div className='container'>
+                    <h3>Días que se imparte el taller:</h3>
+                    <p>{checkDays()}</p>
+                </div>
                 <div className='container'>
                     <h3>Prerrequisitos:</h3>
                     <p>{Prerequisitos}</p>
