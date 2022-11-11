@@ -8,6 +8,7 @@ import {useState,useEffect} from "react";
 import { useNavigate } from 'react-router-dom'
 import {set,ref,onValue,remove,update} from 'firebase/database';
 import { Button, CardMedia, CardActionArea, CardActions } from '@mui/material';
+import emailjs from 'emailjs-com';
 
 const mockTaller = {
     Descripcion:"Durante cada sesión, se darán problemas atractivos a resolver para que el alumno enfrente el problema y emita ideas para empezar a resolver un problema. El profesor guiará esas ideas para estructurarlas y así establecer una heurística de solución.",
@@ -25,48 +26,33 @@ export default function TallerCard(props){
         let path = '/registro-taller-admin';
         navigate(path, {state:{isUpdate:true,id:props.id}});
     }
-
-    const [participantes,setParticipantes] = useState([]);
-
-    const enviarCorreoATodosLosParticipantes = (e) => {
-        onValue(ref(db,'Taller/16a2b3ee056'),(snapshot) => {
-        // onValue(ref(db,'Taller/16a2b3ee056'),(snapshot) => {
+    const enviarCorreoATodosLosParticipantes = (props) => {
+        onValue(ref(db,'Taller/'+props.id),(snapshot) => {
             const data = snapshot.val();
             if(data !== null){
-                data.participantes.map(function (name) {
-                    console.log(name)
-                })
-                console.log(participantes)
-                console.log("test1")
-                console.log(data.participantes)
+                for (const [key, value] of Object.entries(data.participantes)) {
+                    enviarCorreoCancelacionTaller(value)
+                  }
             }
         });
-        for (let i = 0; i < participantes.length; i++) { 
-            console.log(participantes[i])
-        }
-        // var templateParams = {
-        //     nombre_taller: Nombre,
-        //     nombre_hijo: NombreU,
-        //     link_talleres_inscritos: 'http://localhost:3000/talleres-inscritos',
-        //     // quitar este comment para mandar al correo del usuario
-        //     // to_email: Correo,
-        //     // quitar este comment para usar mi direccion de correo y hacer pruebas 
-        //     to_email: 'francogarza98@gmail.com'
-        // };
-        // emailjs.send('service_l68b4ed', 'template_jrfyyws', templateParams, '7VB8KWioxv21zM4iQ')
-        //     .then(function(response) {
-        //     console.log('SUCCESS!', response.status, response.text);
-        //     }, function(error) {
-        //     console.log('FAILED...', error);
-        // });
     };
-    //delete
+    const enviarCorreoCancelacionTaller = (value) => {
+        var templateParams = {
+            nombre_taller: props.Nombre,
+            nombre_hijo: value.NombreU,
+            to_email: value.Mail
+        };
+        emailjs.send('service_8h5bui6', 'template_nf8dfof', templateParams, 'fkFt-NEWOPWt-30Aq')
+            .then(function(response) {
+            console.log('SUCCESS!', response.status, response.text);
+            }, function(error) {
+            console.log('FAILED...', error);
+        });
+    }
     const handleDelete = (e) => {
         remove(ref(db,'Taller/' + e));
-        // console.log("hello")
-        // enviarCorreoATodosLosParticipantes(e);
+        enviarCorreoATodosLosParticipantes(props);
     }
-
     return (
         <Card sx={{ minWidth: 300, maxWidth: 300,borderRadius:'15%'}} style={{margin: 30}}>
             <CardActionArea>

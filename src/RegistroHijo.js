@@ -11,9 +11,7 @@ import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 const RegistroHijo = () => {
-
     const location = useLocation();
-
     //global
     const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
     const {parentId,setParentId} = useContext(UserContext);
@@ -22,6 +20,7 @@ const RegistroHijo = () => {
     const [ClaseProgra, setClaseProgra] = useState("true");
     const [ComoEntero, setComoEntero] = useState("maestro");
     const [Correo, setCorreo] = useState("");
+    const [Mail, setMail] = useState("");
     const [Edad, setEdad] = useState("");
     const [Estado, setEstado] = useState("");
     const [FuturoTrabajo, setFuturoTrabajo] = useState("");
@@ -45,72 +44,54 @@ const RegistroHijo = () => {
     const handleChangeCelularTutorPadre=(e)=>{
         setCelularTutorPadre(e.target.value);
     }
-
-
     const handleChangeClaseProgra=(e)=>{
         setClaseProgra(e.target.value)
     }
-
     const handleChangeComoEntero=(e)=>{
         setComoEntero(e.target.value)
     }
-
     const handleChangeCorreo=(e)=>{
         setCorreo(e.target.value)
     }
-
     const handleChangeEdad=(e)=>{
         setEdad(e.target.value)
     }
-
     const handleChangeEstado=(e)=>{
         setEstado(e.target.value)
     }
     const handleChangeFuturoTrabajo=(e)=>{
         setFuturoTrabajo(e.target.value)
     }
-
     const handleChangeGenero=(e)=>{
         setGenero(e.target.value)
     }
-
     const handleChangeMunicipio=(e)=>{
         setMunicipio(e.target.value)
     }
-
     const handleChangeNacimiento=(e)=>{
         setNacimiento(e.target.value)
     }
-
     const handleChangeNombre=(e)=>{
         setNombre(e.target.value)
     }
-
     const handleChangeNombreEscuela=(e)=>{
         setNombreEscuela(e.target.value)
     }
     const handleChangeNombreTutorPadre=(e)=>{
         setNombreTutorPadre(e.target.value)
     }
-
     const handleChangeParticipadoAxta=(e)=>{
-
         setParticipadoAxta(e.target.value)
     }
-
-
     const handleChangeTipoEscuela=(e)=>{
         setTipoEscuela(e.target.value)
     }
-
     const handleChangeUlitmoGrado=(e)=>{
         setUltimoGrado(e.target.value)
     }
-
     const handleChangeVivieEnMexico=(e)=>{
         setVivieEnMexico(e.target.value)
     }
-
     function verificarDatos(){
         if(verificarCelularPadre() && verificarEdad() && verificarCorreo() && verificarNombre() && verificarEscuela() && verificarNombrePadre() && verificarTrabajoFuturo()){
             return true
@@ -118,19 +99,15 @@ const RegistroHijo = () => {
             return false
         }
     }
-
     function verificarCelularPadre(){
         return !isNaN(parseInt(CelularTutorPadre))
     }
-
     function verificarEdad(){
         return  !isNaN(parseInt(Edad))
     }
-
     function verificarCorreo(){
         return /\S+@\S+\.\S+/.test(Correo);
     }
-
     function verificarNombre(){
         if(Nombre.length>0){
             return true
@@ -138,7 +115,6 @@ const RegistroHijo = () => {
             return false
         }
     }
-
     function verificarEscuela(){
         if(NombreEscuela.length>0){
             return true
@@ -146,7 +122,6 @@ const RegistroHijo = () => {
             return false
         }
     }
-
     function verificarNombrePadre(){
         if(NombreTutorPadre.length>0){
             return true
@@ -154,7 +129,6 @@ const RegistroHijo = () => {
             return false
         }
     }
-
     function verificarTrabajoFuturo(){
         if(FuturoTrabajo.length>0){
             return true
@@ -162,18 +136,16 @@ const RegistroHijo = () => {
             return false
         }
     }
-
     const writeToDatabase = () => {
         if(verificarDatos()){
             const PadreId = parentId;
             const uuid = uid()
-            
-
             set(ref(db, 'Participante/'+ uuid), {
                 CelularTutorPadre,
                 ClaseProgra,
                 ComoEntero,
                 Correo,
+                Mail,
                 Edad,
                 Estado,
                 FuturoTrabajo,
@@ -187,8 +159,7 @@ const RegistroHijo = () => {
                 TipoEscuela,
                 UltimoGrado,
                 VivieEnMexico,
-            });
-            
+            });   
             update(ref(db, 'Padre/'+ PadreId+ "/hijos/" + uuid), {
                 Nombre,
                 uuid
@@ -240,16 +211,15 @@ const RegistroHijo = () => {
             });
         }
     },[isUpdate,idEditar])
-
     const updateToDatabase=()=>{
         if(verificarDatos()){
             const PadreId = parentId;
-            
             update(ref(db, 'Participante/'+ idEditar), {
                 CelularTutorPadre,
                 ClaseProgra,
                 ComoEntero,
                 Correo,
+                Mail,
                 Edad,
                 Estado,
                 FuturoTrabajo,
@@ -272,8 +242,14 @@ const RegistroHijo = () => {
             navigate(-1);
         }
     }
-
     useEffect(()=>{
+        const PadreId = parentId;
+        onValue(ref(db,'Padre/'+PadreId),(snapshot)=>{
+            const data = snapshot.val();
+            if(data!==null){
+                setMail(data.Mail)
+            }
+        });
         if(location.state !== null){
             if(location.state.isUpdate !== null){
                 setIsUpdate(location.state.isUpdate);
@@ -281,8 +257,6 @@ const RegistroHijo = () => {
             }
         }
     },[])
-
-
     return(
         <div id="mainContainer">
             <Container>
