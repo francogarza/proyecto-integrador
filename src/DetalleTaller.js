@@ -16,8 +16,8 @@ import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 
 const DetalleTaller = (props) => {
-
     //global
+    const {parentId, setParentId} = useContext(UserContext);
     const {userId, setUserId} = useContext(UserContext);
     const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
     //local
@@ -34,31 +34,23 @@ const DetalleTaller = (props) => {
     const [imgUrl,setImgUrl] = useState("");
     const [participantes,setParticipantes] = useState([]);
     const [NombreU,setNombreU] = useState("");
-
     const [maxCap,setMaxCap] = useState("");
     const [isCapped,setIsCapped] = useState("");
     const [Correo,setCorreo] = useState("");
-
+    const [Mail, setMail] = useState("");
     const navigate = useNavigate();
 
-
-    const handleEstaInscrito=(e)=>{
-        setEstaInscrito(e.target.value)
-    }
-
     useEffect(() => {
-
         onValue(ref(db,'Taller/'+location.state.id),(snapshot) => {
             setParticipantes([]);
             const data = snapshot.val();
             if(data !== null){
-                
                 if(typeof data.participantes!=='undefined'){
                     Object.values(data.participantes).map((e) => {
                         setParticipantes((oldArray) => [...oldArray,e])
                     });
                 }
-                
+                getParticipantes()
                 setDescripcion(data.Descripcion)
                 setFechas(data.Fechas)
                 setHorarios(data.Horarios)
@@ -78,41 +70,78 @@ const DetalleTaller = (props) => {
             });
 
       }, [isLoggedIn])
-
     useEffect(() => {
-        // quitar el siguiente comentario para probar con un taller en especifico
-        // onValue(ref(db,'Participante/03409e71a2a'),(snapshot) => {
         onValue(ref(db,'Participante/'+userId),(snapshot) => {
             const data = snapshot.val();
             if(data !== null){
                 setNombreU(data.Nombre)
-
                 setCorreo(data.Correo)
-
             }
         });
     }, [])
+    const darDeBaja=()=>{
+        const id = location.state.id
+        remove(ref(db, 'Participante/'+ userId + '/talleres/' + id));
+        remove(ref(db, 'Taller/'+ id + '/participantes/' + userId));
+        enviarCorreoBajaTaller()
+        navigate('/talleres-inscritos');
+    }
+    const enviarCorreoBajaTaller = () => {
+        const PadreId = parentId;
+        const uuid = uid()
+        console.log("PadreId = ", PadreId)
+        onValue(ref(db,'Padre/'+PadreId),(snapshot)=>{
+            const data = snapshot.val();
+            console.log("data = ",data)
+            if(data!==null){
+                console.log("data.Mail = ", data.Mail)
+                setMail(data.Mail)
+            }
+        });
+        console.log("Mail = ", Mail)
 
-    const correoBajaTaller = () => {
         var templateParams = {
             nombre_hijo: NombreU,
             nombre_taller: Nombre,
-            link_catalogo_talleres: 'http://localhost:3000/catalogo-talleres',
-            // quitar este comment para mandar al correo del usuario
-            // to_email: Correo,
-            // quitar este comment para usar mi direccion de correo y hacer pruebas 
-            to_email: 'francogarza98@gmail.com'
+            to_email: Mail,
+            // to_email: 'francogarza98@gmail.com'
         };
-        emailjs.send('service_l68b4ed', 'template_jrfyyws', templateParams, '7VB8KWioxv21zM4iQ')
+        console.log("templateParams = ", templateParams)
+        emailjs.send('service_3kfhl9l', 'template_jrfyyws', templateParams, '7VB8KWioxv21zM4iQ')
             .then(function(response) {
             console.log('SUCCESS!', response.status, response.text);
             }, function(error) {
             console.log('FAILED...', error);
         });
     };
+    const inscribirTaller=()=>{
+        if(location.state.EsAdmin){
+            console.log("para que quiere un admin meter una clase?")
+        }else{
+        if(participantes.length<maxCap && isCapped=='false'){
+            const id = location.state.id
+            set(ref(db, 'Participante/'+ userId + '/talleres/' + id), {
+                id,
+                Nombre,
+                Descripcion,
+                imgUrl
+            });
 
+            set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
+                userId,
+                NombreU,
+                Correo
+            });
+            enviarCorreoInscripcionTaller()
+            navigate('/catalogo-talleres');
+            }else{
+                alert("No se puede inscribir porque el taller esta lleno o esta bloqueado");
+            }
+        }
+        navigate('/catalogo-talleres');
+    };
+    
     function getParticipantes(){
-
         return new Promise((resolve, reject) => {
             get(child(ref(db) ,'Taller/'+ location.state.id + '/participantes/'))
             .then((snapshot) => {
@@ -167,7 +196,6 @@ const DetalleTaller = (props) => {
             })
         })
     }
-
     function hacerArchivo(Taller, Participantes){
 
         const DEFAULT_FILENAME = "InformacionParticipantes_" + Nombre;
@@ -185,7 +213,6 @@ const DetalleTaller = (props) => {
         const data = new Blob([excelBuffer], { type: fileType });
         FileSaver.saveAs(data, DEFAULT_FILENAME + fileExtension);
     }
-
     function ArchivoXLSX(){
         const Taller = [];
         var item = {
@@ -204,96 +231,63 @@ const DetalleTaller = (props) => {
             hacerArchivo(Taller, Participantes);
         });
     }
-
-    const darDeBaja=()=>{
-        const id = location.state.id
-        remove(ref(db, 'Participante/'+ userId + '/talleres/' + id));
-        remove(ref(db, 'Taller/'+ id + '/participantes/' + userId));
-        navigate('/talleres-inscritos');
-        // correoBajaTaller()
+    const handleEstaInscrito=(e)=>{
+        setEstaInscrito(e.target.value)
     }
-
-    const enviarCorreoInscripcionTaller = () => {
-        var templateParams = {
-            nombre_taller: Nombre,
-            nombre_hijo: NombreU,
-            link_talleres_inscritos: 'http://localhost:3000/talleres-inscritos',
-            // quitar este comment para mandar al correo del usuario
-            // to_email: Correo,
-            // quitar este comment para usar mi direccion de correo y hacer pruebas 
-            to_email: 'francogarza98@gmail.com'
-        };
-        emailjs.send('service_l68b4ed', 'template_jrfyyws', templateParams, '7VB8KWioxv21zM4iQ')
-            .then(function(response) {
-            console.log('SUCCESS!', response.status, response.text);
-            }, function(error) {
-            console.log('FAILED...', error);
-        });
-    };
-    const inscribirTaller=()=>{
-        if(location.state.EsAdmin){
-            console.log("para que quiere un admin meter una clase?")
-        }else{
-        if(participantes.length<maxCap && isCapped=='false'){
-            const id = location.state.id
-            set(ref(db, 'Participante/'+ userId + '/talleres/' + id), {
-                id,
-                Nombre,
-                Descripcion,
-                imgUrl
-            });
-
-            set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
-                userId,
-                NombreU
-            });
-            navigate('/catalogo-talleres');
-            // correoInscripcionTaller()
-            }else{
-                alert("No se puede inscribir porque el taller esta lleno o esta bloqueado");
-            }
-        }
-
-        navigate('/catalogo-talleres');
-        // enviarCorreoInscripcionTaller()
-    };
-
-
-      const handleChangeDescripcion=(e)=>{
+    const handleChangeDescripcion=(e)=>{
         setDescripcion(e.target.value)
     }
-
     const handleChangeFechas=(e)=>{
         setFechas(e.target.value)
     }
-
     const handleChangeHorarios=(e)=>{
         setHorarios(e.target.value)
     }
-
     const handleChangeImpartidoPor=(e)=>{
         setImpartidoPor(e.target.value)
     }
-
     const handleChangeNombre=(e)=>{
         setNombre(e.target.value)
     }
-
     const handleChangePrerequisitos=(e)=>{
         setPrerequisitos(e.target.value)
     }
     const handleChangeVirtualPresencial=(e)=>{
         setVirtualPresencial(e.target.value)
     }
-
     const handleChangeImageUrl=(e)=>{
         setImgUrl(e.target.value);
     }
-
     const handleChangeInformacionConfidencial=(e)=>{
         setInformacionConfidencial(e.target.value)
     }
 
+    const enviarCorreoInscripcionTaller = () => {
+        const PadreId = parentId;
+        const uuid = uid()
+        console.log("PadreId = ", PadreId)
+        onValue(ref(db,'Padre/'+PadreId),(snapshot)=>{
+            console.log("data = ",data)
+            const data = snapshot.val();
+            if(data!==null){
+                console.log("data.Mail = ", data.Mail)
+                setMail(data.Mail)
+            }
+        });
+        var templateParams = {
+            nombre_taller: Nombre,
+            nombre_hijo: NombreU,
+            to_email: Mail,
+            // to_email: 'francogarza98@gmail.com'
+        };
+        console.log("templateParams = ", templateParams)
+        emailjs.send('service_3kfhl9l', 'template_7nra4y1', templateParams, '7VB8KWioxv21zM4iQ')
+            .then(function(response) {
+            console.log('SUCCESS!', response.status, response.text);
+            }, function(error) {
+            console.log('FAILED...', error);
+        });
+    };
     const goBack=()=>{
         navigate(-1);
     }
