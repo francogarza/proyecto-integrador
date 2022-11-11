@@ -37,7 +37,11 @@ const DetalleTaller = (props) => {
     const [maxCap,setMaxCap] = useState("");
     const [isCapped,setIsCapped] = useState("");
     const [Correo,setCorreo] = useState("");
+    const [FechaCierre, setFechaCierre] = useState("");
+    const [HorarioFin, setHorarioFin] = useState("");
+    const [selectedDays, setSelectedDays] = useState("");
     const [Mail, setMail] = useState("");
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -66,6 +70,9 @@ const DetalleTaller = (props) => {
                 }else{
                     setImgUrl(null);
                 }
+                setFechaCierre(data.FechaCierre)
+                setHorarioFin(data.HorarioFin)
+                setSelectedDays(data.selectedDays)
             }
             });
 
@@ -240,6 +247,76 @@ const DetalleTaller = (props) => {
     const handleEstaInscrito=(e)=>{
         setEstaInscrito(e.target.value)
     }
+    
+    const enviarCorreoInscripcionTaller = () => {
+        var templateParams = {
+            nombre_taller: Nombre,
+            nombre_hijo: NombreU,
+            link_talleres_inscritos: 'http://localhost:3000/talleres-inscritos',
+            // quitar este comment para mandar al correo del usuario
+            // to_email: Correo,
+            // quitar este comment para usar mi direccion de correo y hacer pruebas 
+            to_email: 'francogarza98@gmail.com'
+        };
+        emailjs.send('service_l68b4ed', 'template_jrfyyws', templateParams, '7VB8KWioxv21zM4iQ')
+            .then(function(response) {
+            console.log('SUCCESS!', response.status, response.text);
+            }, function(error) {
+            console.log('FAILED...', error);
+        });
+    };
+    const inscribirTaller=()=>{
+        if(location.state.EsAdmin){
+            console.log("para que quiere un admin meter una clase?")
+        }else{
+        if(participantes.length<maxCap && isCapped=='false'){
+            const id = location.state.id
+            set(ref(db, 'Participante/'+ userId + '/talleres/' + id), {
+                id,
+                Nombre,
+                Descripcion,
+                imgUrl
+            });
+
+            set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
+                userId,
+                NombreU
+            });
+            navigate('/catalogo-talleres');
+            // correoInscripcionTaller()
+            }else{
+                alert("No se puede inscribir porque el taller esta lleno o esta bloqueado");
+            }
+        }
+
+        navigate('/catalogo-talleres');
+        // enviarCorreoInscripcionTaller()
+    };
+
+    function checkDays () {
+        let myUpdatedDates = "";
+        for(var i=0; i < selectedDays.length; i++){
+            switch(selectedDays.charAt(i)){
+                case 'L':
+                    i > 0 ? myUpdatedDates += ", Lunes" : myUpdatedDates += "Lunes"
+                    break;
+                case 'M':
+                    i > 0 ? myUpdatedDates += ", Martes" : myUpdatedDates += "Martes"
+                    break;
+                case 'W':
+                    i > 0 ? myUpdatedDates += ", Miercoles" : myUpdatedDates += "Miercoles"
+                    break;
+                case 'J':
+                    i > 0 ? myUpdatedDates += ", Jueves" : myUpdatedDates += "Jueves"
+                    break;
+                default:
+                    i > 0 ? myUpdatedDates += ", Viernes" : myUpdatedDates += "Viernes"
+                    break;
+            }
+        }
+        return myUpdatedDates;
+    }
+
     const handleChangeDescripcion=(e)=>{
         setDescripcion(e.target.value)
     }
@@ -298,7 +375,19 @@ const DetalleTaller = (props) => {
                     <h3>Descripción:</h3>
                     <p>{Descripcion}</p>
                 </div>
-
+                <div className='container'>
+                    <h3>Fechas:</h3>
+                    <p>Fecha de inicio: {Fechas}</p>
+                    <p>Fecha de cierre: {FechaCierre}</p>
+                </div>
+                <div className='container'>
+                    <h3>Horarios:</h3>
+                    <p>De {Horarios} a {HorarioFin}</p>
+                </div>
+                <div className='container'>
+                    <h3>Días que se imparte el taller:</h3>
+                    <p>{checkDays()}</p>
+                </div>
                 <div className='container'>
                     <h3>Prerrequisitos:</h3>
                     <p>{Prerequisitos}</p>

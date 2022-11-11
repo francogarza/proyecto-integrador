@@ -8,6 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
 import {Button,Container,Form,Alert, FormLabel} from 'react-bootstrap'
 import { useLocation } from 'react-router-dom';
+import Multiselect from 'multiselect-react-dropdown';
 
 
 ///
@@ -33,6 +34,17 @@ const RegistroTalleres = (props) => {
     const [ImgUrl,setImgUrl] = useState("");
     const [maxCap,setMaxCap] = useState("");
     const [isCapped,setIsCapped] = useState("false");
+    const [FechaCierre, setFechaCierre] = useState("");
+    const [HorarioFin, setHorarioFin] = useState("");
+    const [selectedDays, setSelectedDays] = useState("");
+
+    const daysOfWeek = [
+        {name: 'Lunes', id: 1},
+        {name: 'Martes', id: 2},
+        {name: 'Miercoles', id: 3},
+        {name: 'Jueves', id: 4},
+        {name: 'Viernes', id: 5}
+    ];
 
     const handleChangeIsCapped=(e)=>{
         setIsCapped(e.target.value)
@@ -49,9 +61,18 @@ const RegistroTalleres = (props) => {
     const handleChangeFechas=(e)=>{
         setFechas(e.target.value)
     }
+    
+    const handleChangeFechaCierre=(e)=>{
+        console.log(selectedDays);
+        setFechaCierre(e.target.value)
+    }
 
     const handleChangeHorarios=(e)=>{
         setHorarios(e.target.value)
+    }
+
+    const handleChangeHorarioFin=(e)=>{
+        setHorarioFin(e.target.value)
     }
 
     const handleChangeImpartidoPor=(e)=>{
@@ -90,6 +111,72 @@ const RegistroTalleres = (props) => {
         if (e.target.files[0]) {
             setImg(e.target.files[0]);
         }
+    }
+
+    function selectDay (selectedList, selectedItem) {
+        console.log(selectedItem.id);
+        switch(selectedItem.id){
+            case 1:
+                setSelectedDays(selectedDays+"L");
+                break;
+            case 2:
+                setSelectedDays(selectedDays+"M");
+                break;
+            case 3:
+                setSelectedDays(selectedDays+"W");
+                break;
+            case 4:
+                setSelectedDays(selectedDays+"J");
+                break;
+            default:
+                setSelectedDays(selectedDays+"V");
+                break;
+        }
+    }
+
+    function unselectDay (selectedList, removedItem) {
+        console.log(removedItem.id);
+        switch(removedItem.id){
+            case 1:
+                setSelectedDays(selectedDays.replace('L', ''));
+                break;
+            case 2:
+                setSelectedDays(selectedDays.replace('M', ''));
+                break;
+            case 3:
+                setSelectedDays(selectedDays.replace('W', ''));
+                break;
+            case 4:
+                setSelectedDays(selectedDays.replace('J', ''));
+                break;
+            default:
+                setSelectedDays(selectedDays.replace('V', ''));
+                break;
+        }
+    }
+
+    function checkDays () {
+        let myUpdatedDates = [];
+        for(var i=0; i < selectedDays.length; i++){
+            switch(selectedDays.charAt(i)){
+                case 'L':
+                    myUpdatedDates.push({name: "Lunes", id: 1});
+                    break;
+                case 'M':
+                    myUpdatedDates.push({name: "Martes", id: 2});
+                    break;
+                case 'W':
+                    myUpdatedDates.push({name: "Miercoles", id: 3});
+                    break;
+                case 'J':
+                    myUpdatedDates.push({name: "Jueves", id: 4});
+                    break;
+                default:
+                    myUpdatedDates.push({name: "Viernes", id: 5});
+                    break;
+            }
+        }
+        return myUpdatedDates;
     }
 
     function verificarDatos(){
@@ -177,8 +264,13 @@ const RegistroTalleres = (props) => {
                         uuid,
                         imgUrl,
                         maxCap,
-                        isCapped
+                        isCapped,
+                        FechaCierre,
+                        HorarioFin,
+                        selectedDays
                     });
+
+
                     
                     setDescripcion("");
                     setFechas("");
@@ -188,6 +280,9 @@ const RegistroTalleres = (props) => {
                     setPrerequisitos("");
                     setVirtualPresencial("");
                     setInformacionConfidencial("");
+                    setFechaCierre("");
+                    setHorarioFin("");
+                    setSelectedDays("");
                 })
                     .catch((error) => {
                         // Handle any errors
@@ -230,7 +325,10 @@ const RegistroTalleres = (props) => {
                         InformacionConfidencial,
                         imgUrl,
                         maxCap,
-                        isCapped
+                        isCapped,
+                        FechaCierre,
+                        HorarioFin,
+                        selectedDays
                     });
                 })
                 .catch((error) => {
@@ -279,6 +377,9 @@ const RegistroTalleres = (props) => {
                     setInformacionConfidencial(data.InformacionConfidencial)
                     setIsCapped(data.isCapped)
                     setMaxCap(data.maxCap)
+                    setFechaCierre(data.FechaCierre)
+                    setHorarioFin(data.HorarioFin)
+                    setSelectedDays(data.selectedDays)
                 }
               });
         }
@@ -306,6 +407,30 @@ const RegistroTalleres = (props) => {
             </Form.Label>
             <br/>
             <Form.Control type="date" id="Fechas" value={Fechas} onChange={handleChangeFechas} required={true}/>
+            <br/>
+            <Form.Label>
+                Seleccione la fecha de fin del taller.
+            </Form.Label>
+            <br/>
+            <Form.Control type="date" id="FechaCierre" value={FechaCierre} onChange={handleChangeFechaCierre} required={true}/>
+            <br/>
+            <Form.Label>
+                Seleccione la hora de inicio del taller.
+            </Form.Label>
+            <br/>
+            <Form.Control type="time" id="Horarios" value={Horarios} onChange={handleChangeHorarios} required={true}/>
+            <br/>
+            <Form.Label>
+                Seleccione la hora de fin del taller.
+            </Form.Label>
+            <br/>
+            <Form.Control type="time" id="HorarioFin" value={HorarioFin} onChange={handleChangeHorarioFin} required={true}/>
+            <br/>
+            <Form.Label>
+                Seleccione los dias en los que imparte el taller.
+            </Form.Label>
+            <br/>
+            <Multiselect options={daysOfWeek} selectedValues={checkDays()} onSelect={selectDay} onRemove={unselectDay} displayValue="name" required={true}/>
             <br/>
             <Form.Label>
                 Escriba el nombre de quien imparte el taller.

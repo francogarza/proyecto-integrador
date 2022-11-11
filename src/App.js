@@ -9,7 +9,6 @@ import DetalleTaller from './DetalleTaller.js';
 import TalleresInscritos from './TalleresInscritos';
 import SendEmailTest from './SendEmailTest';
 import { UserContext } from './UserContext';
-import HorarioTalleres from './HorarioTalleres.js';
 import LogIn from './login.js'
 import ManageChild from './manageChild';
 import Navbar from './Navbar'
@@ -60,10 +59,6 @@ function App() {
                 />
                 <Route path="/send-email-test" element={
                   <SendEmailTest />
-                }
-                />
-                <Route path="/horario-taller" element={
-                  <HorarioTalleres />
                 }
                 />
                 <Route path="/login" element={
