@@ -43,7 +43,9 @@ const RegistroTalleres = (props) => {
         {name: 'Martes', id: 2},
         {name: 'Miercoles', id: 3},
         {name: 'Jueves', id: 4},
-        {name: 'Viernes', id: 5}
+        {name: 'Viernes', id: 5},
+        {name: 'Sabado', id: 6},
+        {name: 'Domingo', id: 7}
     ];
 
     const handleChangeIsCapped=(e)=>{
@@ -128,8 +130,14 @@ const RegistroTalleres = (props) => {
             case 4:
                 setSelectedDays(selectedDays+"J");
                 break;
-            default:
+            case 5:
                 setSelectedDays(selectedDays+"V");
+                break;
+            case 6:
+                setSelectedDays(selectedDays+"S");
+                break;
+            default:
+                setSelectedDays(selectedDays+"D");
                 break;
         }
     }
@@ -149,8 +157,14 @@ const RegistroTalleres = (props) => {
             case 4:
                 setSelectedDays(selectedDays.replace('J', ''));
                 break;
-            default:
+            case 5:
                 setSelectedDays(selectedDays.replace('V', ''));
+                break;
+            case 6:
+                setSelectedDays(selectedDays.replace('S', ''));
+                break;
+            default:
+                setSelectedDays(selectedDays.replace('D', ''));
                 break;
         }
     }
@@ -171,8 +185,14 @@ const RegistroTalleres = (props) => {
                 case 'J':
                     myUpdatedDates.push({name: "Jueves", id: 4});
                     break;
-                default:
+                case 'V':
                     myUpdatedDates.push({name: "Viernes", id: 5});
+                    break;
+                case 'S':
+                    myUpdatedDates.push({name: "Sabado", id: 6});
+                    break;
+                default:
+                    myUpdatedDates.push({name: "Domingo", id: 7});
                     break;
             }
         }
