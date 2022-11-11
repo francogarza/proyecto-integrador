@@ -40,11 +40,8 @@ export default function TallerCard(props){
         var templateParams = {
             nombre_taller: props.Nombre,
             nombre_hijo: value.NombreU,
-            to_email: value.Mail,
-            // to_email: 'francogarza98@gmail.com'
+            to_email: value.Mail
         };
-        console.log(value)
-        console.log(templateParams)
         emailjs.send('service_8h5bui6', 'template_nf8dfof', templateParams, 'fkFt-NEWOPWt-30Aq')
             .then(function(response) {
             console.log('SUCCESS!', response.status, response.text);
@@ -54,7 +51,7 @@ export default function TallerCard(props){
     }
     const handleDelete = (e) => {
         remove(ref(db,'Taller/' + e));
-        enviarCorreoATodosLosParticipantes();
+        enviarCorreoATodosLosParticipantes(props);
     }
     return (
         <Card sx={{ minWidth: 300, maxWidth: 300,borderRadius:'15%'}} style={{margin: 30}}>

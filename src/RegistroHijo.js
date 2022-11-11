@@ -140,14 +140,6 @@ const RegistroHijo = () => {
         if(verificarDatos()){
             const PadreId = parentId;
             const uuid = uid()
-            onValue(ref(db,'Padre/'+PadreId),(snapshot)=>{
-                const data = snapshot.val();
-                if(data!==null){
-                    setMail(data.Mail)
-                    console.log("data.Mail = ",data.Mail);
-                    console.log("CorreoPadre = ", Mail);
-                }
-            });
             set(ref(db, 'Participante/'+ uuid), {
                 CelularTutorPadre,
                 ClaseProgra,
@@ -222,12 +214,6 @@ const RegistroHijo = () => {
     const updateToDatabase=()=>{
         if(verificarDatos()){
             const PadreId = parentId;
-            onValue(ref(db,'Padre/'+PadreId),(snapshot)=>{
-                const data = snapshot.val();
-                if(data!==null){
-                    setMail(data.Mail);
-                }
-            });
             update(ref(db, 'Participante/'+ idEditar), {
                 CelularTutorPadre,
                 ClaseProgra,
@@ -257,6 +243,13 @@ const RegistroHijo = () => {
         }
     }
     useEffect(()=>{
+        const PadreId = parentId;
+        onValue(ref(db,'Padre/'+PadreId),(snapshot)=>{
+            const data = snapshot.val();
+            if(data!==null){
+                setMail(data.Mail)
+            }
+        });
         if(location.state !== null){
             if(location.state.isUpdate !== null){
                 setIsUpdate(location.state.isUpdate);

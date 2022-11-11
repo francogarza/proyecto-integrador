@@ -71,6 +71,13 @@ const DetalleTaller = (props) => {
 
       }, [isLoggedIn])
     useEffect(() => {
+        const PadreId = parentId;
+        onValue(ref(db,'Padre/'+PadreId),(snapshot)=>{
+            const data = snapshot.val();
+            if(data!==null){
+                setMail(data.Mail)
+            }
+        });
         onValue(ref(db,'Participante/'+userId),(snapshot) => {
             const data = snapshot.val();
             if(data !== null){
@@ -87,24 +94,10 @@ const DetalleTaller = (props) => {
         navigate('/talleres-inscritos');
     }
     const enviarCorreoBajaTaller = () => {
-        const PadreId = parentId;
-        const uuid = uid()
-        console.log("PadreId = ", PadreId)
-        onValue(ref(db,'Padre/'+PadreId),(snapshot)=>{
-            const data = snapshot.val();
-            console.log("data = ",data)
-            if(data!==null){
-                console.log("data.Mail = ", data.Mail)
-                setMail(data.Mail)
-            }
-        });
-        console.log("Mail = ", Mail)
-
         var templateParams = {
             nombre_hijo: NombreU,
             nombre_taller: Nombre,
             to_email: Mail,
-            // to_email: 'francogarza98@gmail.com'
         };
         console.log("templateParams = ", templateParams)
         emailjs.send('service_3kfhl9l', 'template_jrfyyws', templateParams, '7VB8KWioxv21zM4iQ')
@@ -130,7 +123,7 @@ const DetalleTaller = (props) => {
             set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
                 userId,
                 NombreU,
-                Correo
+                Mail
             });
             enviarCorreoInscripcionTaller()
             navigate('/catalogo-talleres');
@@ -141,24 +134,11 @@ const DetalleTaller = (props) => {
         navigate('/catalogo-talleres');
     };
     const enviarCorreoInscripcionTaller = () => {
-        const PadreId = parentId;
-        const uuid = uid()
-        console.log("PadreId = ", PadreId)
-        onValue(ref(db,'Padre/'+PadreId),(snapshot)=>{
-            console.log("data = ",data)
-            const data = snapshot.val();
-            if(data!==null){
-                console.log("data.Mail = ", data.Mail)
-                setMail(data.Mail)
-            }
-        });
         var templateParams = {
             nombre_taller: Nombre,
             nombre_hijo: NombreU,
             to_email: Mail,
-            // to_email: 'francogarza98@gmail.com'
         };
-        console.log("templateParams = ", templateParams)
         emailjs.send('service_3kfhl9l', 'template_7nra4y1', templateParams, '7VB8KWioxv21zM4iQ')
             .then(function(response) {
             console.log('SUCCESS!', response.status, response.text);
