@@ -140,6 +140,32 @@ const DetalleTaller = (props) => {
         }
         navigate('/catalogo-talleres');
     };
+    const enviarCorreoInscripcionTaller = () => {
+        const PadreId = parentId;
+        const uuid = uid()
+        console.log("PadreId = ", PadreId)
+        onValue(ref(db,'Padre/'+PadreId),(snapshot)=>{
+            console.log("data = ",data)
+            const data = snapshot.val();
+            if(data!==null){
+                console.log("data.Mail = ", data.Mail)
+                setMail(data.Mail)
+            }
+        });
+        var templateParams = {
+            nombre_taller: Nombre,
+            nombre_hijo: NombreU,
+            to_email: Mail,
+            // to_email: 'francogarza98@gmail.com'
+        };
+        console.log("templateParams = ", templateParams)
+        emailjs.send('service_3kfhl9l', 'template_7nra4y1', templateParams, '7VB8KWioxv21zM4iQ')
+            .then(function(response) {
+            console.log('SUCCESS!', response.status, response.text);
+            }, function(error) {
+            console.log('FAILED...', error);
+        });
+    };
     
     function getParticipantes(){
         return new Promise((resolve, reject) => {
@@ -213,32 +239,6 @@ const DetalleTaller = (props) => {
         const data = new Blob([excelBuffer], { type: fileType });
         FileSaver.saveAs(data, DEFAULT_FILENAME + fileExtension);
     }
-    const enviarCorreoInscripcionTaller = () => {
-        const PadreId = parentId;
-        const uuid = uid()
-        console.log("PadreId = ", PadreId)
-        onValue(ref(db,'Padre/'+PadreId),(snapshot)=>{
-            console.log("data = ",data)
-            const data = snapshot.val();
-            if(data!==null){
-                console.log("data.Mail = ", data.Mail)
-                setMail(data.Mail)
-            }
-        });
-        var templateParams = {
-            nombre_taller: Nombre,
-            nombre_hijo: NombreU,
-            to_email: Mail,
-            // to_email: 'francogarza98@gmail.com'
-        };
-        console.log("templateParams = ", templateParams)
-        emailjs.send('service_3kfhl9l', 'template_7nra4y1', templateParams, '7VB8KWioxv21zM4iQ')
-            .then(function(response) {
-            console.log('SUCCESS!', response.status, response.text);
-            }, function(error) {
-            console.log('FAILED...', error);
-        });
-    };
     function ArchivoXLSX(){
         const Taller = [];
         var item = {
