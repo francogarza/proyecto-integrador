@@ -42,6 +42,19 @@ label{
     margin-top: 25px;
 }
 
+.divHijoSelect{
+    position: relative;
+    padding: 30px;
+    margin: 10px;
+    display: inline-block;
+    background: #e5e5e5;
+    border: 2px solid #000000;
+    border-width: 5px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    margin-top: 25px;
+}
+
 .container{
     padding: 30px;
     background-color: white;

@@ -92,8 +92,8 @@ return(
             </div>
             <div style={{padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
             {hijos.map(hijo => (
-                        <div className='divhijos' key={hijo.uuid}>
-                                <p>{hijo.Nombre}{hijo.uuid===userId && "(seleccionado)"}</p>
+                        <div className={hijo.uuid===userId ? 'divHijoSelect':'divhijos'} key={hijo.uuid}>
+                                <p>{hijo.Nombre}</p>
                                 <Button onClick={() => seleccionarHijo(hijo.uuid)}>Seleccionar hijo</Button>
                                 <Button onClick={() => verTalleresInscritos(hijo.uuid)}>Ver talleres inscritos</Button>
                                 <Button onClick={() => editarHijo(hijo.uuid)}>editar hijo</Button>

@@ -281,7 +281,7 @@ const DetalleTaller = (props) => {
         }}
         >
             <div>
-                <Button onClick={goBack}>regresar</Button>
+                {/* <Button onClick={goBack}>regresar</Button> */}
                 <div style={{padding: "50px", textAlign: "center", background: "#864fba", color: "#fdfffc", fontSize: "30px"}}>
                 </div>
                 <div style={{padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
