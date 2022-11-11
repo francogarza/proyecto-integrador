@@ -278,6 +278,54 @@ const DetalleTaller = (props) => {
         return myUpdatedDates;
     }
 
+    function StyleFecha(fecha){
+        const year = fecha.substring(0, 4);
+        const monthNumber = fecha.substring(5, 7);
+        const day = fecha.substring(8);
+        let month = "";
+
+        switch(monthNumber){
+            case '01':
+                month = "enero";
+                break;
+            case '02':
+                month = "febrero";
+                break;
+            case '03':
+                month = "marzo";
+                break;
+            case '04':
+                month = "abril";
+                break;
+            case '05':
+                month = "mayo";
+                break;
+            case '06':
+                month = "junio";
+                break;
+            case '07':
+                month = "julio";
+                break;
+            case '08':
+                month = "agosto";
+                break;
+            case '09':
+                month = "septiembre";
+                break;
+            case '10':
+                month = "octubre";
+                break;
+            case '11':
+                month = "noviembre";
+                break;
+            default:
+                month = "diciembre";
+                break;
+        }
+
+        return `${day} de ${month} de ${year}`;
+    }
+
     const handleChangeDescripcion=(e)=>{
         setDescripcion(e.target.value)
     }
@@ -338,8 +386,8 @@ const DetalleTaller = (props) => {
                 </div>
                 <div className='container'>
                     <h3>Fechas:</h3>
-                    <p>Fecha de inicio: {Fechas}</p>
-                    <p>Fecha de cierre: {FechaCierre}</p>
+                    <p>Fecha de inicio: {StyleFecha(Fechas)}</p>
+                    <p>Fecha de cierre: {StyleFecha(FechaCierre)}</p>
                 </div>
                 <div className='container'>
                     <h3>Horarios:</h3>
