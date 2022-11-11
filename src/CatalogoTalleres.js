@@ -59,7 +59,7 @@ const goBack=()=>{
     >
         <div>
             
-            <Button onClick={goBack}>Regresar</Button>
+            {/* <Button onClick={goBack}>Regresar</Button> */}
             <div style={{padding: "50px", textAlign: "center", background: "#F95828", color: "#fdfffc", fontSize: "30px"}}>
                 <h1> Catálogo de talleres </h1>
                 <p> Talleres disponibles </p>
