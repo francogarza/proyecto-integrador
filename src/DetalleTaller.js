@@ -247,51 +247,6 @@ const DetalleTaller = (props) => {
     const handleEstaInscrito=(e)=>{
         setEstaInscrito(e.target.value)
     }
-    
-    const enviarCorreoInscripcionTaller = () => {
-        var templateParams = {
-            nombre_taller: Nombre,
-            nombre_hijo: NombreU,
-            link_talleres_inscritos: 'http://localhost:3000/talleres-inscritos',
-            // quitar este comment para mandar al correo del usuario
-            // to_email: Correo,
-            // quitar este comment para usar mi direccion de correo y hacer pruebas 
-            to_email: 'francogarza98@gmail.com'
-        };
-        emailjs.send('service_l68b4ed', 'template_jrfyyws', templateParams, '7VB8KWioxv21zM4iQ')
-            .then(function(response) {
-            console.log('SUCCESS!', response.status, response.text);
-            }, function(error) {
-            console.log('FAILED...', error);
-        });
-    };
-    const inscribirTaller=()=>{
-        if(location.state.EsAdmin){
-            console.log("para que quiere un admin meter una clase?")
-        }else{
-        if(participantes.length<maxCap && isCapped=='false'){
-            const id = location.state.id
-            set(ref(db, 'Participante/'+ userId + '/talleres/' + id), {
-                id,
-                Nombre,
-                Descripcion,
-                imgUrl
-            });
-
-            set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
-                userId,
-                NombreU
-            });
-            navigate('/catalogo-talleres');
-            // correoInscripcionTaller()
-            }else{
-                alert("No se puede inscribir porque el taller esta lleno o esta bloqueado");
-            }
-        }
-
-        navigate('/catalogo-talleres');
-        // enviarCorreoInscripcionTaller()
-    };
 
     function checkDays () {
         let myUpdatedDates = "";
@@ -309,8 +264,14 @@ const DetalleTaller = (props) => {
                 case 'J':
                     i > 0 ? myUpdatedDates += ", Jueves" : myUpdatedDates += "Jueves"
                     break;
-                default:
+                case 'V':
                     i > 0 ? myUpdatedDates += ", Viernes" : myUpdatedDates += "Viernes"
+                    break;
+                case 'S':
+                    i > 0 ? myUpdatedDates += ", Sabado" : myUpdatedDates += "Sabado"
+                    break;
+                default:
+                    i > 0 ? myUpdatedDates += ", Domingo" : myUpdatedDates += "Domingo"
                     break;
             }
         }
