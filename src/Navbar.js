@@ -113,14 +113,6 @@ function Navbar() {
                         <ListItemText primary="Manejo de Hijos" />
                     </ListItemButton>
                 </Link> : null}
-                {isLoggedIn ? <Link onClick={() => navigate("/horario-taller")} >
-                    <ListItemButton>
-                        <ListItemIcon>
-                            <ScheduleIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Horario" />
-                    </ListItemButton>
-                </Link> : null}
                 {!EsAdmin && !isLoggedIn ? <Link onClick={() => navigate("/registro-padres")}>
                     <ListItemButton>
                         <ListItemIcon>
