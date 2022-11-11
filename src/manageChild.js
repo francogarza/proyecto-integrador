@@ -52,6 +52,7 @@ const agregarHijo = () => {
 const seleccionarHijo = (id) =>{
     setUserId(id);
     setUserSelected(true);
+
 }
 
 const irCatalogo = () => {
@@ -91,7 +92,7 @@ return(
             </div>
             <div style={{padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
             {hijos.map(hijo => (
-                        <div style={{display: "inline-block"}} key={hijo.uuid}>
+                        <div className='divhijos' key={hijo.uuid}>
                                 <p>{hijo.Nombre}{hijo.uuid===userId && "(seleccionado)"}</p>
                                 <Button onClick={() => seleccionarHijo(hijo.uuid)}>Seleccionar hijo</Button>
                                 <Button onClick={() => verTalleresInscritos(hijo.uuid)}>Ver talleres inscritos</Button>
