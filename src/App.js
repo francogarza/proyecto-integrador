@@ -14,6 +14,7 @@ import ManageChild from './manageChild';
 import Navbar from './Navbar'
 import Box from '@mui/material/Box';
 import RegistroHijo from './RegistroHijo.js';
+import BorrarCuenta from './borrarCuenta';
 
 function App() {
   
@@ -66,6 +67,10 @@ function App() {
                 }/>
                 <Route path='/manage-children' element={
                   <ManageChild/>
+                }
+                />
+                <Route path='/borrar-cuenta' element={
+                  <BorrarCuenta/>
                 }
                 />
           </Routes>

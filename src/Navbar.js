@@ -129,6 +129,14 @@ function Navbar() {
                         <ListItemText primary="Nuevo Taller" />
                     </ListItemButton>
                 </Link> : null}
+                {EsAdmin ? <Link onClick={() => navigate("/borrar-cuenta")} >
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <OpenInBrowserIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Borrar cuenta" />
+                    </ListItemButton>
+                </Link> : null}
                 {isLoggedIn || EsAdmin ? <Link onClick={handleLogOut} >
                     <ListItemButton>
                         <ListItemIcon>
