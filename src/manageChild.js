@@ -100,7 +100,7 @@ return(
             {/* {isLoggedIn?<p>logged in</p> : <p>logged out</p>}
             {isLoggedIn && <h1>{userId}</h1>} */}
             <div style={{padding: "50px", textAlign: "center", background: "#F95828", color: "#fdfffc", fontSize: "30px"}}>
-                <h1> Seleccionar hijo </h1>
+                <h1> Seleccionar hijo/a </h1>
             </div>
             <div style={{padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
             {hijos.map(hijo => (
@@ -113,8 +113,8 @@ return(
                         </div>
                     ))}
             </div>
-            <Button onClick={agregarHijo}>agregar hijo</Button>
-            <Button onClick={irCatalogo}>Catalogo</Button>
+            <Button onClick={agregarHijo}>Agregar hijo/a</Button>
+            <Button onClick={irCatalogo}>Catálogo</Button>
         </div>
     </Box>
 )

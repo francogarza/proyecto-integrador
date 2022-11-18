@@ -107,7 +107,7 @@ const RegistroPadres = () => {
   return(
     <div id="mainContainer">
       <Container>
-      {alertActive && <Alert variant='warning'>porfavor verifique sus datos</Alert>}
+      {alertActive && <Alert variant='warning'>Porfavor verifique sus datos</Alert>}
       <Form className="registroPadres">
         <Form.Group>
           <Form.Label>
@@ -135,7 +135,7 @@ const RegistroPadres = () => {
         <br/>
         <Form.Group>
           <Form.Label>
-            Por favor confirme su contraseña
+            Por favor confirme su contraseña.
           </Form.Label>
           <br/>
           <Form.Control type="password" placeholder="password" id="Password2" value={Password2} onChange={HandlePassword2Change}/>

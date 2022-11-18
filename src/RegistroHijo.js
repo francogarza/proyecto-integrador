@@ -294,7 +294,7 @@ const RegistroHijo = () => {
                 <Form.Label htmlFor="Otro">Otro</Form.Label>
                 <br/>
                 <Form.Label>
-                    Escriba su direccion de correo electrónico.
+                    Escriba su dirección de correo electrónico.
                 </Form.Label>
                 <br/>
                 <Form.Control type="email" placeholder="algo@correo.com" id="Correo" value={Correo} onChange={handleChangeCorreo} required={true}/>

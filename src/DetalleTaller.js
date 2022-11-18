@@ -374,7 +374,7 @@ const DetalleTaller = (props) => {
                     <h1>{Nombre}</h1>
                     <h5>Impartido por:</h5>
                     <h4>{ImpartidoPor}</h4>
-                    {isCapped=='true'? <h5>cupo lleno</h5>: 
+                    {isCapped=='true'? <h5>Cupo lleno</h5>:
                       <div>
                         <h5>Cupo: {participantes.length+" de "+maxCap}</h5>
                       </div>
@@ -408,7 +408,7 @@ const DetalleTaller = (props) => {
           </div>
 
           {location.state.EsAdmin &&
-          <Button onClick={ArchivoXLSX}>Descargar Información</Button>
+          <Button onClick={ArchivoXLSX}>Descargar información</Button>
           }
 
           {(location.state.EstaInscrito || location.state.EsAdmin) &&
