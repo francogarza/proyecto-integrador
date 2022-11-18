@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import {db,storage} from './firebase';
 import {uid} from 'uid';
 import {set, ref as ref_db,onValue,update} from 'firebase/database';
@@ -9,6 +9,7 @@ import './basic.css'
 import {Button,Container,Form,Alert, FormLabel} from 'react-bootstrap'
 import { useLocation, useNavigate } from 'react-router-dom';
 import Multiselect from 'multiselect-react-dropdown';
+import { UserContext } from './UserContext';
 
 
 ///
@@ -17,6 +18,8 @@ import Multiselect from 'multiselect-react-dropdown';
 ///
 
 const RegistroTalleres = (props) => {
+
+    const {EsAdmin,setEsAdmin} = useContext(UserContext);
 
     const location = useLocation();
     const [Descripcion, setDescripcion] = useState("");
@@ -414,7 +417,8 @@ const RegistroTalleres = (props) => {
         <div id='mainContainer'>
         <Container>
         {alertActive && <Alert variant='warning'>Por favor verifique sus datos.</Alert>}
-        <Form className="registroTaller">
+        {EsAdmin && 
+            <Form className="registroTaller">
             <Form.Label>
                 Escriba el nombre del taller.
             </Form.Label>
@@ -510,8 +514,8 @@ const RegistroTalleres = (props) => {
                 {isUpdate ? 'Actualizar Taller' : 'Registrar taller'}
             </Button>
             }
-
         </Form>
+        }
         </Container>
         </div>
     )
