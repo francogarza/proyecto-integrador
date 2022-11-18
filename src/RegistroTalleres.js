@@ -413,7 +413,7 @@ const RegistroTalleres = (props) => {
     return(
         <div id='mainContainer'>
         <Container>
-        {alertActive && <Alert variant='warning'>Por favor, verifique sus datos.</Alert>}
+        {alertActive && <Alert variant='warning'>Por favor verifique sus datos.</Alert>}
         <Form className="registroTaller">
             <Form.Label>
                 Escriba el nombre del taller.
@@ -470,7 +470,7 @@ const RegistroTalleres = (props) => {
             <Form.Control type="text" placeholder="Prerrequisitos" id="Prerrequisitos" value={Prerequisitos} onChange={handleChangePrerequisitos} required={true}/>
             <br/>
             <Form.Label>
-                Escriba la información confidencial del taller.
+                Escriba la liga o lugar donde se impartirá el taller.
             </Form.Label>
             <br/>
             <Form.Control type="text" placeholder="Información confidencial" id="InformacionConfidencial" value={InformacionConfidencial} onChange={handleChangeInformacionConfidencial} required={true}/>
@@ -489,7 +489,7 @@ const RegistroTalleres = (props) => {
             <input type="file" onChange={handleChangeImg}></input>
             <br/>
             <Form.Label>
-                Cupo maximo
+                Cupo maximo.
             </Form.Label>
             <br/>
             <Form.Control type="number" placeholder="Capacidad maxima" id="maxCap" value={maxCap} onChange={handleChangeMaxCap} required={true}/>

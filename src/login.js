@@ -98,7 +98,7 @@ const LogIn = () => {
         >
             <div id="mainContainer">
                 <Container>
-                {alertActive && <Alert variant='warning'>porfavor verifique sus datos</Alert>}
+                {alertActive && <Alert variant='warning'>Porfavor verifique sus datos</Alert>}
                 <Form className="login">
                 <Form.Group>
                     <Form.Label>
@@ -123,7 +123,7 @@ const LogIn = () => {
                     {isPasswordReset ? "Recuperar contraseña" : "Ingresar"} 
                     </Button>
                     {!isPasswordReset && 
-                    <Button onClick={setPasswordReset}>olvidaste tu contraseña?</Button>}
+                    <Button onClick={setPasswordReset}>Olvidaste tu contraseña?</Button>}
                     
                 </Form>
                 </Container>
