@@ -93,7 +93,9 @@ const RegistroPadres = () => {
         navigate(-1);
       })
       .catch((error)=>{
-        console.log(error);
+        if(error.code==='auth/email-already-in-use'){
+          alert("Error: El mail que ingreso ya esta registrado, si olvido su contraseña puede recuperarla desde la pagina de inicio de sesion.")
+        }
       })
       }else{
       setAlertActive(true);

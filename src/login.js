@@ -52,7 +52,10 @@ const LogIn = () => {
                 //setUserId(userCredential.user.uid);
             })
             .catch((error) =>{
-                console.log(error);
+                if(error.code==='auth/user-not-found'){
+                    alert('el correo que ingreso no esta registrado, porfavor verifique que su correo esta bien escrito o si no ha creado una cuenta porfavor dirigase a la pagina de Nueva cuenta')
+                }
+                
             })
         }
     };
@@ -65,12 +68,13 @@ const LogIn = () => {
         const auth = getAuth();
         sendPasswordResetEmail(auth, Mail)
         .then(() => {
-            alert('se mando un correo a su cuenta de email para re-establecer su contraseña, si no encuentra el mail porfavor verificar su carpeta de spam')
+            alert('Se mando un correo a su cuenta de email para re-establecer su contraseña, si no encuentra el mail porfavor verificar su carpeta de spam')
         })
         .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log('error');
+            console.log(error.code)
+            if(error.code==='auth/user-not-found'){
+                alert('La cuenta que se esta tratando de recuperar no se encuentra registrada, porfavor verifique su correo o considere registrar una cuenta en Nueva cuenta')
+            }
         });
     }
 
@@ -115,7 +119,6 @@ const LogIn = () => {
                 }
                 
                 <br/>
-                
                     <Button onClick={isPasswordReset ? passwordReset : writeToDatabase} class='submit'>
                     {isPasswordReset ? "Recuperar contraseña" : "Ingresar"} 
                     </Button>
