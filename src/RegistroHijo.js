@@ -361,6 +361,9 @@ const RegistroHijo = () => {
                 <option value="Cuarto de primaria">Cuarto de primaria</option>
                 <option value="Quinto de primaria">Quinto de primaria</option>
                 <option value="Sexto de primaria">Sexto de primaria</option>
+                <option value="Primero de secundaria">Primero de secundaria</option>
+                <option value="Segundo de secundaria">Segundo de secundaria</option>
+                <option value="Tercero de secundaria">Tercero de secundaria</option>
                 <option value="Primero de preparatoria">Primero de preparatoria</option>
                 <option value="Segundo de preparatoria">Segundo de preparatoria</option>
                 <option value="Tercero de preparatoria">Tercero de preparatoria</option>
