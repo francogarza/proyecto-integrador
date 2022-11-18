@@ -5,10 +5,12 @@ import {set, ref, onValue,update} from 'firebase/database';
 import {useState,useEffect,useContext} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
-import {Button,Container,Form,Alert} from 'react-bootstrap'
+import {Button,Container,Form,Alert,Dropdown, DropdownButton} from 'react-bootstrap'
 import { UserContext } from './UserContext';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import DropdownToggle from 'react-bootstrap/esm/DropdownToggle';
+import DropdownMenu from 'react-bootstrap/esm/DropdownMenu';
 
 const RegistroHijo = () => {
     const location = useLocation();
@@ -32,7 +34,7 @@ const RegistroHijo = () => {
     const [NombreTutorPadre, setNombreTutorPadre] = useState("");
     const [ParticipadoAxta, setParticipadoAxta] = useState("true");
     const [TipoEscuela, setTipoEscuela] = useState("privada");
-    const [UltimoGrado, setUltimoGrado] = useState("");
+    const [UltimoGrado, setUltimoGrado] = useState("Primero de primaria");
     const [VivieEnMexico, setVivieEnMexico] = useState("true");
     const [alertActive, setAlertActive] = useState(false);
     const [hijos, setHijos] = useState([]);
@@ -351,7 +353,19 @@ const RegistroHijo = () => {
                     Escriba el último grado de escolaridad del participante.
                 </Form.Label>
                 <br/>
-                <Form.Control type="text" placeholder="8vo grado" id="UltimoGrado" value={UltimoGrado} onChange={handleChangeUlitmoGrado} required={true}/>
+                {/* <Form.Control type="text" placeholder="8vo grado" id="UltimoGrado" value={UltimoGrado} onChange={handleChangeUlitmoGrado} required={true}/> */}
+                <select className='form-control' value={UltimoGrado} onChange={handleChangeUlitmoGrado}>
+                <option value="Primero de primaria">Primero de primaria</option>
+                <option value="Segundo de primaria">Segundo de primaria</option>
+                <option value="Tercero de primaria">Tercero de primaria</option>
+                <option value="Cuarto de primaria">Cuarto de primaria</option>
+                <option value="Quinto de primaria">Quinto de primaria</option>
+                <option value="Sexto de primaria">Sexto de primaria</option>
+                <option value="Primero de preparatoria">Primero de preparatoria</option>
+                <option value="Segundo de preparatoria">Segundo de preparatoria</option>
+                <option value="Tercero de preparatoria">Tercero de preparatoria</option>
+                </select>
+                
                 <br/>
                 <Form.Label>
                     ¿Ha llevado clases de programación anteriormente el participante?
