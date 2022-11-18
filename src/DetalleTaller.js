@@ -419,7 +419,7 @@ const DetalleTaller = (props) => {
           asi se ponen los ifs aqui
           <p>{props.EstaInscrito ? {InformacionSecreta} : "para ver esta informacion primero inscriba el taller"}</p>
           */}
-          <h3>Información secreta:</h3>
+          <h3>Liga o lugar del taller:</h3>
           {(location.state.EstaInscrito || location.state.EsAdmin) ? <p>{InformacionConfidencial}</p> : <p></p>}
 
           </div>
