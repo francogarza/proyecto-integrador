@@ -7,6 +7,7 @@ import {useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
 import {Button,Container,Form,Alert} from 'react-bootstrap'
+import { Navigate,useNavigate } from 'react-router-dom';
 
 const RegistroPadres = () => {
   
@@ -17,6 +18,7 @@ const RegistroPadres = () => {
   const [Celular, setCelular] = useState("");
   const [alertActive, setAlertActive] = useState(false);
 
+  const navigate = useNavigate();
 
   const handleChangeNombre=(e)=>{
     setNombre(e.target.value)
@@ -88,6 +90,7 @@ const RegistroPadres = () => {
         setNombre("");
         setMail("");
         setCelular("");
+        navigate(-1);
       })
       .catch((error)=>{
         console.log(error);

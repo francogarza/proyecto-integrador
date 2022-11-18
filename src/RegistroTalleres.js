@@ -7,7 +7,7 @@ import {useState,useEffect} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
 import {Button,Container,Form,Alert, FormLabel} from 'react-bootstrap'
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Multiselect from 'multiselect-react-dropdown';
 
 
@@ -37,6 +37,8 @@ const RegistroTalleres = (props) => {
     const [FechaCierre, setFechaCierre] = useState("");
     const [HorarioFin, setHorarioFin] = useState("");
     const [selectedDays, setSelectedDays] = useState("");
+
+    const navigate = useNavigate();
 
     const daysOfWeek = [
         {name: 'Lunes', id: 1},
@@ -303,6 +305,7 @@ const RegistroTalleres = (props) => {
                     setFechaCierre("");
                     setHorarioFin("");
                     setSelectedDays("");
+                    navigate(-1);
                 })
                     .catch((error) => {
                         // Handle any errors
@@ -330,7 +333,7 @@ const RegistroTalleres = (props) => {
                 getDownloadURL(imageRef).then((url) => {
                     console.log(url);
                     if(img.name === '' || img.name==null){
-                        url = null
+                        url = ImgUrl
                     }
                     const imgUrl = url;
             
@@ -350,6 +353,7 @@ const RegistroTalleres = (props) => {
                         HorarioFin,
                         selectedDays
                     });
+                    navigate(-1);
                 })
                 .catch((error) => {
                     // Handle any errors
@@ -400,6 +404,7 @@ const RegistroTalleres = (props) => {
                     setFechaCierre(data.FechaCierre)
                     setHorarioFin(data.HorarioFin)
                     setSelectedDays(data.selectedDays)
+                    setImgUrl(data.imgUrl)
                 }
               });
         }
