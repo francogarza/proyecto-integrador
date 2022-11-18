@@ -19,6 +19,7 @@ const {userId, setUserId} = useContext(UserContext);
 const {userSelected,setUserSelected} = useContext(UserContext);
 const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
 const {parentId,setParentId} = useContext(UserContext);
+const [talleresBorrar,setTalleresBorrar] = useState([]);
 
 
 //local
@@ -65,6 +66,17 @@ const verTalleresInscritos=(e)=>{
 }
 
 const borrarHijo=(e)=>{
+    onValue(ref(db,'Participante/'+e+'/talleres/'),(snapshot) => {
+        setTalleresBorrar([]);
+        const data = snapshot.val();
+        if(data !== null){
+            Object.values(data).map((taller) => {
+                console.log('Taller/'+taller.id+'/participantes/'+e);
+                remove(ref(db,'Taller/'+taller.id+'/participantes/'+e));
+                ////setTalleresBorrar((oldArray) => [...oldArray,e])
+            });
+        }
+    });
     remove(ref(db,'Participante/'+e));
     remove(ref(db,'Padre/'+parentId+'/hijos/'+e));
 }
