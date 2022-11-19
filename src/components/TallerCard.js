@@ -79,13 +79,13 @@ export default function TallerCard(props){
                         </Button>
 
                         <Button size="small" color="primary" onClick={irTaller}>
-                            Ver mas
+                            Ver más
                         </Button>
                     </div>
                 ) 
                 : (
                 <Button size="small" color="primary" onClick={irTaller}>
-                    Ver mas
+                    Ver más
                 </Button>)}
                 
                 {props.EsAdmin && <Button size="small" color="error" onClick={() => handleDelete(props.id)}>Borrar taller</Button>}

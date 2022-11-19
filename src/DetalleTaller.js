@@ -259,7 +259,7 @@ const DetalleTaller = (props) => {
                     i > 0 ? myUpdatedDates += ", Martes" : myUpdatedDates += "Martes"
                     break;
                 case 'W':
-                    i > 0 ? myUpdatedDates += ", Miercoles" : myUpdatedDates += "Miercoles"
+                    i > 0 ? myUpdatedDates += ", Miércoles" : myUpdatedDates += "Miércoles"
                     break;
                 case 'J':
                     i > 0 ? myUpdatedDates += ", Jueves" : myUpdatedDates += "Jueves"
@@ -268,7 +268,7 @@ const DetalleTaller = (props) => {
                     i > 0 ? myUpdatedDates += ", Viernes" : myUpdatedDates += "Viernes"
                     break;
                 case 'S':
-                    i > 0 ? myUpdatedDates += ", Sabado" : myUpdatedDates += "Sabado"
+                    i > 0 ? myUpdatedDates += ", Sábado" : myUpdatedDates += "Sábado"
                     break;
                 default:
                     i > 0 ? myUpdatedDates += ", Domingo" : myUpdatedDates += "Domingo"

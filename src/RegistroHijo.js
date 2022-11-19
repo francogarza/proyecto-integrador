@@ -280,7 +280,7 @@ const RegistroHijo = () => {
                     Seleccione su fecha de nacimiento.
                 </Form.Label>
                 <br/>
-                <Form.Control type="date" placeholder="31/12/2001" id="Nacimiento" value={Nacimiento} onChange={handleChangeNacimiento} required={true}/>
+                <Form.Control type="date" placeholder="Fecha" id="Nacimiento" value={Nacimiento} onChange={handleChangeNacimiento} required={true}/>
                 <br/>
                 <Form.Label>
                     Seleccione su género.
@@ -297,19 +297,19 @@ const RegistroHijo = () => {
                     Escriba su dirección de correo electrónico.
                 </Form.Label>
                 <br/>
-                <Form.Control type="email" placeholder="algo@correo.com" id="Correo" value={Correo} onChange={handleChangeCorreo} required={true}/>
+                <Form.Control type="email" placeholder="Correo" id="Correo" value={Correo} onChange={handleChangeCorreo} required={true}/>
                 <br/>
                 <Form.Label>
                     Escriba el nombre del padre o tutor del participante.
                 </Form.Label>
                 <br/>
-                <Form.Control type="text" placeholder="NombreTutorPadre" id="NombreTutorPadre" value={NombreTutorPadre} onChange={handleChangeNombreTutorPadre} required={true}/>
+                <Form.Control type="text" placeholder="Nombre" id="NombreTutorPadre" value={NombreTutorPadre} onChange={handleChangeNombreTutorPadre} required={true}/>
                 <br/>
                 <Form.Label>
                     Escriba el número celular del padre o tutor del participante.
                 </Form.Label>
                 <br/>
-                <Form.Control type="number" placeholder="CelularTutorPadre" id="CelularTutorPadre" value={CelularTutorPadre} onChange={handleChangeCelularTutorPadre} minLength="10" maxLength="10" required={true}/>
+                <Form.Control type="number" placeholder="Celular" id="CelularTutorPadre" value={CelularTutorPadre} onChange={handleChangeCelularTutorPadre} minLength="10" maxLength="10" required={true}/>
                 <br/>
                 <Form.Label>
                     ¿Vive en México?
@@ -324,19 +324,19 @@ const RegistroHijo = () => {
                     Seleccione el estado de residencia.
                 </Form.Label>
                 <br/>
-                <Form.Control type="text" placeholder="Nuevo León" id="Estado" value={Estado} onChange={handleChangeEstado} required={true}/>
+                <Form.Control type="text" placeholder="Estado" id="Estado" value={Estado} onChange={handleChangeEstado} required={true}/>
                 <br/>
                 <Form.Label>
                     Seleccione el municipio de residencia.
                 </Form.Label>
                 <br/>
-                <Form.Control type="text" placeholder="Monterrey" id="Municipio" value={Municipio} onChange={handleChangeMunicipio} required={true}/>
+                <Form.Control type="text" placeholder="Municipio" id="Municipio" value={Municipio} onChange={handleChangeMunicipio} required={true}/>
                 <br/>
                 <Form.Label>
                     Escriba el nombre de la escuela del participante.
                 </Form.Label>
                 <br/>
-                <Form.Control type="text" placeholder="NombreEscuela" id="NombreEscuela" value={NombreEscuela} onChange={handleChangeNombreEscuela} required={true}/>
+                <Form.Control type="text" placeholder="Escuela" id="NombreEscuela" value={NombreEscuela} onChange={handleChangeNombreEscuela} required={true}/>
                 <br/>
                 <Form.Label>
                     Seleccione el tipo de escuela del participante.
@@ -396,7 +396,7 @@ const RegistroHijo = () => {
                     ¿Cuál es el trabajo futuro que desea el participante?
                 </Form.Label>
                 <br/>
-                <Form.Control type="text" placeholder="Desarrollador de Software" id="FuturoTrabajo" value={FuturoTrabajo} onChange={handleChangeFuturoTrabajo} required={true}/>
+                <Form.Control type="text" placeholder="Trabajo futuro" id="FuturoTrabajo" value={FuturoTrabajo} onChange={handleChangeFuturoTrabajo} required={true}/>
                 <br/>
                 <Form.Label>
                     ¿Cómo se enteró de estos talleres?

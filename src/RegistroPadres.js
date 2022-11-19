@@ -59,12 +59,12 @@ const RegistroPadres = () => {
 
   function validarPassword(){
     if(Password===""){
-      alert("La contraseña no puede estar vacia")
+      alert("La contraseña no puede estar vacía.")
       return false
     }else if(Password === Password2 && Password.length > 5){
       return true
     }
-    alert("la contraseña tiene que ser igual y debe de tener 6 o mas caracteres")
+    alert("La contraseña tiene que ser la misma y debe tener seis o más caracteres.")
     return false
   }
 
@@ -94,7 +94,7 @@ const RegistroPadres = () => {
       })
       .catch((error)=>{
         if(error.code==='auth/email-already-in-use'){
-          alert("Error: El mail que ingreso ya esta registrado, si olvido su contraseña puede recuperarla desde la pagina de inicio de sesion.")
+          alert("Error: El correo que ingresó ya esta registrado. Si olvidó su contraseña, puede recuperarla desde la página de inicio de sesion.")
         }
       })
       }else{
@@ -109,7 +109,7 @@ const RegistroPadres = () => {
   return(
     <div id="mainContainer">
       <Container>
-      {alertActive && <Alert variant='warning'>Porfavor verifique sus datos</Alert>}
+      {alertActive && <Alert variant='warning'>Por favor verifique sus datos</Alert>}
       <Form className="registroPadres">
         <Form.Group>
           <Form.Label>
@@ -132,15 +132,15 @@ const RegistroPadres = () => {
             Escriba su contraseña.
           </Form.Label>
           <br/>
-          <Form.Control type="password" placeholder="password" id="Password" value={Password} onChange={HandlePasswordChange}/>
+          <Form.Control type="password" placeholder="Contraseña" id="Password" value={Password} onChange={HandlePasswordChange}/>
         </Form.Group>
         <br/>
         <Form.Group>
           <Form.Label>
-            Por favor confirme su contraseña.
+            Confirme su contraseña.
           </Form.Label>
           <br/>
-          <Form.Control type="password" placeholder="password" id="Password2" value={Password2} onChange={HandlePassword2Change}/>
+          <Form.Control type="password" placeholder="Contraseña" id="Password2" value={Password2} onChange={HandlePassword2Change}/>
         </Form.Group>
         <br/>
         <Form.Group>

@@ -42,7 +42,7 @@ useEffect(() => {
 }, [parentId,isLoggedIn])
 
 useEffect(() => {
-    console.log("el hijo elejido fue")
+    console.log("El hijo elegido fue")
     console.log(userId)
 }, [userId,userSelected])
 
@@ -108,7 +108,7 @@ return(
                                 <p>{hijo.Nombre}</p>
                                 <Button onClick={() => seleccionarHijo(hijo.uuid)}>Seleccionar hijo/a</Button>
                                 <Button onClick={() => verTalleresInscritos(hijo.uuid)}>Ver talleres inscritos</Button>
-                                <Button onClick={() => editarHijo(hijo.uuid)}>editar hijo/a</Button>
+                                <Button onClick={() => editarHijo(hijo.uuid)}>Editar hijo/a</Button>
                                 <Button onClick={() => borrarHijo(hijo.uuid)}>Borrar hijo/a</Button>
                         </div>
                     ))}

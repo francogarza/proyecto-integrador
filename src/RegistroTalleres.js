@@ -46,10 +46,10 @@ const RegistroTalleres = (props) => {
     const daysOfWeek = [
         {name: 'Lunes', id: 1},
         {name: 'Martes', id: 2},
-        {name: 'Miercoles', id: 3},
+        {name: 'Miércoles', id: 3},
         {name: 'Jueves', id: 4},
         {name: 'Viernes', id: 5},
-        {name: 'Sabado', id: 6},
+        {name: 'Sábado', id: 6},
         {name: 'Domingo', id: 7}
     ];
 
@@ -185,7 +185,7 @@ const RegistroTalleres = (props) => {
                     myUpdatedDates.push({name: "Martes", id: 2});
                     break;
                 case 'W':
-                    myUpdatedDates.push({name: "Miercoles", id: 3});
+                    myUpdatedDates.push({name: "Miércoles", id: 3});
                     break;
                 case 'J':
                     myUpdatedDates.push({name: "Jueves", id: 4});
@@ -194,7 +194,7 @@ const RegistroTalleres = (props) => {
                     myUpdatedDates.push({name: "Viernes", id: 5});
                     break;
                 case 'S':
-                    myUpdatedDates.push({name: "Sabado", id: 6});
+                    myUpdatedDates.push({name: "Sábado", id: 6});
                     break;
                 default:
                     myUpdatedDates.push({name: "Domingo", id: 7});
@@ -423,7 +423,7 @@ const RegistroTalleres = (props) => {
                 Escriba el nombre del taller.
             </Form.Label>
             <br/>
-            <Form.Control type="text" placeholder="NombreTaller" id="Nombre" value={Nombre} onChange={handleChangeNombre} required={true}/>
+            <Form.Control type="text" placeholder="Nombre" id="Nombre" value={Nombre} onChange={handleChangeNombre} required={true}/>
             <br/>
             <Form.Label>
                 Escriba la descripción del taller.
@@ -438,7 +438,7 @@ const RegistroTalleres = (props) => {
             <Form.Control type="date" id="Fechas" value={Fechas} onChange={handleChangeFechas} required={true}/>
             <br/>
             <Form.Label>
-                Seleccione la fecha de fin del taller.
+                Seleccione la fecha de finalización del taller.
             </Form.Label>
             <br/>
             <Form.Control type="date" id="FechaCierre" value={FechaCierre} onChange={handleChangeFechaCierre} required={true}/>
@@ -450,13 +450,13 @@ const RegistroTalleres = (props) => {
             <Form.Control type="time" id="Horarios" value={Horarios} onChange={handleChangeHorarios} required={true}/>
             <br/>
             <Form.Label>
-                Seleccione la hora de fin del taller.
+                Seleccione la hora de finalización del taller.
             </Form.Label>
             <br/>
             <Form.Control type="time" id="HorarioFin" value={HorarioFin} onChange={handleChangeHorarioFin} required={true}/>
             <br/>
             <Form.Label>
-                Seleccione los dias en los que imparte el taller.
+                Seleccione los días en los que se imparte el taller.
             </Form.Label>
             <br/>
             <Multiselect options={daysOfWeek} selectedValues={checkDays()} onSelect={selectDay} onRemove={unselectDay} displayValue="name" required={true}/>
@@ -465,7 +465,7 @@ const RegistroTalleres = (props) => {
                 Escriba el nombre de quien imparte el taller.
             </Form.Label>
             <br/>
-            <Form.Control type="text" placeholder="NombreInstructor" id="ImpartidoPor" value={ImpartidoPor} onChange={handleChangeImpartidoPor} required={true}/>
+            <Form.Control type="text" placeholder="Nombre" id="ImpartidoPor" value={ImpartidoPor} onChange={handleChangeImpartidoPor} required={true}/>
             <br/>
             <Form.Label>
                 Escriba los prerrequisitos del taller.
@@ -474,10 +474,10 @@ const RegistroTalleres = (props) => {
             <Form.Control type="text" placeholder="Prerrequisitos" id="Prerrequisitos" value={Prerequisitos} onChange={handleChangePrerequisitos} required={true}/>
             <br/>
             <Form.Label>
-                Escriba la liga o lugar donde se impartirá el taller.
+                Escriba la liga o el lugar donde se impartirá el taller.
             </Form.Label>
             <br/>
-            <Form.Control type="text" placeholder="Información confidencial" id="InformacionConfidencial" value={InformacionConfidencial} onChange={handleChangeInformacionConfidencial} required={true}/>
+            <Form.Control type="text" placeholder="Liga o lugar" id="InformacionConfidencial" value={InformacionConfidencial} onChange={handleChangeInformacionConfidencial} required={true}/>
             <br/>
             <Form.Label>
                 Seleccione si el taller es virtual o presencial.
@@ -493,10 +493,10 @@ const RegistroTalleres = (props) => {
             <input type="file" onChange={handleChangeImg}></input>
             <br/>
             <Form.Label>
-                Cupo maximo.
+                Cupo máximo
             </Form.Label>
             <br/>
-            <Form.Control type="number" placeholder="Capacidad maxima" id="maxCap" value={maxCap} onChange={handleChangeMaxCap} required={true}/>
+            <Form.Control type="number" placeholder="Cupo máximo" id="maxCap" value={maxCap} onChange={handleChangeMaxCap} required={true}/>
             <br/>
             <Form.Label>
                 Bloquear inscripciones

@@ -85,10 +85,10 @@ const BorrarCuenta = () => {
                         <Form className="Cuenta">
                         <Form.Group>
                             <Form.Label>
-                            Escriba el uid de la cuenta que desea borrar
+                            Escriba el identificador único (UID) de la cuenta que desea borrar.
                             </Form.Label>
                             <br/>
-                            <Form.Control type="text" placeholder="Uid" id="Mail" value={uid} onChange={handleChangeUid}/>
+                            <Form.Control type="text" placeholder="UID" id="Mail" value={uid} onChange={handleChangeUid}/>
                         </Form.Group>
                         
                         <br/>
@@ -96,8 +96,8 @@ const BorrarCuenta = () => {
                             Borrar cuenta
                             </Button>
         
-                            <p>Para conseguir el uid de un usuario se requiere que entre a la plataforma de firebase, en la seccion de Authentication y se busque la cuenta con el mail del padre.</p>
-                            <p>Recuerde que para que se borre correctamente la cuenta tambien se tiene que borrar la cuenta desde la seccion de Authentication despues de introducir el uid en esta pagina</p>
+                            <p>Para conseguir el UID de un usuario, se requiere que entre a la plataforma de Firebase en la sección de autenticación y se busque la cuenta con el correo del padre.</p>
+                            <p>Recuerde que, para que se borre correctamente la cuenta, también se tiene que borrar la cuenta desde la sección de autenticación después de introducir el UID en esta página.</p>
                         </Form>
                     }
 

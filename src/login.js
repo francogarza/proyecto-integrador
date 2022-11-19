@@ -53,7 +53,7 @@ const LogIn = () => {
             })
             .catch((error) =>{
                 if(error.code==='auth/user-not-found'){
-                    alert('el correo que ingreso no esta registrado, porfavor verifique que su correo esta bien escrito o si no ha creado una cuenta porfavor dirigase a la pagina de Nueva cuenta')
+                    alert('El correo que ingresó no está registrado. Por favor verifique que su correo está bien escrito o, si no ha creado una cuenta, por favor diríjase a la página de crear cuenta nueva.')
                 }
                 
             })
@@ -68,12 +68,12 @@ const LogIn = () => {
         const auth = getAuth();
         sendPasswordResetEmail(auth, Mail)
         .then(() => {
-            alert('Se mando un correo a su cuenta de email para re-establecer su contraseña, si no encuentra el mail porfavor verificar su carpeta de spam')
+            alert('Se mandó un correo a su dirección electrónica para restablecer su contraseña. Si no encuentra el correo, favor de verificarlo en su carpeta de correo no deseado.')
         })
         .catch((error) => {
             console.log(error.code)
             if(error.code==='auth/user-not-found'){
-                alert('La cuenta que se esta tratando de recuperar no se encuentra registrada, porfavor verifique su correo o considere registrar una cuenta en Nueva cuenta')
+                alert('La cuenta que se está tratando de recuperar no se encuentra registrada. Por favor verifique su correo o considere registrar una cuenta nueva.')
             }
         });
     }
@@ -98,7 +98,7 @@ const LogIn = () => {
         >
             <div id="mainContainer">
                 <Container>
-                {alertActive && <Alert variant='warning'>Porfavor verifique sus datos</Alert>}
+                {alertActive && <Alert variant='warning'>Por favor verifique sus datos.</Alert>}
                 <Form className="login">
                 <Form.Group>
                     <Form.Label>
@@ -114,7 +114,7 @@ const LogIn = () => {
                 Escriba su contraseña.
                 </Form.Label>
                 <br/>
-                <Form.Control type="password" placeholder="password" id="Password" value={Password} onChange={HandlePasswordChange}/>
+                <Form.Control type="password" placeholder="Contraseña" id="Password" value={Password} onChange={HandlePasswordChange}/>
                 </Form.Group>
                 }
                 
@@ -123,7 +123,7 @@ const LogIn = () => {
                     {isPasswordReset ? "Recuperar contraseña" : "Ingresar"} 
                     </Button>
                     {!isPasswordReset && 
-                    <Button onClick={setPasswordReset}>Olvidaste tu contraseña?</Button>}
+                    <Button onClick={setPasswordReset}>¿Olvidó su contraseña?</Button>}
                     
                 </Form>
                 </Container>

@@ -94,7 +94,7 @@ function Navbar() {
                         <ListItemIcon>
                             <AppsIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Catalogo Talleres" />
+                        <ListItemText primary="Catálogo de talleres" />
                     </ListItemButton>
                 </Link>
                 {isLoggedIn ? <Link onClick={() => navigate("/talleres-inscritos")}>
@@ -102,7 +102,7 @@ function Navbar() {
                         <ListItemIcon>
                             <AppRegistrationIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Talleres Inscritos" />
+                        <ListItemText primary="Talleres inscritos" />
                     </ListItemButton>
                 </Link> : null}
                 {isLoggedIn ?<Link onClick={() => navigate("/manage-children")} >
@@ -110,7 +110,7 @@ function Navbar() {
                         <ListItemIcon>
                             <Face3Icon />
                         </ListItemIcon>
-                        <ListItemText primary="Manejo de Hijos" />
+                        <ListItemText primary="Manejo de hijos" />
                     </ListItemButton>
                 </Link> : null}
                 {!EsAdmin && !isLoggedIn ? <Link onClick={() => navigate("/registro-padres")}>
@@ -118,7 +118,7 @@ function Navbar() {
                         <ListItemIcon>
                             <AddCircleIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Nueva cuenta" />
+                        <ListItemText primary="Crear cuenta nueva" />
                     </ListItemButton>
                 </Link> : null}
                 {EsAdmin ? <Link onClick={() => navigate("/registro-taller-admin")} >
@@ -126,7 +126,7 @@ function Navbar() {
                         <ListItemIcon>
                             <OpenInBrowserIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Nuevo Taller" />
+                        <ListItemText primary="Nuevo taller" />
                     </ListItemButton>
                 </Link> : null}
                 {EsAdmin ? <Link onClick={() => navigate("/borrar-cuenta")} >
@@ -142,7 +142,7 @@ function Navbar() {
                         <ListItemIcon>
                             <LogoutIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Log Out" />
+                        <ListItemText primary="Cerrar sesión" />
                     </ListItemButton> 
                 </Link> : null }
                 {!isLoggedIn && !EsAdmin ? <Link onClick={() => navigate("/login")}>
@@ -150,7 +150,7 @@ function Navbar() {
                         <ListItemIcon>
                             <LoginIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Log In" />
+                        <ListItemText primary="Iniciar sesión" />
                     </ListItemButton>
                 </Link> : null }
                 <Divider sx={{ my: 1 }} />
