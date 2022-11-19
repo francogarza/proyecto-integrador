@@ -80,7 +80,6 @@ const LogIn = () => {
 
     function checkAdmin(){
         if(Mail==="admin" && Password==="csoftmty2022"){
-            console.log("what")
             return true;
         }else{
             return false;

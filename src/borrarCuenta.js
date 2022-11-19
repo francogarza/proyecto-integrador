@@ -64,6 +64,7 @@ const BorrarCuenta = () => {
             })
             .then((hijos)=>{//se borra el padre
                 remove(ref(db,'Padre/'+uid));
+                navigate('/catalogo-talleres')
                 resolve(hijos)
             })
         })

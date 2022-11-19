@@ -308,7 +308,7 @@ const RegistroTalleres = (props) => {
                     setFechaCierre("");
                     setHorarioFin("");
                     setSelectedDays("");
-                    navigate(-1);
+                    navigate('/catalogo-talleres');
                 })
                     .catch((error) => {
                         // Handle any errors
@@ -334,33 +334,54 @@ const RegistroTalleres = (props) => {
                 
             }).then(() =>{
                 getDownloadURL(imageRef).then((url) => {
-                    console.log(url);
+                    console.log(img.name);
                     if(img.name === '' || img.name==null){
                         url = ImgUrl
                     }
                     const imgUrl = url;
-            
-                    update(ref_db(db, 'Taller/'+ id), {
-                        Descripcion,
-                        Fechas,
-                        Horarios,
-                        ImpartidoPor,
-                        Nombre,
-                        Prerequisitos,
-                        VirtualPresencial,
-                        InformacionConfidencial,
-                        imgUrl,
-                        maxCap,
-                        isCapped,
-                        FechaCierre,
-                        HorarioFin,
-                        selectedDays
-                    });
-                    navigate(-1);
+                    console.log(id);
+                    if(ImgUrl===undefined && img.name===undefined){
+                        update(ref_db(db, 'Taller/'+ id), {
+                            Descripcion,
+                            Fechas,
+                            Horarios,
+                            ImpartidoPor,
+                            Nombre,
+                            Prerequisitos,
+                            VirtualPresencial,
+                            InformacionConfidencial,
+                            maxCap,
+                            isCapped,
+                            FechaCierre,
+                            HorarioFin,
+                            selectedDays
+                        });
+                    }else{
+                        update(ref_db(db, 'Taller/'+ id), {
+                            Descripcion,
+                            Fechas,
+                            Horarios,
+                            ImpartidoPor,
+                            Nombre,
+                            Prerequisitos,
+                            VirtualPresencial,
+                            InformacionConfidencial,
+                            imgUrl,
+                            maxCap,
+                            isCapped,
+                            FechaCierre,
+                            HorarioFin,
+                            selectedDays
+                        });
+                    }
+                    
+                }).then(()=>{
+                    navigate('/catalogo-talleres');
                 })
                 .catch((error) => {
                     // Handle any errors
                 });
+                
             })
         }else{
             setAlertActive(true);

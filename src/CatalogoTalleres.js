@@ -44,10 +44,6 @@ const CatalogoTalleres = (props) => {
             });
       }, [userId])
 
-const goBack=()=>{
-    navigate(-1);
-}
-
   return(
     <Box
         component="main"

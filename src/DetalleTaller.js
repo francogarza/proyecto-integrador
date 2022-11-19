@@ -353,9 +353,6 @@ const DetalleTaller = (props) => {
     const handleChangeInformacionConfidencial=(e)=>{
         setInformacionConfidencial(e.target.value)
     }
-    const goBack=()=>{
-        navigate(-1);
-    }
 
     return(
         <Box

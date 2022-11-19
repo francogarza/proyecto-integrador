@@ -90,7 +90,7 @@ const RegistroPadres = () => {
         setNombre("");
         setMail("");
         setCelular("");
-        navigate(-1);
+        navigate('/login');
       })
       .catch((error)=>{
         if(error.code==='auth/email-already-in-use'){

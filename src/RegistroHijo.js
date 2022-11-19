@@ -185,7 +185,7 @@ const RegistroHijo = () => {
         }else{
             setAlertActive(true);
         }
-        navigate(-1);
+        navigate('/manage-children');
     };
 
     useEffect(() =>{
@@ -241,7 +241,7 @@ const RegistroHijo = () => {
                 Nombre,
                 uuid
             });
-            navigate(-1);
+            navigate('/manage-children');
         }
     }
     useEffect(()=>{
