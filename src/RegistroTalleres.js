@@ -532,7 +532,7 @@ const RegistroTalleres = (props) => {
             <br/>
             {
             <Button onClick={isUpdate ? updateToDatabase : writeToDatabase} className="registro">
-                {isUpdate ? 'Actualizar Taller' : 'Registrar taller'}
+                {isUpdate ? 'Actualizar taller' : 'Registrar taller'}
             </Button>
             }
         </Form>
