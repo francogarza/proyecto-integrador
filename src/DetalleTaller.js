@@ -153,8 +153,10 @@ const DetalleTaller = (props) => {
             console.log('FAILED...', error);
         });
     };
-    
+
+    //Esta funcion busca todos los participantes de un taller y los pone en un arreglo de objetos participante
     function getParticipantes(){
+        //Aqui agarra las llaves de todos los participantes de un taller
         return new Promise((resolve, reject) => {
             get(child(ref(db) ,'Taller/'+ location.state.id + '/participantes/'))
             .then((snapshot) => {
@@ -168,6 +170,7 @@ const DetalleTaller = (props) => {
                     console.log("No data available");
                 }
             })
+                //Aqui compara las llaves en el arreglo de ParticipantesT con todos los participantes para extraer la informacion
             .then((ParticipantesT) => {
                 get(child(ref(db), 'Participante/')).then((snapshot) => {
                     const Participantes = [];
@@ -209,23 +212,27 @@ const DetalleTaller = (props) => {
             })
         })
     }
+    //Esta funcion genera el archivo XLSX con los objetos de Taller y Participantes
     function hacerArchivo(Taller, Participantes){
-
+        //Se define el nombre del archivo
         const DEFAULT_FILENAME = "InformacionParticipantes_" + Nombre;
 
+        //Se define el tipo de archivo
         const fileType =  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
         const fileExtension = ".xlsx";
 
+        //Se crean las hojas de taller y participantes, luego se escribe la informacion en ellas
         const ws = XLSX.utils.json_to_sheet(Taller);
         const ws2 = XLSX.utils.json_to_sheet(Participantes);
-        //const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Taller");
         XLSX.utils.book_append_sheet(wb, ws2, "Participantes");
         const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
         const data = new Blob([excelBuffer], { type: fileType });
+        //Se descarga el archivo desde el navegador
         FileSaver.saveAs(data, DEFAULT_FILENAME + fileExtension);
     }
+    //Funcion que junta todo lo necesario para la generacion y descarga de archivos
     function ArchivoXLSX(){
         const Taller = [];
         var item = {
@@ -240,6 +247,7 @@ const DetalleTaller = (props) => {
         }
         Taller.push (item);
 
+        //Solo despues de que se genera el arreglo de objetos Participantes, se genera el archivo
         getParticipantes().then((Participantes) => {
             hacerArchivo(Taller, Participantes);
         });
