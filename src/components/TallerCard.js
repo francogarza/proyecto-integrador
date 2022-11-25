@@ -43,6 +43,7 @@ export default function TallerCard(props){
         });
     };
 
+    // funcion que hace fetch a la funcion de mandar correo que esta ligada a la ruta /contact_form, con el uso de la extension firebase functions 
     const handleSubmit = async (values) => {
         const result = await fetch(
           '/contact_form',
