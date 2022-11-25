@@ -14,6 +14,7 @@ import { UserContext } from './UserContext';
 import TallerCard from "./components/TallerCard";
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
+import axios from 'axios';
 
 const DetalleTaller = (props) => {
     //global
@@ -101,17 +102,23 @@ const DetalleTaller = (props) => {
         navigate('/talleres-inscritos');
     }
     const enviarCorreoBajaTaller = () => {
-        var templateParams = {
-            nombre_hijo: NombreU,
-            nombre_taller: Nombre,
-            to_email: Mail,
-        };
-        console.log("templateParams = ", templateParams)
-        emailjs.send('service_3kfhl9l', 'template_jrfyyws', templateParams, '7VB8KWioxv21zM4iQ')
-            .then(function(response) {
-            console.log('SUCCESS!', response.status, response.text);
-            }, function(error) {
-            console.log('FAILED...', error);
+        const to = Mail
+        const subject = `Axtateen: Baja de taller ${Nombre}`
+        const text = `<b>Axtateen</b> le informamos:
+            <br>
+            <ul>
+                <li>Su hijo/a <b>${NombreU}</b> ha sido dado de baja del <b>${Nombre}</b>.
+                <li>Le invitamos visitar el catalogo de talleres disponibles para encontrar un taller de su agrado.
+            </ul>
+            <br>
+            <b>Atentamente</b>,
+            <br>
+            <b>Axtateen</b>`
+        axios
+            .post(`http://localhost:20003/v1/text-mail?to=${to}&subject=${subject}&text=${text}`)
+            .then(() => console.log('Email Sent'))
+            .catch(err => {
+                console.error("err");
         });
     };
     const inscribirTaller=()=>{
@@ -141,16 +148,23 @@ const DetalleTaller = (props) => {
         navigate('/catalogo-talleres');
     };
     const enviarCorreoInscripcionTaller = () => {
-        var templateParams = {
-            nombre_taller: Nombre,
-            nombre_hijo: NombreU,
-            to_email: Mail,
-        };
-        emailjs.send('service_3kfhl9l', 'template_7nra4y1', templateParams, '7VB8KWioxv21zM4iQ')
-            .then(function(response) {
-            console.log('SUCCESS!', response.status, response.text);
-            }, function(error) {
-            console.log('FAILED...', error);
+        const to = Mail
+        const subject = `Axtateen: Inscripcion de taller ${Nombre}`
+        const text = `<b>Axtateen</b> le informamos:
+            <br>
+            <ul>
+                <li>Su hijo/a <b>${NombreU}</b> ha sido dado <b>inscrito</b> al taller <b>${Nombre}</b>.
+                <li>Agradecemos su preferencia e interes en nuestros talleres.
+            </ul>    
+            <br>
+            <b>Atentamente</b>,
+            <br>
+            <b>Axtateen</b>`
+        axios
+            .post(`http://localhost:20003/v1/text-mail?to=${to}&subject=${subject}&text=${text}`)
+            .then(() => console.log('Email Sent'))
+            .catch(err => {
+                console.error("err");
         });
     };
     

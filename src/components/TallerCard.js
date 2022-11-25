@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import {set,ref,onValue,remove,update} from 'firebase/database';
 import { Button, CardMedia, CardActionArea, CardActions } from '@mui/material';
 import emailjs from 'emailjs-com';
+import axios from 'axios';
 
 const mockTaller = {
     Descripcion:"Durante cada sesión, se darán problemas atractivos a resolver para que el alumno enfrente el problema y emita ideas para empezar a resolver un problema. El profesor guiará esas ideas para estructurarlas y así establecer una heurística de solución.",
@@ -37,21 +38,28 @@ export default function TallerCard(props){
         });
     };
     const enviarCorreoCancelacionTaller = (value) => {
-        var templateParams = {
-            nombre_taller: props.Nombre,
-            nombre_hijo: value.NombreU,
-            to_email: value.Mail
-        };
-        emailjs.send('service_8h5bui6', 'template_nf8dfof', templateParams, 'fkFt-NEWOPWt-30Aq')
-            .then(function(response) {
-            console.log('SUCCESS!', response.status, response.text);
-            }, function(error) {
-            console.log('FAILED...', error);
-        });
+        const to = value.Mail
+        const subject = `Axtateen: Cancelacion de taller ${props.Nombre}`
+        const text = `<b>Axtateen</b> le informamos:
+            <br>
+            <ul>
+                <li>El taller <b>${props.Nombre}</b> en el cual su hijo <b>${value.NombreU}</b> esta inscrito, ha sido <b>CANCELADO</b>.
+                <li>Le invitamos visitar el catalogo de talleres disponibles para encontrar un taller de su agrado.
+            </ul>
+            <br>
+            <b>Atentamente</b>,
+            <br>
+            <b>Axtateen</b>`
+        axios
+            .post(`http://localhost:20003/v1/text-mail?to=${to}&subject=${subject}&text=${text}`)
+            .then(() => console.log('Email Sent'))
+            .catch(err => {
+                console.error("err");
+            });
     }
     const handleDelete = (e) => {
-        remove(ref(db,'Taller/' + e));
         enviarCorreoATodosLosParticipantes(props);
+        remove(ref(db,'Taller/' + e));
     }
     return (
         <Card sx={{ minWidth: 300, maxWidth: 300,borderRadius:'15%'}} style={{margin: 30}}>
