@@ -6,7 +6,7 @@ import {uploadBytes, ref as ref_st,getDownloadURL} from 'firebase/storage'
 import {useState,useEffect} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
-import {Button,Container,Form,Alert, FormLabel} from 'react-bootstrap'
+import {Button,Container,Form,Alert} from 'react-bootstrap'
 import { useLocation, useNavigate } from 'react-router-dom';
 import Multiselect from 'multiselect-react-dropdown';
 import { UserContext } from './UserContext';
@@ -18,9 +18,9 @@ import { UserContext } from './UserContext';
 ///
 
 const RegistroTalleres = (props) => {
-
+    //variable global
     const {EsAdmin,setEsAdmin} = useContext(UserContext);
-
+    //variables locales
     const location = useLocation();
     const [Descripcion, setDescripcion] = useState("");
     const [Fechas, setFechas] = useState("");
@@ -52,74 +52,62 @@ const RegistroTalleres = (props) => {
         {name: 'Sábado', id: 6},
         {name: 'Domingo', id: 7}
     ];
-
+    //funcion para manejar IsCapped
     const handleChangeIsCapped=(e)=>{
         setIsCapped(e.target.value)
     }
-
+    //funcion para manejar MaxCap
     const handleChangeMaxCap=(e)=>{
         setMaxCap(e.target.value)
     }
-
+    //funcion para manejar Descripcion
     const handleChangeDescripcion=(e)=>{
         setDescripcion(e.target.value)
     }
-
+    //funcion para manejar Fechas
     const handleChangeFechas=(e)=>{
         setFechas(e.target.value)
     }
-    
+    //funcion para manejar FechaCierre
     const handleChangeFechaCierre=(e)=>{
         console.log(selectedDays);
         setFechaCierre(e.target.value)
     }
-
+    //funcion para manejar Horarios
     const handleChangeHorarios=(e)=>{
         setHorarios(e.target.value)
     }
-
+    //funcion para manejar HorarioFin
     const handleChangeHorarioFin=(e)=>{
         setHorarioFin(e.target.value)
     }
-
+    //funcion para manejar ImpartidoPor
     const handleChangeImpartidoPor=(e)=>{
         setImpartidoPor(e.target.value)
     }
-
+    //funcion para manejar Nombre
     const handleChangeNombre=(e)=>{
         setNombre(e.target.value)
     }
-
+    //funcion para manejar Prerequisitos
     const handleChangePrerequisitos=(e)=>{
         setPrerequisitos(e.target.value)
     }
-
+    //funcion para manejar VirtualPresencial
     const handleChangeVirtualPresencial=(e)=>{
         setVirtualPresencial(e.target.value)
     }
-
+    //funcion para manejar InformacionConfidencial
     const handleChangeInformacionConfidencial=(e)=>{
         setInformacionConfidencial(e.target.value)
     }
-
-    const handleChangeImgUrl=(e)=>{
-        setImgUrl(e.target.value);
-    }
-
-    const handleId=(e)=>{
-        setId(e.target.value)
-    }
-
-    const handleIsUpdate=(e)=>{
-        setIsUpdate(e.target.value)
-    }
-
+    //funcion para manejar Img
     const handleChangeImg=(e)=>{
         if (e.target.files[0]) {
             setImg(e.target.files[0]);
         }
     }
-
+    //funcion para seleccionar el dia
     function selectDay (selectedList, selectedItem) {
         console.log(selectedItem.id);
         switch(selectedItem.id){
@@ -146,7 +134,7 @@ const RegistroTalleres = (props) => {
                 break;
         }
     }
-
+    //funcion para quitar dia
     function unselectDay (selectedList, removedItem) {
         console.log(removedItem.id);
         switch(removedItem.id){
@@ -173,7 +161,7 @@ const RegistroTalleres = (props) => {
                 break;
         }
     }
-
+    //funcion para traducir letras a dias
     function checkDays () {
         let myUpdatedDates = [];
         for(var i=0; i < selectedDays.length; i++){
@@ -203,7 +191,7 @@ const RegistroTalleres = (props) => {
         }
         return myUpdatedDates;
     }
-
+    //funcion para verificar datos del taller
     function verificarDatos(){
         
         if(verificarDescripcion() && verificarImpartido() && verificarNombre() && verificarPrerequisitos() && verificarInformacionConfidencial()){
@@ -213,14 +201,7 @@ const RegistroTalleres = (props) => {
         }
     }
 
-    function verificarImagen(){
-        if(img == null){
-            return false;
-        }else{
-            return true;
-        }
-    }
-
+    //funcion para verificar que la descripcion exista
     function verificarDescripcion(){
         if(Descripcion.length>0){
             return true
@@ -229,6 +210,7 @@ const RegistroTalleres = (props) => {
         }
     }
 
+    //funcion para verificar que el Impartidor exista
     function verificarImpartido(){
         if(ImpartidoPor.length>0){
             return true
@@ -236,7 +218,7 @@ const RegistroTalleres = (props) => {
             return false
         }
     }
-
+    //funcion para verificar que el nombre exista
     function verificarNombre(){
         if(Nombre.length>0){
             return true
@@ -244,7 +226,7 @@ const RegistroTalleres = (props) => {
             return false
         }
     }
-
+    //funcian para verificar que los prerequisitos existan
     function verificarPrerequisitos(){
         if(Prerequisitos.length>0){
             return true
@@ -252,7 +234,7 @@ const RegistroTalleres = (props) => {
             return false
         }
     }
-
+    //funcion para verificar la informacion confidencial
     function verificarInformacionConfidencial(){
         if(InformacionConfidencial.length>0){
             return true
@@ -260,16 +242,16 @@ const RegistroTalleres = (props) => {
             return false
         }
     }
-
+    //funcion para guardar el taller
     const writeToDatabase = () => {
         if(verificarDatos()){
             const uuid = uid()
             const imgRef = ref_st(storage,`images/${uuid + img.name}`)
-            uploadBytes(imgRef,img).then(()=>{
+            uploadBytes(imgRef,img).then(()=>{//aqui se sube la imagen a firebase storage 
                 
             }).then(() =>{
                 getDownloadURL(imgRef)
-                .then((url) => {
+                .then((url) => { //url es el link a la imagen subida
                         // `url` is the download URL for 'images/stars.jpg'
                     console.log(url);
                     if(img.name === '' || img.name==null){
@@ -277,7 +259,7 @@ const RegistroTalleres = (props) => {
                     }
                     const imgUrl = url;
                 
-                    set(ref_db(db, 'Taller/'+ uuid), {
+                    set(ref_db(db, 'Taller/'+ uuid), { //aqui se sube el taller
                         Descripcion,
                         Fechas,
                         Horarios,
@@ -321,10 +303,7 @@ const RegistroTalleres = (props) => {
         
     };
 
-    const fileSelectedHandler = event => {
-        console.log(event.target.files[0]);
-    }
-
+    //esta funcion actualiza un taller
     const updateToDatabase = () => {
 
         if(verificarDatos()){
@@ -340,8 +319,8 @@ const RegistroTalleres = (props) => {
                     }
                     const imgUrl = url;
                     console.log(id);
-                    if(ImgUrl===undefined && img.name===undefined){
-                        update(ref_db(db, 'Taller/'+ id), {
+                    if(ImgUrl===undefined && img.name===undefined){//aqui se pregunta si se subio una imagen o no
+                        update(ref_db(db, 'Taller/'+ id), { //si no se subio imagen
                             Descripcion,
                             Fechas,
                             Horarios,
@@ -356,7 +335,7 @@ const RegistroTalleres = (props) => {
                             HorarioFin,
                             selectedDays
                         });
-                    }else{
+                    }else{ //si se subio imagen
                         update(ref_db(db, 'Taller/'+ id), {
                             Descripcion,
                             Fechas,
@@ -376,7 +355,7 @@ const RegistroTalleres = (props) => {
                     }
                     
                 }).then(()=>{
-                    navigate('/catalogo-talleres');
+                    navigate('/catalogo-talleres'); //regresa a catalogo-talleres
                 })
                 .catch((error) => {
                     // Handle any errors
@@ -388,7 +367,7 @@ const RegistroTalleres = (props) => {
         }
     };
 
-
+    //Esta funcion maneja la diferencia entre las variables prop y las variables mandadas con navigate
     useEffect(() => {
         if(location.state != null){
             if(location.state.id != null){
@@ -408,6 +387,7 @@ const RegistroTalleres = (props) => {
 
     }, [props.isUpdate,props.id])
 
+    //esta funcion baja la informacion de un taller si el taller es isUpdate
     useEffect(() => {
         if(isUpdate){//si viene como update
             //sacar el id

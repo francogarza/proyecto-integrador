@@ -1,16 +1,14 @@
-import React, {useContext,useEffect} from 'react';
+import React, {useContext} from 'react';
 import {db} from './firebase';
-import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail,deleteUser  } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import {set, ref,onValue,remove,get, child} from 'firebase/database';
+import {ref,onValue,remove,get} from 'firebase/database';
 import {useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
-import {Button,Container,Form,Alert} from 'react-bootstrap'
+import {Button,Container,Form} from 'react-bootstrap'
 import { UserContext } from './UserContext';
-import { Navigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import { isAdmin } from '@firebase/util';
+
 
 const BorrarCuenta = () => {
 

@@ -1,12 +1,10 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import {db} from '../firebase';
-import {useState,useEffect} from "react";
 import { useNavigate } from 'react-router-dom'
-import {set,ref,onValue,remove,update} from 'firebase/database';
+import {ref,onValue,remove} from 'firebase/database';
 import { Button, CardMedia, CardActionArea, CardActions } from '@mui/material';
 import emailjs from 'emailjs-com';
 

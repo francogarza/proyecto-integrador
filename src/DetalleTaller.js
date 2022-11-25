@@ -3,24 +3,22 @@ import emailjs from 'emailjs-com';
 import {db} from './firebase';
 import * as FileSaver from "file-saver";
 import * as XLSX from "xlsx";
-import {uid} from 'uid';
 import {set, ref,onValue,get, remove, child} from 'firebase/database';
 import {useState,useEffect} from "react";
 import { useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
-import {Button,Container,Form,Alert, FormLabel} from 'react-bootstrap'
+import {Button} from 'react-bootstrap'
 import { UserContext } from './UserContext';
-import TallerCard from "./components/TallerCard";
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 
 const DetalleTaller = (props) => {
-    //global
+    //variables globales
     const {parentId, setParentId} = useContext(UserContext);
     const {userId, setUserId} = useContext(UserContext);
     const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
-    //local
+    //variables locales
     const location = useLocation();
     const [Descripcion, setDescripcion] = useState("");
     const [Fechas, setFechas] = useState("");
@@ -30,7 +28,6 @@ const DetalleTaller = (props) => {
     const [Prerequisitos, setPrerequisitos] = useState("");
     const [VirtualPresencial, setVirtualPresencial] = useState("");
     const [InformacionConfidencial, setInformacionConfidencial] = useState("");
-    const [EstaInscrito,setEstaInscrito] = useState(false);
     const [imgUrl,setImgUrl] = useState("");
     const [participantes,setParticipantes] = useState([]);
     const [NombreU,setNombreU] = useState("");
@@ -44,12 +41,13 @@ const DetalleTaller = (props) => {
 
     const navigate = useNavigate();
 
+    //esta funcion consigue la informacion del taller
     useEffect(() => {
         onValue(ref(db,'Taller/'+location.state.id),(snapshot) => {
             setParticipantes([]);
             const data = snapshot.val();
             if(data !== null){
-                if(typeof data.participantes!=='undefined'){
+                if(typeof data.participantes!=='undefined'){ //verifica si hay usuarios inscritos en el taller
                     Object.values(data.participantes).map((e) => {
                         setParticipantes((oldArray) => [...oldArray,e])
                     });
@@ -77,6 +75,8 @@ const DetalleTaller = (props) => {
             });
 
       }, [isLoggedIn])
+
+    //Esta funcion consigue el mail del padre en caso de necesitar mandar un mail
     useEffect(() => {
         const PadreId = parentId;
         onValue(ref(db,'Padre/'+PadreId),(snapshot)=>{
@@ -93,6 +93,8 @@ const DetalleTaller = (props) => {
             }
         });
     }, [])
+
+    //Esta funcion quita a el objeto de participante del objeto taller y el taller del objeto del participante
     const darDeBaja=()=>{
         const id = location.state.id
         remove(ref(db, 'Participante/'+ userId + '/talleres/' + id));
@@ -100,6 +102,8 @@ const DetalleTaller = (props) => {
         enviarCorreoBajaTaller()
         navigate('/talleres-inscritos');
     }
+
+    //esta funcion manda el correo de dada de baja
     const enviarCorreoBajaTaller = () => {
         var templateParams = {
             nombre_hijo: NombreU,
@@ -114,32 +118,36 @@ const DetalleTaller = (props) => {
             console.log('FAILED...', error);
         });
     };
+
+    //esta funcion se usa para inscribir un participante a un taller
     const inscribirTaller=()=>{
         if(location.state.EsAdmin){
             console.log("para que quiere un admin meter una clase?")
         }else{
-        if(participantes.length<maxCap && isCapped=='false'){
+        if(participantes.length<maxCap && isCapped==='false'){//pregunta si hay espacio o si el taller no esta bloqueado para poder inscribirlo
             const id = location.state.id
-            set(ref(db, 'Participante/'+ userId + '/talleres/' + id), {
+            set(ref(db, 'Participante/'+ userId + '/talleres/' + id), { //se guarda el taller en el participante para encontrarlo facilmente
                 id,
                 Nombre,
                 Descripcion,
                 imgUrl
             });
 
-            set(ref(db, 'Taller/'+ id + '/participantes/' + userId), {
+            set(ref(db, 'Taller/'+ id + '/participantes/' + userId), { //se guarda el participante en el taller para encontrarlo facilmente
                 userId,
                 NombreU,
                 Mail
             });
-            enviarCorreoInscripcionTaller()
-            navigate('/catalogo-talleres');
+            enviarCorreoInscripcionTaller();//se llama la funcion para mandar el correo de confirmacion
+            navigate('/catalogo-talleres'); //se regresa a el catalogo de talleres
             }else{
                 alert("No se puede inscribir porque el taller esta lleno o esta bloqueado");
             }
         }
         navigate('/catalogo-talleres');
     };
+
+    //Esta funcion envia el correo para que los papas esten enterados del taller que su hijo inscribio
     const enviarCorreoInscripcionTaller = () => {
         var templateParams = {
             nombre_taller: Nombre,
@@ -252,10 +260,8 @@ const DetalleTaller = (props) => {
             hacerArchivo(Taller, Participantes);
         });
     }
-    const handleEstaInscrito=(e)=>{
-        setEstaInscrito(e.target.value)
-    }
 
+    //esta funcion regresa los dias que se da la clase
     function checkDays () {
         let myUpdatedDates = "";
         for(var i=0; i < selectedDays.length; i++){
@@ -286,6 +292,7 @@ const DetalleTaller = (props) => {
         return myUpdatedDates;
     }
 
+    //esta funcion regresa una fecha en formato ${day} de ${month} de ${year}
     function StyleFecha(fecha){
         const year = fecha.substring(0, 4);
         const monthNumber = fecha.substring(5, 7);
@@ -334,33 +341,6 @@ const DetalleTaller = (props) => {
         return `${day} de ${month} de ${year}`;
     }
 
-    const handleChangeDescripcion=(e)=>{
-        setDescripcion(e.target.value)
-    }
-    const handleChangeFechas=(e)=>{
-        setFechas(e.target.value)
-    }
-    const handleChangeHorarios=(e)=>{
-        setHorarios(e.target.value)
-    }
-    const handleChangeImpartidoPor=(e)=>{
-        setImpartidoPor(e.target.value)
-    }
-    const handleChangeNombre=(e)=>{
-        setNombre(e.target.value)
-    }
-    const handleChangePrerequisitos=(e)=>{
-        setPrerequisitos(e.target.value)
-    }
-    const handleChangeVirtualPresencial=(e)=>{
-        setVirtualPresencial(e.target.value)
-    }
-    const handleChangeImageUrl=(e)=>{
-        setImgUrl(e.target.value);
-    }
-    const handleChangeInformacionConfidencial=(e)=>{
-        setInformacionConfidencial(e.target.value)
-    }
 
     return(
         <Box
@@ -372,14 +352,13 @@ const DetalleTaller = (props) => {
         }}
         >
             <div>
-                {/* <Button onClick={goBack}>regresar</Button> */}
                 <div style={{padding: "50px", textAlign: "center", background: "#864fba", color: "#fdfffc", fontSize: "30px"}}>
                 </div>
                 <div style={{padding: "30px", textAlign: "center", overflow: "hidden", float: "center"}}>
                     <h1>{Nombre}</h1>
                     <h5>Impartido por:</h5>
                     <h4>{ImpartidoPor}</h4>
-                    {isCapped=='true'? <h5>Cupo lleno</h5>:
+                    {isCapped==='true'? <h5>Cupo lleno</h5>:
                       <div>
                         <h5>Cupo: {participantes.length+" de "+maxCap}</h5>
                       </div>

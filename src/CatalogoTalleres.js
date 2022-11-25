@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import {db,storage} from './firebase';
+import {db} from './firebase';
 import {ref as ref_db,onValue} from 'firebase/database';
 import {useState,useEffect} from "react";
 import TallerCard from './components/TallerCard.js';
@@ -9,7 +9,7 @@ import Box from '@mui/material/Box';
 const CatalogoTalleres = (props) => {
     
     //variables globales
-    const {userId, setUserId} = useContext(UserContext);
+    const {userId,setUserId} = useContext(UserContext);
     const {EsAdmin,setEsAdmin} = useContext(UserContext)
     //variables globales
     const [talleres,setTalleres] = useState([])
