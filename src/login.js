@@ -1,57 +1,52 @@
-import React, {useContext,useEffect} from 'react';
-import {db} from './firebase';
+import React, {useContext} from 'react';
 import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail  } from 'firebase/auth';
-import {uid} from 'uid';
 import { useNavigate } from 'react-router-dom';
-import {set, ref} from 'firebase/database';
 import {useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
-import {Button,Container,Form,Alert} from 'react-bootstrap'
+import {Button,Container,Form} from 'react-bootstrap'
 import { UserContext } from './UserContext';
-import { Navigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 
 const LogIn = () => {
 
-    //global
-    const {userId, setUserId} = useContext(UserContext);
-    const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
-    const {parentId,setParentId} = useContext(UserContext);
-    const {EsAdmin,setEsAdmin} = useContext(UserContext);
+    //variables globales
+    const {setIsLoggedIn} = useContext(UserContext);
+    const {setParentId} = useContext(UserContext);
+    const {setEsAdmin} = useContext(UserContext);
 
+    //variables locales
     const [Mail, setMail] = useState("");
     const [Password,setPassword] = useState("");
-    const [alertActive, setAlertActive] = useState(false);
     const [isPasswordReset,setIsPasswordReset] = useState(false);
     let navigate = useNavigate();
 
+    //funcion para actualizar el valor de mail
     const handleChangeMail=(e)=>{
         setMail(e.target.value)
     }
 
+    //funcion para actualizar el valor de password
     const HandlePasswordChange=(e)=>{
         setPassword(e.target.value)
     }
 
-    const writeToDatabase = () => {//funcion general para hacer login
-    
+    //funcion para hacer login
+    const writeToDatabase = () => {
         if(checkAdmin()){
             setEsAdmin(true);
             console.log('es admin')
             navigate('/catalogo-talleres')
         }else{
-            const auth = getAuth();
+            const auth = getAuth();//aqui se usa la funcionalidad de firebase auth para crear el usuario y regresar un UID que el objeto de padre pueda usar
             signInWithEmailAndPassword(auth,Mail,Password)
             .then((userCredential) =>{
                 console.log(userCredential.user.uid)
                 setIsLoggedIn(true);
                 setParentId(userCredential.user.uid)
-                navigate('/manage-children')
-                //hay que poner al padre
-                //setUserId(userCredential.user.uid);
+                navigate('/manage-children') //una vez ingresado se manda a la pagina de /manage-children 
             })
-            .catch((error) =>{
+            .catch((error) =>{ //en caso de que encuentra un error
                 if(error.code==='auth/user-not-found'){
                     alert('El correo que ingresó no está registrado. Por favor verifique que su correo está bien escrito o, si no ha creado una cuenta, por favor diríjase a la página de crear cuenta nueva.')
                 }
@@ -60,10 +55,12 @@ const LogIn = () => {
         }
     };
     
+    //esta funcion cambia la variable de password reset para poder entrar en el workflow de password reset
     const setPasswordReset=(e)=>{
         setIsPasswordReset(true);
     }
 
+    //esta funcion hace la funcionalidad de recuperacion de la contrasena, se usa la funcionalidad de firebase auth
     const passwordReset=()=>{
         const auth = getAuth();
         sendPasswordResetEmail(auth, Mail)
@@ -78,6 +75,7 @@ const LogIn = () => {
         });
     }
 
+    //esta funcion guarda las credenciales del administrador por el momento son user:admin password:csoftmty2022
     function checkAdmin(){
         if(Mail==="admin" && Password==="csoftmty2022"){
             return true;
@@ -97,7 +95,6 @@ const LogIn = () => {
         >
             <div id="mainContainer">
                 <Container>
-                {alertActive && <Alert variant='warning'>Por favor verifique sus datos.</Alert>}
                 <Form className="login">
                 <Form.Group>
                     <Form.Label>

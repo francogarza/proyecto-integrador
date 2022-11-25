@@ -5,19 +5,17 @@ import {set, ref, onValue,update} from 'firebase/database';
 import {useState,useEffect,useContext} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
-import {Button,Container,Form,Alert,Dropdown, DropdownButton} from 'react-bootstrap'
+import {Button,Container,Form,Alert} from 'react-bootstrap'
 import { UserContext } from './UserContext';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import DropdownToggle from 'react-bootstrap/esm/DropdownToggle';
-import DropdownMenu from 'react-bootstrap/esm/DropdownMenu';
 
 const RegistroHijo = () => {
-    const location = useLocation();
-    //global
+    //variables globales
     const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
     const {parentId,setParentId} = useContext(UserContext);
-    //local
+    //variables locales
+    const location = useLocation();
     const [CelularTutorPadre, setCelularTutorPadre] = useState("");
     const [ClaseProgra, setClaseProgra] = useState("true");
     const [ComoEntero, setComoEntero] = useState("maestro");
@@ -40,60 +38,77 @@ const RegistroHijo = () => {
     const [hijos, setHijos] = useState([]);
     const [isUpdate,setIsUpdate]=useState(false);
     const [idEditar,setIdEditar] = useState("");
-
     const navigate = useNavigate();
 
+    //funcion para manejar CelularTutorPadre
     const handleChangeCelularTutorPadre=(e)=>{
         setCelularTutorPadre(e.target.value);
     }
+    //funcion para manejar ClaseProgra
     const handleChangeClaseProgra=(e)=>{
         setClaseProgra(e.target.value)
     }
+    //funcion para manejar ComoEntero
     const handleChangeComoEntero=(e)=>{
         setComoEntero(e.target.value)
     }
+    //funcion para manejar Change Correo
     const handleChangeCorreo=(e)=>{
         setCorreo(e.target.value)
     }
+    //funcion para manejar Edad
     const handleChangeEdad=(e)=>{
         setEdad(e.target.value)
     }
+    //funcion para manejar Change Estado
     const handleChangeEstado=(e)=>{
         setEstado(e.target.value)
     }
+    //funcion para manejar Futuro Trabajo
     const handleChangeFuturoTrabajo=(e)=>{
         setFuturoTrabajo(e.target.value)
     }
+    //funcion para manejar Genero
     const handleChangeGenero=(e)=>{
         setGenero(e.target.value)
     }
+    //funcion para manejar Municipio
     const handleChangeMunicipio=(e)=>{
         setMunicipio(e.target.value)
     }
+    //funcion para manejar Nacimiento
     const handleChangeNacimiento=(e)=>{
         setNacimiento(e.target.value)
     }
+    //funcion para manejar Nombre
     const handleChangeNombre=(e)=>{
         setNombre(e.target.value)
     }
+    //funcion para manejar Escuela
     const handleChangeNombreEscuela=(e)=>{
         setNombreEscuela(e.target.value)
     }
+    //funcion para manejar NombreTutorPadre
     const handleChangeNombreTutorPadre=(e)=>{
         setNombreTutorPadre(e.target.value)
     }
+    //funcion para manejar ParticipadoAxta
     const handleChangeParticipadoAxta=(e)=>{
         setParticipadoAxta(e.target.value)
     }
+    //funcion para manejar TipoEscuela
     const handleChangeTipoEscuela=(e)=>{
         setTipoEscuela(e.target.value)
     }
+    //funcion para manejar Ultimo Grado
     const handleChangeUlitmoGrado=(e)=>{
         setUltimoGrado(e.target.value)
     }
+    //funcion para manejar ViveEnMexico
     const handleChangeVivieEnMexico=(e)=>{
         setVivieEnMexico(e.target.value)
     }
+    //Esta funcion verifica que todos los datos sean correctos
     function verificarDatos(){
         if(verificarCelularPadre() && verificarEdad() && verificarCorreo() && verificarNombre() && verificarEscuela() && verificarNombrePadre() && verificarTrabajoFuturo()){
             return true
@@ -101,15 +116,19 @@ const RegistroHijo = () => {
             return false
         }
     }
+    //esta funcion verifica el celular del padre (que sean solo numeros)
     function verificarCelularPadre(){
         return !isNaN(parseInt(CelularTutorPadre))
     }
+    //esta funcion verifica que la variable edad sean solo numeros
     function verificarEdad(){
         return  !isNaN(parseInt(Edad))
     }
+    //esta funcion verifica que el correo tenga el formato test@test.algo
     function verificarCorreo(){
         return /\S+@\S+\.\S+/.test(Correo);
     }
+    //esta funcion verifica que se escriba un nombre
     function verificarNombre(){
         if(Nombre.length>0){
             return true
@@ -117,6 +136,7 @@ const RegistroHijo = () => {
             return false
         }
     }
+    //esta funcion verifica que se escriba una escuela
     function verificarEscuela(){
         if(NombreEscuela.length>0){
             return true
@@ -124,6 +144,7 @@ const RegistroHijo = () => {
             return false
         }
     }
+    //esta funcion verifica que se escriba un nombre de padre
     function verificarNombrePadre(){
         if(NombreTutorPadre.length>0){
             return true
@@ -131,6 +152,7 @@ const RegistroHijo = () => {
             return false
         }
     }
+    //esta funcion verifica que se escriba un trabajoFuturo
     function verificarTrabajoFuturo(){
         if(FuturoTrabajo.length>0){
             return true
@@ -138,6 +160,8 @@ const RegistroHijo = () => {
             return false
         }
     }
+
+    //esta funcion guarda los datos en la base de datos y se agrega el objeto a el objeto del padre
     const writeToDatabase = () => {
         if(verificarDatos()){
             const PadreId = parentId;
@@ -185,9 +209,10 @@ const RegistroHijo = () => {
         }else{
             setAlertActive(true);
         }
-        navigate('/manage-children');
+        navigate('/manage-children');//una vez inscrito se regresa a la pagina manage-children
     };
 
+    //Esta funcion actualiza los datos si registro hijo fue llamado con la flag de isUpdate
     useEffect(() =>{
         if(isUpdate){
             onValue(ref(db,'Participante/'+idEditar),(snapshot)=>{
@@ -213,6 +238,8 @@ const RegistroHijo = () => {
             });
         }
     },[isUpdate,idEditar])
+
+    //esta funcion actualiza los datos del hijo
     const updateToDatabase=()=>{
         if(verificarDatos()){
             const PadreId = parentId;
@@ -244,6 +271,8 @@ const RegistroHijo = () => {
             navigate('/manage-children');
         }
     }
+
+    //esta funcion verifica el mail del padre y verifica si es isUpdate
     useEffect(()=>{
         const PadreId = parentId;
         onValue(ref(db,'Padre/'+PadreId),(snapshot)=>{
@@ -259,6 +288,7 @@ const RegistroHijo = () => {
             }
         }
     },[])
+    
     return(
         <div id="mainContainer">
             <Container>

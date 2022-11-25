@@ -1,7 +1,5 @@
 import React, { useState }  from 'react';
-import { BrowserRouter as Router, Route, RouterProvider, Routes, Navigate  } from "react-router-dom";
-import TallerCard from './components/TallerCard';
-import Home from './components/Home';
+import { BrowserRouter as Router, Route, Routes, Navigate  } from "react-router-dom";
 import RegistroPadres from './RegistroPadres.js';
 import RegistroTalleres from './RegistroTalleres.js';
 import CatalogoTalleres from './CatalogoTalleres.js';
@@ -17,7 +15,8 @@ import RegistroHijo from './RegistroHijo.js';
 import BorrarCuenta from './borrarCuenta';
 
 function App() {
-  
+
+  //variables globales
   const [userId, setUserId] = useState(false);
   const [userSelected,setUserSelected] = useState(false);
   const [parentId,setParentId] = useState(false);
