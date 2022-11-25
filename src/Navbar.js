@@ -3,9 +3,6 @@ import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import MuiDrawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -13,7 +10,6 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import AppsIcon from '@mui/icons-material/Apps';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
-import ScheduleIcon from '@mui/icons-material/Schedule';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import Face3Icon from '@mui/icons-material/Face3';
@@ -74,20 +70,19 @@ function Navbar() {
     }
     
     return (
-        <Drawer variant="permanent" open={!open}>
+        <Drawer variant="permanent" open={true}>
             <Toolbar
                 sx={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'flex-end',
+                justifyContent: 'flex-start',
+                marginLeft: '10px',
+                marginTop: '10px',
                 px: [1],
                 }}
             >
-                <IconButton onClick={toggleDrawer}>
-                    { open ? <ChevronRightIcon /> : <ChevronLeftIcon /> }
-                </IconButton>
+                <img src={require('./Assets/LogoAxtateen.png')} width="120" height="50"/>
             </Toolbar>
-            <Divider />
             <List component="nav">
                 <Link onClick={() => navigate("/catalogo-talleres")}>
                     <ListItemButton>
@@ -155,6 +150,22 @@ function Navbar() {
                 </Link> : null }
                 <Divider sx={{ my: 1 }} />
             </List>
+            <Toolbar
+                sx={{
+                position: 'absolute',
+                bottom: '0',
+                marginLeft: 'auto',
+                marginRight: 'auto',
+                left: '0',
+                right: '0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                px: [1],
+                }}
+            >
+                <img src={require('./Assets/LogoCSOFTMty.png')} width="150" height="50"/>
+            </Toolbar>
         </Drawer>
         );
 }
