@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+//este es el inicio del porgrama
 root.render(
   <React.StrictMode>
     <App />

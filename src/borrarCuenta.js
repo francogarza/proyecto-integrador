@@ -1,45 +1,40 @@
-import React, {useContext,useEffect} from 'react';
+import React, {useContext} from 'react';
 import {db} from './firebase';
-import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail,deleteUser  } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import {set, ref,onValue,remove,get, child} from 'firebase/database';
+import {ref,onValue,remove,get} from 'firebase/database';
 import {useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
-import {Button,Container,Form,Alert} from 'react-bootstrap'
+import {Button,Container,Form} from 'react-bootstrap'
 import { UserContext } from './UserContext';
-import { Navigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import { isAdmin } from '@firebase/util';
+
 
 const BorrarCuenta = () => {
 
-    //global
-    const {userId, setUserId} = useContext(UserContext);
-    const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
-    const {parentId,setParentId} = useContext(UserContext);
+    //variable global
     const {EsAdmin,setEsAdmin} = useContext(UserContext);
 
+    //variable local
     const [uid, setUid] = useState("");
-
     let navigate = useNavigate();
 
+    //funcion para cambiar el estado de uid
     const handleChangeUid=(e)=>{
         setUid(e.target.value)
     }
-
+    
+    //funcion para borrar una cuenta, esto incluye borrar a los hijos, borrar a los hijos en el objeto de los talleres y borrar a el padre
     function borrarCuenta(){
 
         return new Promise((resolve, reject) => {
             get(ref(db,'Padre/'+uid+'/hijos/'))
             .then((snapshot)=>{//se saca la lista de hijos
-                
                 const hijos = [];
                 const data = snapshot.val();
                 if(data !== null){
                     Object.values(data).map((e) => {
-                            ////setHijos((oldArray) => [...oldArray,e])
-                        hijos.push(e.uuid)
+                        hijos.push(e.uuid)//se guarda el hijo en el arreglo hijos
                     });
                     return hijos;
                 }
