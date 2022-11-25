@@ -13,13 +13,14 @@ import Box from '@mui/material/Box';
 
 const TalleresInscritos = (props) => {
 
-    //global
+    //variables globales
     const {userId, setUserId} = useContext(UserContext);
     const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
-    //local
+    //variables locales
     const [talleres,setTalleres] = useState([]);
     const [realTalleres,setRealTalleres] = useState([]);
 
+    //esta funcion baja los talleres que el hijo esta inscrito
     useEffect(() => {
         onValue(ref(db,'Participante/'+userId+'/talleres/'),(snapshot) => {
             setTalleres([]);
@@ -58,7 +59,7 @@ const TalleresInscritos = (props) => {
         </div>
 
         <div style={{padding: "50px", textAlign: "center", color: "gray", fontSize: "18px"}}>
-            <p> Si tiene dudas puede contactar al correo: <a href="mailto:axtateen@csoftmty.org">axtateen@csoftmty.org</a> o al correo: <a href="mailto:capitalhumano@csoftmty.org">capitalhumano@csoftmty.org</a></p>
+            <p> Si tiene dudas, puede contactar al correo: <a href="mailto:axtateen@csoftmty.org">axtateen@csoftmty.org</a> o al correo: <a href="mailto:capitalhumano@csoftmty.org">capitalhumano@csoftmty.org</a></p>
         </div>
     </Box>
   )

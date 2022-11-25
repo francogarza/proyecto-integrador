@@ -1,5 +1,5 @@
-import React, {useEffect, useState, useCallback, useContext} from 'react';
-import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
+import React, {useContext} from 'react';
+import { styled} from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import MuiDrawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
@@ -21,6 +21,7 @@ import { UserContext } from './UserContext';
 
 const drawerWidth = 240;
 
+//funcion de estilizado del navbar
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
         '& .MuiDrawer-paper': {
@@ -48,17 +49,21 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 function Navbar() {
-    const [open, setOpen] = React.useState(true);
+    //variables globales
     const {isLoggedIn,setIsLoggedIn} = useContext(UserContext);
     const {EsAdmin,setEsAdmin} = useContext(UserContext)
     const {parentId,setParentId} = useContext(UserContext);
 
+    //variables locales
+    const [open, setOpen] = React.useState(true);
     let navigate = useNavigate();
 
+    //funcion para abrir y cerrar el navbar
     const toggleDrawer = () => {
         setOpen(!open);
     };
 
+    //funcion para cerrar la sesion
     function handleLogOut() {
         if(EsAdmin){
             setEsAdmin(false);

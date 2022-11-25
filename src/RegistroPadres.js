@@ -1,16 +1,16 @@
 import React from 'react';
 import {db} from './firebase';
 import { getAuth, createUserWithEmailAndPassword  } from 'firebase/auth';
-import {uid} from 'uid';
 import {set, ref} from 'firebase/database';
 import {useState} from "react";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './basic.css'
 import {Button,Container,Form,Alert} from 'react-bootstrap'
-import { Navigate,useNavigate } from 'react-router-dom';
+import {useNavigate } from 'react-router-dom';
 
 const RegistroPadres = () => {
   
+  //variables locales
   const [Nombre, setNombre] = useState("");
   const [Mail, setMail] = useState("");
   const [Password,setPassword] = useState("");
@@ -20,35 +20,42 @@ const RegistroPadres = () => {
 
   const navigate = useNavigate();
 
+  //funcion para manejar Nombre
   const handleChangeNombre=(e)=>{
     setNombre(e.target.value)
   }
 
+  //funcion para manejar Mail
   const handleChangeMail=(e)=>{
     setMail(e.target.value)
   }
 
+  //funcion para manejar Password
   const HandlePasswordChange=(e)=>{
     setPassword(e.target.value)
   }
 
+  //funcion para manejar Password2
   const HandlePassword2Change=(e)=>{
     setPassword2(e.target.value)
   }
 
-
+  //funcion para manejar Celular
   const handleChangeCelular=(e)=>{
     setCelular(e.target.value)
   }
 
+  //funcion para validar mail con forma de test@test.com
   function validaMail(mail){
     return /\S+@\S+\.\S+/.test(mail);
   }
 
+  //funcion para validar Celular
   function validaCelular(celular){
     return !isNaN(parseInt(celular))
   }
 
+  //funcion para verificar los datos ingresados
   function verificarDatos(){
     if(validaMail(Mail) && Nombre.length>0 && validaCelular(Celular) && validarPassword()){
       return true
@@ -57,6 +64,7 @@ const RegistroPadres = () => {
     }
   }
 
+  //funcion para validar que las contrasenas sean iguales y que tengan 6 caracteres o mas
   function validarPassword(){
     if(Password===""){
       alert("La contraseña no puede estar vacía.")
@@ -68,6 +76,7 @@ const RegistroPadres = () => {
     return false
   }
 
+  //funcion para crear usuario padre
   const writeToDatabase = () => {
 
     if(verificarDatos()){
@@ -159,7 +168,7 @@ const RegistroPadres = () => {
       </Container>
 
       <div style={{padding: "50px", textAlign: "center", color: "gray", fontSize: "18px"}}>
-        <p> Si tiene dudas puede contactar al correo: <a href="mailto:axtateen@csoftmty.org">axtateen@csoftmty.org</a> o al correo: <a href="mailto:capitalhumano@csoftmty.org">capitalhumano@csoftmty.org</a></p>
+        <p> Si tiene dudas, puede contactar al correo: <a href="mailto:axtateen@csoftmty.org">axtateen@csoftmty.org</a> o al correo: <a href="mailto:capitalhumano@csoftmty.org">capitalhumano@csoftmty.org</a></p>
       </div>
     </div>
   )
