@@ -58,7 +58,7 @@ const TalleresInscritos = (props) => {
         </div>
 
         <div style={{padding: "50px", textAlign: "center", color: "gray", fontSize: "18px"}}>
-            <p> Si tiene dudas puede contactar al correo: axtateen@csoftmty.org </p>
+            <p> Si tiene dudas, puede contactar al correo: axtateen@csoftmty.org </p>
             <p> o al correo: capitalhumano@csoftmty.org </p>
         </div>
     </Box>

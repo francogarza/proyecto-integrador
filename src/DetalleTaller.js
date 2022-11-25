@@ -135,7 +135,7 @@ const DetalleTaller = (props) => {
             enviarCorreoInscripcionTaller()
             navigate('/catalogo-talleres');
             }else{
-                alert("No se puede inscribir porque el taller esta lleno o esta bloqueado");
+                alert("No se puede inscribir porque el taller está lleno o está bloqueado.");
             }
         }
         navigate('/catalogo-talleres');
@@ -215,7 +215,7 @@ const DetalleTaller = (props) => {
     //Esta funcion genera el archivo XLSX con los objetos de Taller y Participantes
     function hacerArchivo(Taller, Participantes){
         //Se define el nombre del archivo
-        const DEFAULT_FILENAME = "InformacionParticipantes_" + Nombre;
+        const DEFAULT_FILENAME = "Información de participantes de " + Nombre;
 
         //Se define el tipo de archivo
         const fileType =  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
@@ -237,13 +237,13 @@ const DetalleTaller = (props) => {
         const Taller = [];
         var item = {
             Nombre: Nombre,
-            Descripcion: Descripcion,
+            Descripción: Descripcion,
             Fechas: Fechas,
             Horarios: Horarios,
             ImpartidoPor: ImpartidoPor,
-            Prerequisitos: Prerequisitos,
+            Prerrequisitos: Prerequisitos,
             VirtualPresencial: VirtualPresencial,
-            InformacionConfidencial: InformacionConfidencial
+            LigaLugar: InformacionConfidencial
         }
         Taller.push (item);
 
@@ -437,7 +437,7 @@ const DetalleTaller = (props) => {
                   </div>
               }
                 <div style={{padding: "50px", textAlign: "center", color: "gray", fontSize: "18px"}}>
-                    <p> Si tiene dudas puede contactar al correo: axtateen@csoftmty.org </p>
+                    <p> Si tiene dudas, puede contactar al correo: axtateen@csoftmty.org </p>
                     <p> o al correo: capitalhumano@csoftmty.org </p>
                 </div>
       </div>
