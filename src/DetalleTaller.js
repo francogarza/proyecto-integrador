@@ -94,6 +94,19 @@ const DetalleTaller = (props) => {
         });
     }, [])
 
+    const handleSubmit = async (values) => {
+        const result = await fetch(
+          '/contact_form',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ...values, secret: 'firebaseIsCool' }),
+          }
+        );
+      }
+
     //Esta funcion quita a el objeto de participante del objeto taller y el taller del objeto del participante
     const darDeBaja=()=>{
         const id = location.state.id
@@ -105,18 +118,21 @@ const DetalleTaller = (props) => {
 
     //esta funcion manda el correo de dada de baja
     const enviarCorreoBajaTaller = () => {
-        var templateParams = {
-            nombre_hijo: NombreU,
-            nombre_taller: Nombre,
-            to_email: Mail,
+        const values = {
+          subject: `Axtateen: Baja de taller ${Nombre}`,
+          email: [Mail],
+          message: `<b>Axtateen</b> le informamos:
+          <br>
+          <ul>
+              <li>Su hijo/a <b>${NombreU}</b> ha sido dado de baja del <b>${Nombre}</b>.
+              <li>Le invitamos visitar el catalogo de talleres disponibles para encontrar un taller de su agrado.
+          </ul>
+          <br>
+          <b>Atentamente</b>,
+          <br>
+          <b>Axtateen</b>`,
         };
-        console.log("templateParams = ", templateParams)
-        emailjs.send('service_3kfhl9l', 'template_jrfyyws', templateParams, '7VB8KWioxv21zM4iQ')
-            .then(function(response) {
-            console.log('SUCCESS!', response.status, response.text);
-            }, function(error) {
-            console.log('FAILED...', error);
-        });
+        handleSubmit(values);
     };
 
     //esta funcion se usa para inscribir un participante a un taller
@@ -149,17 +165,21 @@ const DetalleTaller = (props) => {
 
     //Esta funcion envia el correo para que los papas esten enterados del taller que su hijo inscribio
     const enviarCorreoInscripcionTaller = () => {
-        var templateParams = {
-            nombre_taller: Nombre,
-            nombre_hijo: NombreU,
-            to_email: Mail,
+        const values = {
+          subject: `Axtateen: Inscripcion al taller ${Nombre}`,
+          email: [Mail],
+          message: `<b>Axtateen</b> le informamos:
+            <br>
+            <ul>
+                <li>Su hijo/a <b>${NombreU}</b> ha sido dado <b>inscrito</b> al taller <b>${Nombre}</b>.
+                <li>Agradecemos su preferencia e interes en nuestros talleres.
+            </ul>    
+            <br>
+            <b>Atentamente</b>,
+            <br>
+            <b>Axtateen</b>`
         };
-        emailjs.send('service_3kfhl9l', 'template_7nra4y1', templateParams, '7VB8KWioxv21zM4iQ')
-            .then(function(response) {
-            console.log('SUCCESS!', response.status, response.text);
-            }, function(error) {
-            console.log('FAILED...', error);
-        });
+        handleSubmit(values); 
     };
 
     //Esta funcion busca todos los participantes de un taller y los pone en un arreglo de objetos participante
