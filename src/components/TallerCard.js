@@ -43,25 +43,44 @@ export default function TallerCard(props){
         });
     };
 
+    // funcion que hace fetch a la funcion de mandar correo que esta ligada a la ruta /contact_form, con el uso de la extension firebase functions 
+    const handleSubmit = async (values) => {
+        const result = await fetch(
+          '/contact_form',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ...values, secret: 'firebaseIsCool' }),
+          }
+        );
+      }
+
     //funcion que manda el correo individal a los participantes
     const enviarCorreoCancelacionTaller = (value) => {
-        var templateParams = {
-            nombre_taller: props.Nombre,
-            nombre_hijo: value.NombreU,
-            to_email: value.Mail
+        console.log("enviarCorreoCancelacion")
+        const values = {
+          subject: `Axtateen: Cancelacion de taller ${props.Nombre}`,
+          email: value.Mail,
+          message: `<b>Axtateen</b> le informamos:
+          <br>
+          <ul>
+              <li>El taller <b>${props.Nombre}</b> en el cual su hijo <b>${value.NombreU}</b> esta inscrito, ha sido <b>CANCELADO</b>.
+              <li>Le invitamos visitar el catalogo de talleres disponibles para encontrar un taller de su agrado.
+          </ul>
+          <br>
+          <b>Atentamente</b>,
+          <br>
+          <b>Axtateen</b>`
         };
-        emailjs.send('service_8h5bui6', 'template_nf8dfof', templateParams, 'fkFt-NEWOPWt-30Aq')
-            .then(function(response) {
-            console.log('SUCCESS!', response.status, response.text);
-            }, function(error) {
-            console.log('FAILED...', error);
-        });
+        handleSubmit(values);
     }
 
     //funcion para borrar el taller
     const handleDelete = (e) => {
-        remove(ref(db,'Taller/' + e));
         enviarCorreoATodosLosParticipantes(props);
+        remove(ref(db,'Taller/' + e));
     }
     
     return (

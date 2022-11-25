@@ -5,7 +5,6 @@ import RegistroTalleres from './RegistroTalleres.js';
 import CatalogoTalleres from './CatalogoTalleres.js';
 import DetalleTaller from './DetalleTaller.js';
 import TalleresInscritos from './TalleresInscritos';
-import SendEmailTest from './SendEmailTest';
 import { UserContext } from './UserContext';
 import LogIn from './login.js'
 import ManageChild from './manageChild';
@@ -55,10 +54,6 @@ function App() {
                 />
                 <Route path="/detalle-taller" element={
                   <DetalleTaller />
-                }
-                />
-                <Route path="/send-email-test" element={
-                  <SendEmailTest />
                 }
                 />
                 <Route path="/login" element={
